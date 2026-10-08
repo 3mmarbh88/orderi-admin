@@ -20,7 +20,8 @@ import { renderDashboardHtml } from "./dashboard.js";
 
 const app = express();
 
-const PORT = Number(process.env.PORT || 3000);
+// AI Studio dev container requires port 3000
+const PORT = 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || "";
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY || "";
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
@@ -148,7 +149,8 @@ function requireAuth(handler: (req: Request, res: Response) => Promise<any>) {
 function requireAdmin(handler: (req: Request, res: Response) => Promise<any>) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const token = String(req.headers["x-admin-token"] || req.query.admin_token || "");
+      const bearer = getBearerToken(req);
+      const token = String(req.headers["x-admin-token"] || req.query.admin_token || bearer || "");
       if (!ADMIN_TOKEN || token !== ADMIN_TOKEN) {
         logEvent("UNAUTHORIZED_ADMIN_ACCESS", null, "محاولة وصول غير مصرح بها للمشرف", "warning", null, req);
         return res.status(401).json({ success: false, error: "Invalid admin token" });
@@ -412,6 +414,110 @@ app.get(
     const sub = memoryStore.user_subscriptions.find((s) => s.user_id === user.id);
     const dev = memoryStore.devices.find((d) => d.device_id === user.bound_device_id);
     res.json({ success: true, user: { ...user, subscription: sub, device: dev } });
+  })
+);
+
+app.post(
+  "/api/admin/users",
+  requireAdmin(async (req, res) => {
+    try {
+      const username = normalizeUsername(req.body?.username);
+      const password = String(req.body?.password || "");
+      const phone = String(req.body?.phone || "").trim();
+      const initialDays = Number(req.body?.days || 0);
+
+      if (!username || !password) {
+        return res.status(400).json({ success: false, error: "اسم المستخدم وكلمة المرور مطلوبان" });
+      }
+
+      if (username.length < 3) {
+        return res.status(400).json({ success: false, error: "يجب ألا يقل اسم المستخدم عن 3 أحرف" });
+      }
+
+      const existing = memoryStore.app_users.find((u) => u.username === username);
+      if (existing) {
+        return res.status(409).json({ success: false, error: "اسم المستخدم مسجل مسبقاً" });
+      }
+
+      const newUser = {
+        id: `usr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        username,
+        password_hash: hash(password),
+        phone: phone || null,
+        is_active: true,
+        bound_device_id: null,
+        last_login_at: null,
+        last_seen_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      };
+
+      memoryStore.app_users.push(newUser);
+
+      if (initialDays > 0) {
+        const expiresAt = new Date(Date.now() + initialDays * 24 * 60 * 60 * 1000).toISOString();
+        memoryStore.user_subscriptions.push({
+          id: `sub-${Date.now()}`,
+          user_id: newUser.id,
+          username: newUser.username,
+          activation_code_id: null,
+          plan_name: "تفعيل أولي من المشرف",
+          starts_at: new Date().toISOString(),
+          expires_at: expiresAt,
+          is_active: true,
+          updated_at: new Date().toISOString(),
+        });
+      }
+
+      saveStoreToDisk();
+      logEvent("ADMIN_USER_CREATED", username, `تم إنشاء مستخدم جديد من قبل المشرف: ${username}`, "success", newUser.id, req);
+
+      res.status(201).json({ success: true, user: newUser });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err?.message || "Failed to create user" });
+    }
+  })
+);
+
+app.patch(
+  "/api/admin/users/:id",
+  requireAdmin(async (req, res) => {
+    const user = memoryStore.app_users.find((u) => u.id === req.params.id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    const { username, phone, password, is_active } = req.body || {};
+
+    if (username) {
+      const normalized = normalizeUsername(username);
+      if (normalized !== user.username) {
+        const dup = memoryStore.app_users.find((u) => u.username === normalized && u.id !== user.id);
+        if (dup) {
+          return res.status(409).json({ success: false, error: "اسم المستخدم مستخدم بالفعل" });
+        }
+        user.username = normalized;
+      }
+    }
+
+    if (phone !== undefined) {
+      user.phone = String(phone).trim() || null;
+    }
+
+    if (password) {
+      if (String(password).length < 4) {
+        return res.status(400).json({ success: false, error: "كلمة المرور يجب ألا تقل عن 4 أحرف" });
+      }
+      user.password_hash = hash(String(password));
+    }
+
+    if (is_active !== undefined) {
+      user.is_active = Boolean(is_active);
+    }
+
+    saveStoreToDisk();
+    logEvent("USER_UPDATED", user.username, `تم تعديل بيانات المستخدم ${user.username}`, "success", user.id, req);
+
+    res.json({ success: true, user });
   })
 );
 

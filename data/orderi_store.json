@@ -7,9 +7,72 @@
   "app_users": [],
   "devices": [],
   "activation_codes": [],
-  "user_subscriptions": [],
+  "user_subscriptions": [
+    {
+      "id": "sub-1791452441693",
+      "user_id": "usr-1791452441693-b9x2",
+      "username": "test_captain_1",
+      "activation_code_id": null,
+      "plan_name": "تفعيل أولي من المشرف",
+      "starts_at": "2026-10-08T09:40:41.693Z",
+      "expires_at": "2026-11-07T09:40:41.693Z",
+      "is_active": true,
+      "updated_at": "2026-10-08T09:40:41.693Z"
+    }
+  ],
   "orders": [],
-  "system_logs": [],
+  "system_logs": [
+    {
+      "id": "log-1791452454143-42d9",
+      "action": "USER_DELETED",
+      "user_id": "usr-1791452441693-b9x2",
+      "username": "test_captain_1",
+      "details": "تم حذف حساب المستخدم test_captain_1",
+      "ip": "127.0.0.1",
+      "status": "warning",
+      "created_at": "2026-10-08T09:40:54.143Z"
+    },
+    {
+      "id": "log-1791452454121-v770",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "user_id": null,
+      "username": "admin",
+      "details": "تسجيل دخول المشرف باسم المستخدم وكلمة المرور",
+      "ip": "127.0.0.1",
+      "status": "success",
+      "created_at": "2026-10-08T09:40:54.121Z"
+    },
+    {
+      "id": "log-1791452441701-stjd",
+      "action": "USER_UPDATED",
+      "user_id": "usr-1791452441693-b9x2",
+      "username": "test_captain_1",
+      "details": "تم تعديل بيانات المستخدم test_captain_1",
+      "ip": "127.0.0.1",
+      "status": "success",
+      "created_at": "2026-10-08T09:40:41.701Z"
+    },
+    {
+      "id": "log-1791452441693-zen6",
+      "action": "ADMIN_USER_CREATED",
+      "user_id": "usr-1791452441693-b9x2",
+      "username": "test_captain_1",
+      "details": "تم إنشاء مستخدم جديد من قبل المشرف: test_captain_1",
+      "ip": "127.0.0.1",
+      "status": "success",
+      "created_at": "2026-10-08T09:40:41.693Z"
+    },
+    {
+      "id": "log-1791452441663-aot1",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "user_id": null,
+      "username": "admin",
+      "details": "تسجيل دخول المشرف باسم المستخدم وكلمة المرور",
+      "ip": "127.0.0.1",
+      "status": "success",
+      "created_at": "2026-10-08T09:40:41.663Z"
+    }
+  ],
   "system_alerts": [],
   "admin_biometrics": [],
   "whatsapp_session": {

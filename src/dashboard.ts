@@ -4,10 +4,13 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Orderi Server | إدارة البرنامج والتحكم المركزي</title>
-  <meta name="description" content="Orderi Server - لوحة الإدارة والتحكم المركزية لمنظومة Orderi لإدارة المستخدمين والمندوبين والأجهزة والتراخيص">
+  <title>Orderi Server - إدارة البرنامج</title>
+  <meta name="description" content="لوحة الإدارة والتحكم المركزية لمنظومة Orderi لإدارة المستخدمين والمندوبين والأجهزة والتراخيص والاشتراكات">
+  <meta property="og:title" content="Orderi Server - إدارة البرنامج">
+  <meta property="og:description" content="لوحة الإدارة والتحكم المركزية لمنظومة Orderi لإدارة المستخدمين والمندوبين والأجهزة والتراخيص والاشتراكات">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="apple-touch-icon" href="/orderi-admin-logo.svg">
+  <link rel="alternate icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/orderi-admin-logo.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1776,7 +1779,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <div class="modal-overlay" id="modal-add-user">
     <div class="modal">
       <div class="modal-header">
-        <h3>إضافة مستخدم جديد</h3>
+        <h3>➕ إضافة مستخدم جديد</h3>
         <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-add-user')">✕</button>
       </div>
       <div class="modal-body">
@@ -1792,10 +1795,61 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           <label>رقم الهاتف</label>
           <input type="text" id="add-phone" class="form-input" placeholder="+97339000000">
         </div>
+        <div class="form-group">
+          <label>مدة الاشتراك الأولي</label>
+          <select id="add-user-days" class="form-input">
+            <option value="0">بدون اشتراك أولي (يتطلب كود تفعيل لاحقاً)</option>
+            <option value="30" selected>30 يوم (شهر)</option>
+            <option value="60">60 يوم (شهرين)</option>
+            <option value="90">90 يوم (3 أشهر)</option>
+            <option value="365">365 يوم (سنة كاملة)</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('modal-add-user')">إلغاء</button>
-        <button class="btn btn-primary" onclick="submitAddUser()">حفظ</button>
+        <button class="btn btn-primary" onclick="submitAddUser()">حفظ وإنشاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit User -->
+  <div class="modal-overlay" id="modal-edit-user">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ تعديل بيانات المستخدم</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-edit-user')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-id">
+        <div class="form-group">
+          <label>اسم المستخدم (Username)</label>
+          <input type="text" id="edit-user-username" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input type="text" id="edit-user-phone" class="form-input" placeholder="+97339000000">
+        </div>
+        <div class="form-group">
+          <label>تعيين كلمة مرور جديدة (اتركه فارغاً دون تغيير)</label>
+          <input type="password" id="edit-user-password" class="form-input" placeholder="كلمة مرور جديدة...">
+        </div>
+        <div class="form-group">
+          <label>حالة الحساب</label>
+          <select id="edit-user-status" class="form-input">
+            <option value="true">نشط (Active)</option>
+            <option value="false">معلق (Suspended)</option>
+          </select>
+        </div>
+        <div style="margin-top: 1rem; border-top: 1px solid #1f293d; padding-top: 0.75rem;">
+          <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteUserFromModal()" style="width: 100%;">
+            🗑️ حذف حساب المستخدم نهائياً
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-edit-user')">إلغاء</button>
+        <button class="btn btn-primary" onclick="submitEditUser()">حفظ التعديلات</button>
       </div>
     </div>
   </div>
@@ -1807,7 +1861,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
        CLIENT-SIDE JAVASCRIPT: AUTH, BIOMETRICS, NAVIGATION & API
   ========================================================= -->
   <script>
-    const ORDERI_SERVER_URL = "https://orderi-server.onrender.com";
+    const ORDERI_SERVER_URL = window.location.origin;
     let activeToken = localStorage.getItem('orderi_admin_token') || "";
     let currentAdminUser = localStorage.getItem('orderi_admin_user') || "admin";
     let allUsers = [];
@@ -2059,6 +2113,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     async function apiFetch(url, options = {}) {
       options.headers = options.headers || {};
       options.headers['Authorization'] = activeToken ? 'Bearer ' + activeToken : '';
+      options.headers['X-Admin-Token'] = activeToken || '';
       if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
         options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(options.body);
@@ -2181,6 +2236,9 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
                 <button class="btn \${u.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleUserStatus('\${u.id}', \${!u.is_active})">
                   \${u.is_active ? 'تعليق' : 'تفعيل'}
                 </button>
+                <button class="btn btn-secondary btn-sm" onclick="openEditUserModal('\${u.id}')">
+                  ✏️ تعديل
+                </button>
                 <button class="btn btn-secondary btn-sm" onclick="openExtendModal('\${u.id}', '\${u.username}')">
                   تمديد
                 </button>
@@ -2247,25 +2305,87 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       }
     }
 
+    function openEditUserModal(id) {
+      const user = allUsers.find(u => u.id === id);
+      if (!user) return;
+      document.getElementById('edit-user-id').value = user.id;
+      document.getElementById('edit-user-username').value = user.username || '';
+      document.getElementById('edit-user-phone').value = user.phone || '';
+      document.getElementById('edit-user-password').value = '';
+      document.getElementById('edit-user-status').value = user.is_active ? 'true' : 'false';
+      openModal('modal-edit-user');
+    }
+
+    async function submitEditUser() {
+      const id = document.getElementById('edit-user-id').value;
+      const username = document.getElementById('edit-user-username').value.trim();
+      const phone = document.getElementById('edit-user-phone').value.trim();
+      const password = document.getElementById('edit-user-password').value;
+      const is_active = document.getElementById('edit-user-status').value === 'true';
+
+      if (!username) {
+        alert('اسم المستخدم مطلوب');
+        return;
+      }
+
+      const body = { username, phone, is_active };
+      if (password) {
+        body.password = password;
+      }
+
+      const res = await apiFetch('/api/admin/users/' + id, {
+        method: 'PATCH',
+        body
+      });
+
+      if (res.success) {
+        showToast('تم حفظ تعديلات المستخدم بنجاح');
+        closeModal('modal-edit-user');
+        fetchUsers();
+        fetchStats();
+      } else {
+        alert(res.error || 'فشل تحديث بيانات المستخدم');
+      }
+    }
+
+    async function submitDeleteUserFromModal() {
+      const id = document.getElementById('edit-user-id').value;
+      const user = allUsers.find(u => u.id === id);
+      if (!confirm('هل أنت متأكد من حذف حساب المستخدم ' + (user?.username || '') + ' نهائياً؟')) return;
+
+      const res = await apiFetch('/api/admin/users/' + id, { method: 'DELETE' });
+      if (res.success) {
+        showToast('تم حذف حساب المستخدم بنجاح');
+        closeModal('modal-edit-user');
+        fetchUsers();
+        fetchStats();
+      } else {
+        alert(res.error || 'فشل حذف المستخدم');
+      }
+    }
+
     async function submitAddUser() {
       const username = document.getElementById('add-username').value.trim();
       const password = document.getElementById('add-password').value;
       const phone = document.getElementById('add-phone').value.trim();
+      const days = Number(document.getElementById('add-user-days').value || 0);
 
       if (!username || !password) {
         alert('يرجى كتابة اسم المستخدم وكلمة المرور');
         return;
       }
 
-      const res = await fetch('/api/auth/register', {
+      const res = await apiFetch('/api/admin/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, phone })
-      }).then(r => r.json());
+        body: { username, password, phone, days }
+      });
 
       if (res.success) {
-        showToast('تمت إضافة المستخدم بنجاح');
+        showToast('تمت إضافة المستخدم بنجاح' + (days > 0 ? (' مع اشتراك ' + days + ' يوم') : ''));
         closeModal('modal-add-user');
+        document.getElementById('add-username').value = '';
+        document.getElementById('add-password').value = '';
+        document.getElementById('add-phone').value = '';
         fetchUsers();
         fetchStats();
       } else {
