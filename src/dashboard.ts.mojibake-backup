@@ -1,11 +1,11 @@
-export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boolean): string {
+﻿export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boolean): string {
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Orderi Server | إدارة البرنامج والتحكم المركزي</title>
-  <meta name="description" content="Orderi Server - لوحة الإدارة والتحكم المركزية لمنظومة Orderi لإدارة المستخدمين والمندوبين والأجهزة والتراخيص">
+  <title>Orderi Server | ط¥ط¯ط§ط±ط© ط§ظ„ط¨ط±ظ†ط§ظ…ط¬ ظˆط§ظ„طھط­ظƒظ… ط§ظ„ظ…ط±ظƒط²ظٹ</title>
+  <meta name="description" content="Orderi Server - ظ„ظˆط­ط© ط§ظ„ط¥ط¯ط§ط±ط© ظˆط§ظ„طھط­ظƒظ… ط§ظ„ظ…ط±ظƒط²ظٹط© ظ„ظ…ظ†ط¸ظˆظ…ط© Orderi ظ„ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ظˆط§ظ„ظ…ظ†ط¯ظˆط¨ظٹظ† ظˆط§ظ„ط£ط¬ظ‡ط²ط© ظˆط§ظ„طھط±ط§ط®ظٹطµ">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/orderi-admin-logo.svg">
   <link rel="manifest" href="/manifest.json">
@@ -17,6 +17,15 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
+      @font-face {
+        font-family: "OrderiCairo";
+        src: url("/fonts/Cairo-Regular.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      
     :root {
       --bg: #090d16;
       --card-bg: #111827;
@@ -35,7 +44,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
-      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      font-family: 'OrderiCairo', 'Cairo', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -1039,7 +1048,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     }
   </style>
 </head>
-<body>
+<body dir="rtl">
 
   <!-- =========================================================
        1. ADMIN LOGIN SCREEN WITH BIOMETRICS
@@ -1050,34 +1059,34 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         <img src="/orderi-admin-logo.svg" alt="Orderi Admin" style="width:100%; height:100%; object-fit:cover; display:block;">
       </div>
       <h2 class="login-title">Orderi Server</h2>
-      <p class="login-subtitle">إدارة البرنامج</p>
+      <p class="login-subtitle">ط¥ط¯ط§ط±ط© ط§ظ„ط¨ط±ظ†ط§ظ…ط¬</p>
 
       <form class="login-form" id="admin-login-form" onsubmit="handleLoginSubmit(event)">
         <div class="input-wrapper">
-          <label>اسم المشرف (Username)</label>
+          <label>ط§ط³ظ… ط§ظ„ظ…ط´ط±ظپ (Username)</label>
           <div class="input-field">
-            <input type="text" id="admin-user-input" placeholder="أدخل اسم المشرف" required autocomplete="username">
+            <input type="text" id="admin-user-input" placeholder="ط£ط¯ط®ظ„ ط§ط³ظ… ط§ظ„ظ…ط´ط±ظپ" required autocomplete="username">
           </div>
         </div>
 
         <div class="input-wrapper">
-          <label>كلمة المرور (Password)</label>
+          <label>ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± (Password)</label>
           <div class="input-field">
-            <input type="password" id="admin-pass-input" placeholder="أدخل كلمة المرور" required autocomplete="current-password">
-            <button type="button" class="input-icon-btn" onclick="togglePassVisibility()" title="إظهار/إخفاء">👁️</button>
+            <input type="password" id="admin-pass-input" placeholder="ط£ط¯ط®ظ„ ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±" required autocomplete="current-password">
+            <button type="button" class="input-icon-btn" onclick="togglePassVisibility()" title="ط¥ط¸ظ‡ط§ط±/ط¥ط®ظپط§ط،">ًں‘پï¸ڈ</button>
           </div>
         </div>
 
         <button type="submit" class="btn-login" id="btn-login-submit">
-          <span>دخول للوحة التحكم</span>
-          <span>←</span>
+          <span>ط¯ط®ظˆظ„ ظ„ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ…</span>
+          <span>â†گ</span>
         </button>
 
-        <div class="divider">أو الدخول المباشر بالبصمة</div>
+        <div class="divider">ط£ظˆ ط§ظ„ط¯ط®ظˆظ„ ط§ظ„ظ…ط¨ط§ط´ط± ط¨ط§ظ„ط¨طµظ…ط©</div>
 
         <button type="button" class="btn-biometric" onclick="handleBiometricLoginClick()">
-          <span style="font-size:1.3rem;">👆</span>
-          <span>الدخول ببصمة الإصبع / الوجه</span>
+          <span style="font-size:1.3rem;">ًں‘†</span>
+          <span>ط§ظ„ط¯ط®ظˆظ„ ط¨ط¨طµظ…ط© ط§ظ„ط¥طµط¨ط¹ / ط§ظ„ظˆط¬ظ‡</span>
         </button>
       </form>
     </div>
@@ -1086,18 +1095,18 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <!-- BIOMETRIC SCANNER POPUP -->
   <div class="bio-modal-overlay" id="bio-modal">
     <div class="bio-modal-card">
-      <h3 style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:0.25rem;">التحقق من البصمة</h3>
-      <p style="font-size:0.85rem; color:#94a3b8;">المس مستشعر البصمة أو انقر للمصادقة الفورية</p>
+      <h3 style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:0.25rem;">ط§ظ„طھط­ظ‚ظ‚ ظ…ظ† ط§ظ„ط¨طµظ…ط©</h3>
+      <p style="font-size:0.85rem; color:#94a3b8;">ط§ظ„ظ…ط³ ظ…ط³طھط´ط¹ط± ط§ظ„ط¨طµظ…ط© ط£ظˆ ط§ظ†ظ‚ط± ظ„ظ„ظ…طµط§ط¯ظ‚ط© ط§ظ„ظپظˆط±ظٹط©</p>
       
       <div class="fingerprint-scanner" onclick="confirmBiometricTouch()">
-        👆
+        ًں‘†
       </div>
 
       <div id="bio-modal-status" style="font-size:0.88rem; color:#6ee7b7; font-weight:700; margin-bottom:1.25rem;">
-        بانتظار قراءة البصمة...
+        ط¨ط§ظ†طھط¸ط§ط± ظ‚ط±ط§ط،ط© ط§ظ„ط¨طµظ…ط©...
       </div>
 
-      <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="closeBioModal()">إلغاء</button>
+      <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="closeBioModal()">ط¥ظ„ط؛ط§ط،</button>
     </div>
   </div>
 
@@ -1114,51 +1123,51 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         </div>
         <div>
           <div class="brand-title">Orderi Server</div>
-          <div class="brand-subtitle">إدارة البرنامج والتحكم</div>
+          <div class="brand-subtitle">ط¥ط¯ط§ط±ط© ط§ظ„ط¨ط±ظ†ط§ظ…ط¬ ظˆط§ظ„طھط­ظƒظ…</div>
         </div>
       </div>
 
       <ul class="nav-links">
         <li class="nav-item active" onclick="switchTab('dashboard')">
-          <span>🏠</span>
-          <span>لوحة التحكم الرئيسية</span>
+          <span>ًںڈ </span>
+          <span>ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ… ط§ظ„ط±ط¦ظٹط³ظٹط©</span>
         </li>
         <li class="nav-item" onclick="switchTab('users')">
-          <span>👥</span>
-          <span>إدارة المستخدمين</span>
+          <span>ًں‘¥</span>
+          <span>ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†</span>
         </li>
         <li class="nav-item" onclick="switchTab('codes')">
-          <span>🔑</span>
-          <span>أكواد التفعيل</span>
+          <span>ًں”‘</span>
+          <span>ط£ظƒظˆط§ط¯ ط§ظ„طھظپط¹ظٹظ„</span>
         </li>
         <li class="nav-item" onclick="switchTab('devices')">
-          <span>📱</span>
-          <span>إدارة الأجهزة</span>
+          <span>ًں“±</span>
+          <span>ط¥ط¯ط§ط±ط© ط§ظ„ط£ط¬ظ‡ط²ط©</span>
         </li>
         <li class="nav-item" onclick="switchTab('subscriptions')">
-          <span>📅</span>
-          <span>الاشتراكات</span>
+          <span>ًں“…</span>
+          <span>ط§ظ„ط§ط´طھط±ط§ظƒط§طھ</span>
         </li>
         <li class="nav-item" onclick="switchTab('orders')">
-          <span>📦</span>
-          <span>الطلبات</span>
+          <span>ًں“¦</span>
+          <span>ط§ظ„ط·ظ„ط¨ط§طھ</span>
         </li>
         <li class="nav-item" onclick="switchTab('logs')">
-          <span>📋</span>
-          <span>سجل العمليات</span>
+          <span>ًں“‹</span>
+          <span>ط³ط¬ظ„ ط§ظ„ط¹ظ…ظ„ظٹط§طھ</span>
         </li>
         <li class="nav-item" onclick="switchTab('alerts')">
-          <span>🚨</span>
-          <span>التنبيهات والأخطاء</span>
+          <span>ًںڑ¨</span>
+          <span>ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظˆط§ظ„ط£ط®ط·ط§ط،</span>
           <span class="nav-badge" id="sidebar-alert-badge" style="display:none">0</span>
         </li>
         <li class="nav-item" onclick="switchTab('whatsapp')">
-          <span>📡</span>
-          <span>رادار الواتساب</span>
+          <span>ًں“،</span>
+          <span>ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨</span>
         </li>
         <li class="nav-item" onclick="switchTab('security')">
-          <span>🛡️</span>
-          <span>أمان الهاتف والبصمة</span>
+          <span>ًں›،ï¸ڈ</span>
+          <span>ط£ظ…ط§ظ† ط§ظ„ظ‡ط§طھظپ ظˆط§ظ„ط¨طµظ…ط©</span>
         </li>
       </ul>
 
@@ -1170,10 +1179,10 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
             </div>
             <div>
               <div style="font-size:0.85rem; font-weight:800; color:#fff;" id="profile-admin-name">Admin</div>
-              <div style="font-size:0.7rem; color:#10b981;">● متصل بالبصمة</div>
+              <div style="font-size:0.7rem; color:#10b981;">â—ڈ ظ…طھطµظ„ ط¨ط§ظ„ط¨طµظ…ط©</div>
             </div>
           </div>
-          <button class="btn btn-danger btn-sm" onclick="logoutAdmin()" title="تسجيل الخروج">🚪</button>
+          <button class="btn btn-danger btn-sm" onclick="logoutAdmin()" title="طھط³ط¬ظٹظ„ ط§ظ„ط®ط±ظˆط¬">ًںڑھ</button>
         </div>
       </div>
     </aside>
@@ -1184,17 +1193,17 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <!-- TOP BAR -->
       <header class="topbar">
         <div class="top-left">
-          <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+          <button class="mobile-menu-btn" onclick="toggleSidebar()">âک°</button>
           <div class="page-title">
-            <h1 id="tab-title">لوحة التحكم (Dashboard)</h1>
-            <p id="tab-desc">نظرة عامة على نشاط الخادم والمستخدمين والتراخيص والأجهزة</p>
+            <h1 id="tab-title">ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ… (Dashboard)</h1>
+            <p id="tab-desc">ظ†ط¸ط±ط© ط¹ط§ظ…ط© ط¹ظ„ظ‰ ظ†ط´ط§ط· ط§ظ„ط®ط§ط¯ظ… ظˆط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ظˆط§ظ„طھط±ط§ط®ظٹطµ ظˆط§ظ„ط£ط¬ظ‡ط²ط©</p>
           </div>
         </div>
 
         <div class="top-actions">
-          <button class="btn btn-secondary btn-sm" onclick="fetchStats()">🔄 تحديث</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-code-generate')">➕ كود جديد</button>
-          <button class="btn btn-danger btn-sm" onclick="logoutAdmin()" title="تسجيل خروج">خروج</button>
+          <button class="btn btn-secondary btn-sm" onclick="fetchStats()">ًں”„ طھط­ط¯ظٹط«</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-code-generate')">â‍• ظƒظˆط¯ ط¬ط¯ظٹط¯</button>
+          <button class="btn btn-danger btn-sm" onclick="logoutAdmin()" title="طھط³ط¬ظٹظ„ ط®ط±ظˆط¬">ط®ط±ظˆط¬</button>
         </div>
       </header>
 
@@ -1202,47 +1211,47 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <section class="stats-grid">
         <div class="stat-card">
           <div class="stat-head">
-            <span>إجمالي المستخدمين</span>
-            <span>👥</span>
+            <span>ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†</span>
+            <span>ًں‘¥</span>
           </div>
           <div class="stat-val" id="stat-total-users">0</div>
-          <div class="stat-sub"><span id="stat-active-users" style="color:var(--success); font-weight:700">0</span> نشط • <span id="stat-suspended-users" style="color:var(--danger)">0</span> معلق</div>
+          <div class="stat-sub"><span id="stat-active-users" style="color:var(--success); font-weight:700">0</span> ظ†ط´ط· â€¢ <span id="stat-suspended-users" style="color:var(--danger)">0</span> ظ…ط¹ظ„ظ‚</div>
         </div>
 
         <div class="stat-card stat-success">
           <div class="stat-head">
-            <span>الاشتراكات الفعالة</span>
-            <span>📅</span>
+            <span>ط§ظ„ط§ط´طھط±ط§ظƒط§طھ ط§ظ„ظپط¹ط§ظ„ط©</span>
+            <span>ًں“…</span>
           </div>
           <div class="stat-val" id="stat-total-subs">0</div>
-          <div class="stat-sub"><span id="stat-expiring-soon" style="color:var(--warning)">0</span> تنتهي قريباً • <span id="stat-expired-subs" style="color:var(--danger)">0</span> منتهية</div>
+          <div class="stat-sub"><span id="stat-expiring-soon" style="color:var(--warning)">0</span> طھظ†طھظ‡ظٹ ظ‚ط±ظٹط¨ط§ظ‹ â€¢ <span id="stat-expired-subs" style="color:var(--danger)">0</span> ظ…ظ†طھظ‡ظٹط©</div>
         </div>
 
         <div class="stat-card stat-warning">
           <div class="stat-head">
-            <span>الأجهزة المرتبطة</span>
-            <span>📱</span>
+            <span>ط§ظ„ط£ط¬ظ‡ط²ط© ط§ظ„ظ…ط±طھط¨ط·ط©</span>
+            <span>ًں“±</span>
           </div>
           <div class="stat-val" id="stat-total-devices">0</div>
-          <div class="stat-sub"><span id="stat-active-devices" style="color:var(--success)">0</span> متصل • <span id="stat-blocked-devices" style="color:var(--danger)">0</span> محظور</div>
+          <div class="stat-sub"><span id="stat-active-devices" style="color:var(--success)">0</span> ظ…طھطµظ„ â€¢ <span id="stat-blocked-devices" style="color:var(--danger)">0</span> ظ…ط­ط¸ظˆط±</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-head">
-            <span>أكواد التفعيل</span>
-            <span>🔑</span>
+            <span>ط£ظƒظˆط§ط¯ ط§ظ„طھظپط¹ظٹظ„</span>
+            <span>ًں”‘</span>
           </div>
           <div class="stat-val" id="stat-available-codes">0</div>
-          <div class="stat-sub"><span id="stat-used-codes" style="color:var(--text-muted)">0</span> مستخدم من <span id="stat-total-codes">0</span></div>
+          <div class="stat-sub"><span id="stat-used-codes" style="color:var(--text-muted)">0</span> ظ…ط³طھط®ط¯ظ… ظ…ظ† <span id="stat-total-codes">0</span></div>
         </div>
 
         <div class="stat-card stat-danger">
           <div class="stat-head">
-            <span>التنبيهات والأخطاء</span>
-            <span>🚨</span>
+            <span>ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظˆط§ظ„ط£ط®ط·ط§ط،</span>
+            <span>ًںڑ¨</span>
           </div>
           <div class="stat-val" id="stat-unread-alerts" style="color:var(--danger)">0</div>
-          <div class="stat-sub">تتطلب المراجعة الفورية</div>
+          <div class="stat-sub">طھطھط·ظ„ط¨ ط§ظ„ظ…ط±ط§ط¬ط¹ط© ط§ظ„ظپظˆط±ظٹط©</div>
         </div>
       </section>
 
@@ -1252,21 +1261,21 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           
           <div class="card">
             <div class="card-header">
-              <div class="card-title">🕒 آخر تسجيلات الدخول</div>
-              <button class="btn btn-secondary btn-sm" onclick="switchTab('users')">عرض المستخدمين</button>
+              <div class="card-title">ًں•’ ط¢ط®ط± طھط³ط¬ظٹظ„ط§طھ ط§ظ„ط¯ط®ظˆظ„</div>
+              <button class="btn btn-secondary btn-sm" onclick="switchTab('users')">ط¹ط±ط¶ ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†</button>
             </div>
             <div class="table-container">
               <table class="mobile-card-view">
                 <thead>
                   <tr>
-                    <th>المستخدم</th>
-                    <th>الهاتف</th>
-                    <th>الجهاز المرتبط</th>
-                    <th>الوقت</th>
+                    <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                    <th>ط§ظ„ظ‡ط§طھظپ</th>
+                    <th>ط§ظ„ط¬ظ‡ط§ط² ط§ظ„ظ…ط±طھط¨ط·</th>
+                    <th>ط§ظ„ظˆظ‚طھ</th>
                   </tr>
                 </thead>
                 <tbody id="table-recent-logins">
-                  <tr><td colspan="4" style="text-align:center;">جاري التحميل...</td></tr>
+                  <tr><td colspan="4" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1274,21 +1283,21 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">🚨 تنبيهات حية معلقة</div>
-              <button class="btn btn-secondary btn-sm" onclick="switchTab('alerts')">عرض الكل</button>
+              <div class="card-title">ًںڑ¨ طھظ†ط¨ظٹظ‡ط§طھ ط­ظٹط© ظ…ط¹ظ„ظ‚ط©</div>
+              <button class="btn btn-secondary btn-sm" onclick="switchTab('alerts')">ط¹ط±ط¶ ط§ظ„ظƒظ„</button>
             </div>
             <div class="table-container">
               <table class="mobile-card-view">
                 <thead>
                   <tr>
-                    <th>النوع</th>
-                    <th>العنوان</th>
-                    <th>التفاصيل</th>
-                    <th>الحالة</th>
+                    <th>ط§ظ„ظ†ظˆط¹</th>
+                    <th>ط§ظ„ط¹ظ†ظˆط§ظ†</th>
+                    <th>ط§ظ„طھظپط§طµظٹظ„</th>
+                    <th>ط§ظ„ط­ط§ظ„ط©</th>
                   </tr>
                 </thead>
                 <tbody id="table-recent-alerts">
-                  <tr><td colspan="4" style="text-align:center;">جاري التحميل...</td></tr>
+                  <tr><td colspan="4" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1301,27 +1310,27 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-users" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">👥 إدارة المستخدمين</div>
+            <div class="card-title">ًں‘¥ ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†</div>
             <div style="display: flex; gap: 0.5rem; align-items: center; width:100%; max-width:400px;">
-              <input type="text" id="user-search-input" class="form-input" placeholder="بحث بالاسم أو الهاتف..." oninput="filterUsersTable()">
-              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-user')">➕ إضافة مستخدم</button>
+              <input type="text" id="user-search-input" class="form-input" placeholder="ط¨ط­ط« ط¨ط§ظ„ط§ط³ظ… ط£ظˆ ط§ظ„ظ‡ط§طھظپ..." oninput="filterUsersTable()">
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-user')">â‍• ط¥ط¶ط§ظپط© ظ…ط³طھط®ط¯ظ…</button>
             </div>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>المستخدم</th>
-                  <th>الهاتف</th>
-                  <th>الحالة</th>
-                  <th>الاشتراك</th>
-                  <th>الجهاز المرتبط</th>
-                  <th>آخر نشاط</th>
-                  <th>الإجراءات</th>
+                  <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                  <th>ط§ظ„ظ‡ط§طھظپ</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
+                  <th>ط§ظ„ط§ط´طھط±ط§ظƒ</th>
+                  <th>ط§ظ„ط¬ظ‡ط§ط² ط§ظ„ظ…ط±طھط¨ط·</th>
+                  <th>ط¢ط®ط± ظ†ط´ط§ط·</th>
+                  <th>ط§ظ„ط¥ط¬ط±ط§ط،ط§طھ</th>
                 </tr>
               </thead>
               <tbody id="table-users-body">
-                <tr><td colspan="7" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="7" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1332,28 +1341,28 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-codes" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">🔑 أكواد التفعيل (Licenses)</div>
+            <div class="card-title">ًں”‘ ط£ظƒظˆط§ط¯ ط§ظ„طھظپط¹ظٹظ„ (Licenses)</div>
             <div style="display: flex; gap: 0.5rem;">
-              <button class="btn btn-primary btn-sm" onclick="openModal('modal-code-generate')">➕ كود مفرد</button>
-              <button class="btn btn-secondary btn-sm" onclick="openModal('modal-bulk-codes')">📑 دفعة (Bulk)</button>
+              <button class="btn btn-primary btn-sm" onclick="openModal('modal-code-generate')">â‍• ظƒظˆط¯ ظ…ظپط±ط¯</button>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('modal-bulk-codes')">ًں“‘ ط¯ظپط¹ط© (Bulk)</button>
             </div>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>كود التفعيل</th>
-                  <th>الباقة</th>
-                  <th>المدة</th>
+                  <th>ظƒظˆط¯ ط§ظ„طھظپط¹ظٹظ„</th>
+                  <th>ط§ظ„ط¨ط§ظ‚ط©</th>
+                  <th>ط§ظ„ظ…ط¯ط©</th>
                   <th>VIP</th>
-                  <th>الحالة</th>
-                  <th>المستخدم</th>
-                  <th>تاريخ الإنشاء</th>
-                  <th>إجراء</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
+                  <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                  <th>طھط§ط±ظٹط® ط§ظ„ط¥ظ†ط´ط§ط،</th>
+                  <th>ط¥ط¬ط±ط§ط،</th>
                 </tr>
               </thead>
               <tbody id="table-codes-body">
-                <tr><td colspan="8" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="8" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1364,24 +1373,24 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-devices" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">📱 إدارة الأجهزة المرتبطة</div>
-            <span style="font-size:0.8rem; color:var(--text-muted)">حماية تعدد الأجهزة</span>
+            <div class="card-title">ًں“± ط¥ط¯ط§ط±ط© ط§ظ„ط£ط¬ظ‡ط²ط© ط§ظ„ظ…ط±طھط¨ط·ط©</div>
+            <span style="font-size:0.8rem; color:var(--text-muted)">ط­ظ…ط§ظٹط© طھط¹ط¯ط¯ ط§ظ„ط£ط¬ظ‡ط²ط©</span>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
                   <th>Device ID</th>
-                  <th>المستخدم</th>
-                  <th>نوع الجهاز</th>
-                  <th>الإصدار</th>
-                  <th>الحالة</th>
-                  <th>آخر اتصال</th>
-                  <th>الإجراء</th>
+                  <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                  <th>ظ†ظˆط¹ ط§ظ„ط¬ظ‡ط§ط²</th>
+                  <th>ط§ظ„ط¥طµط¯ط§ط±</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
+                  <th>ط¢ط®ط± ط§طھطµط§ظ„</th>
+                  <th>ط§ظ„ط¥ط¬ط±ط§ط،</th>
                 </tr>
               </thead>
               <tbody id="table-devices-body">
-                <tr><td colspan="7" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="7" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1392,22 +1401,22 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-subscriptions" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">📅 إدارة الاشتراكات</div>
+            <div class="card-title">ًں“… ط¥ط¯ط§ط±ط© ط§ظ„ط§ط´طھط±ط§ظƒط§طھ</div>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>المستخدم</th>
-                  <th>الباقة</th>
-                  <th>تاريخ البداية</th>
-                  <th>تاريخ الانتهاء</th>
-                  <th>الحالة</th>
-                  <th>الإجراء</th>
+                  <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                  <th>ط§ظ„ط¨ط§ظ‚ط©</th>
+                  <th>طھط§ط±ظٹط® ط§ظ„ط¨ط¯ط§ظٹط©</th>
+                  <th>طھط§ط±ظٹط® ط§ظ„ط§ظ†طھظ‡ط§ط،</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
+                  <th>ط§ظ„ط¥ط¬ط±ط§ط،</th>
                 </tr>
               </thead>
               <tbody id="table-subs-body">
-                <tr><td colspan="6" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="6" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1418,25 +1427,25 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-orders" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">📦 طلبات الرادار الملتقطة</div>
-            <span class="badge badge-info" id="orders-count-badge">0 طلب</span>
+            <div class="card-title">ًں“¦ ط·ظ„ط¨ط§طھ ط§ظ„ط±ط§ط¯ط§ط± ط§ظ„ظ…ظ„طھظ‚ط·ط©</div>
+            <span class="badge badge-info" id="orders-count-badge">0 ط·ظ„ط¨</span>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>الرقم</th>
-                  <th>الاستلام</th>
-                  <th>الوجهة</th>
-                  <th>السعر</th>
-                  <th>المسافة</th>
-                  <th>المصدر</th>
-                  <th>الحالة</th>
-                  <th>الوقت</th>
+                  <th>ط§ظ„ط±ظ‚ظ…</th>
+                  <th>ط§ظ„ط§ط³طھظ„ط§ظ…</th>
+                  <th>ط§ظ„ظˆط¬ظ‡ط©</th>
+                  <th>ط§ظ„ط³ط¹ط±</th>
+                  <th>ط§ظ„ظ…ط³ط§ظپط©</th>
+                  <th>ط§ظ„ظ…طµط¯ط±</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
+                  <th>ط§ظ„ظˆظ‚طھ</th>
                 </tr>
               </thead>
               <tbody id="table-orders-body">
-                <tr><td colspan="8" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="8" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1447,23 +1456,23 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-logs" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">📋 سجل العمليات (Audit Logs)</div>
-            <button class="btn btn-secondary btn-sm" onclick="fetchLogs()">🔄 تحديث</button>
+            <div class="card-title">ًں“‹ ط³ط¬ظ„ ط§ظ„ط¹ظ…ظ„ظٹط§طھ (Audit Logs)</div>
+            <button class="btn btn-secondary btn-sm" onclick="fetchLogs()">ًں”„ طھط­ط¯ظٹط«</button>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>الوقت</th>
-                  <th>العملية</th>
-                  <th>المستخدم</th>
-                  <th>التفاصيل</th>
+                  <th>ط§ظ„ظˆظ‚طھ</th>
+                  <th>ط§ظ„ط¹ظ…ظ„ظٹط©</th>
+                  <th>ط§ظ„ظ…ط³طھط®ط¯ظ…</th>
+                  <th>ط§ظ„طھظپط§طµظٹظ„</th>
                   <th>IP</th>
-                  <th>الحالة</th>
+                  <th>ط§ظ„ط­ط§ظ„ط©</th>
                 </tr>
               </thead>
               <tbody id="table-logs-body">
-                <tr><td colspan="6" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="6" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1474,23 +1483,23 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-alerts" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">🚨 التنبيهات والأخطاء</div>
-            <button class="btn btn-secondary btn-sm" onclick="clearAllAlerts()">تحديد الكل كمقروء</button>
+            <div class="card-title">ًںڑ¨ ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظˆط§ظ„ط£ط®ط·ط§ط،</div>
+            <button class="btn btn-secondary btn-sm" onclick="clearAllAlerts()">طھط­ط¯ظٹط¯ ط§ظ„ظƒظ„ ظƒظ…ظ‚ط±ظˆط،</button>
           </div>
           <div class="table-container">
             <table class="mobile-card-view">
               <thead>
                 <tr>
-                  <th>الخطورة</th>
-                  <th>النوع</th>
-                  <th>العنوان</th>
-                  <th>الرسالة</th>
-                  <th>الوقت</th>
-                  <th>الإجراء</th>
+                  <th>ط§ظ„ط®ط·ظˆط±ط©</th>
+                  <th>ط§ظ„ظ†ظˆط¹</th>
+                  <th>ط§ظ„ط¹ظ†ظˆط§ظ†</th>
+                  <th>ط§ظ„ط±ط³ط§ظ„ط©</th>
+                  <th>ط§ظ„ظˆظ‚طھ</th>
+                  <th>ط§ظ„ط¥ط¬ط±ط§ط،</th>
                 </tr>
               </thead>
               <tbody id="table-alerts-body">
-                <tr><td colspan="6" style="text-align:center;">جاري التحميل...</td></tr>
+                <tr><td colspan="6" style="text-align:center;">ط¬ط§ط±ظٹ ط§ظ„طھط­ظ…ظٹظ„...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1503,51 +1512,51 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📡 بوابة رادار الواتساب</div>
-              <button class="btn btn-secondary btn-sm" onclick="refreshWhatsAppQR()">🔄 كود QR</button>
+              <div class="card-title">ًں“، ط¨ظˆط§ط¨ط© ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨</div>
+              <button class="btn btn-secondary btn-sm" onclick="refreshWhatsAppQR()">ًں”„ ظƒظˆط¯ QR</button>
             </div>
             <div style="padding: 1.5rem; text-align: center;">
               <div id="qr-display-container" style="background:#fff; padding:0.75rem; border-radius:12px; display:inline-block; margin-bottom:1rem; border:2px solid #38bdf8;">
                 <img id="whatsapp-qr-img" src="" alt="QR Code" style="width: 220px; height: 220px; display:block;">
               </div>
               <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
-                امسح الرمز لربط بوابة التنبيهات مع تطبيق Orderi Radar
+                ط§ظ…ط³ط­ ط§ظ„ط±ظ…ط² ظ„ط±ط¨ط· ط¨ظˆط§ط¨ط© ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظ…ط¹ طھط·ط¨ظٹظ‚ Orderi Radar
               </p>
               <div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap:wrap;">
-                <button class="btn btn-success btn-sm" onclick="openPairWhatsAppModal()">🔗 ربط برقم هاتف فعلي</button>
-                <button class="btn btn-danger btn-sm" onclick="disconnectWhatsApp()">❌ فصل البوابة</button>
+                <button class="btn btn-success btn-sm" onclick="openPairWhatsAppModal()">ًں”— ط±ط¨ط· ط¨ط±ظ‚ظ… ظ‡ط§طھظپ ظپط¹ظ„ظٹ</button>
+                <button class="btn btn-danger btn-sm" onclick="disconnectWhatsApp()">â‌Œ ظپطµظ„ ط§ظ„ط¨ظˆط§ط¨ط©</button>
               </div>
             </div>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">📊 إحصائيات البوابة الفعالة</div>
+              <div class="card-title">ًں“ٹ ط¥ط­طµط§ط¦ظٹط§طھ ط§ظ„ط¨ظˆط§ط¨ط© ط§ظ„ظپط¹ط§ظ„ط©</div>
             </div>
             <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem;">
               <div style="display:flex; justify-content:space-between; border-bottom:1px solid #1f293d; padding-bottom:0.6rem;">
-                <span style="color:#94a3b8">الحالة</span>
-                <span id="wa-status-badge" class="badge badge-gray">بانتظار الربط</span>
+                <span style="color:#94a3b8">ط§ظ„ط­ط§ظ„ط©</span>
+                <span id="wa-status-badge" class="badge badge-gray">ط¨ط§ظ†طھط¸ط§ط± ط§ظ„ط±ط¨ط·</span>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom:1px solid #1f293d; padding-bottom:0.6rem;">
-                <span style="color:#94a3b8">الهاتف المتصل</span>
-                <span id="wa-phone-val" class="code-tag">غير متصل</span>
+                <span style="color:#94a3b8">ط§ظ„ظ‡ط§طھظپ ط§ظ„ظ…طھطµظ„</span>
+                <span id="wa-phone-val" class="code-tag">ط؛ظٹط± ظ…طھطµظ„</span>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom:1px solid #1f293d; padding-bottom:0.6rem;">
-                <span style="color:#94a3b8">الجهاز</span>
+                <span style="color:#94a3b8">ط§ظ„ط¬ظ‡ط§ط²</span>
                 <span id="wa-device-val" style="font-weight:700">Orderi Radar Gateway</span>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom:1px solid #1f293d; padding-bottom:0.6rem;">
-                <span style="color:#94a3b8">البطارية</span>
-                <span id="wa-battery-val" style="color:var(--success); font-weight:700">🔋 100%</span>
+                <span style="color:#94a3b8">ط§ظ„ط¨ط·ط§ط±ظٹط©</span>
+                <span id="wa-battery-val" style="color:var(--success); font-weight:700">ًں”‹ 100%</span>
               </div>
               <div style="display:flex; justify-content:space-between; border-bottom:1px solid #1f293d; padding-bottom:0.6rem;">
-                <span style="color:#94a3b8">القروبات المراقبة</span>
-                <span id="wa-groups-val" style="font-weight:700; color:var(--accent-hover)">0 قروب</span>
+                <span style="color:#94a3b8">ط§ظ„ظ‚ط±ظˆط¨ط§طھ ط§ظ„ظ…ط±ط§ظ‚ط¨ط©</span>
+                <span id="wa-groups-val" style="font-weight:700; color:var(--accent-hover)">0 ظ‚ط±ظˆط¨</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8">الطلبات الملتقطة</span>
-                <span id="wa-orders-val" style="font-weight:700">0 طلب</span>
+                <span style="color:#94a3b8">ط§ظ„ط·ظ„ط¨ط§طھ ط§ظ„ظ…ظ„طھظ‚ط·ط©</span>
+                <span id="wa-orders-val" style="font-weight:700">0 ط·ظ„ط¨</span>
               </div>
             </div>
           </div>
@@ -1557,16 +1566,16 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         <!-- LIVE WEBHOOK CARD -->
         <div class="card" style="margin-top: 1rem;">
           <div class="card-header">
-            <div class="card-title">🌐 رابط الويب هوك لاستقبال الطلبات الفعلي (Live Order Webhook)</div>
+            <div class="card-title">ًںŒگ ط±ط§ط¨ط· ط§ظ„ظˆظٹط¨ ظ‡ظˆظƒ ظ„ط§ط³طھظ‚ط¨ط§ظ„ ط§ظ„ط·ظ„ط¨ط§طھ ط§ظ„ظپط¹ظ„ظٹ (Live Order Webhook)</div>
           </div>
           <div style="padding:1.25rem; font-size:0.88rem; color:#cbd5e1; display:flex; flex-direction:column; gap:0.75rem;">
-            <p>يمكن لبوت الواتساب أو تطبيق التقاط الإشعارات في هواتف المندوبين إرسال الطلبات مباشرة إلى هذا الرابط:</p>
+            <p>ظٹظ…ظƒظ† ظ„ط¨ظˆطھ ط§ظ„ظˆط§طھط³ط§ط¨ ط£ظˆ طھط·ط¨ظٹظ‚ ط§ظ„طھظ‚ط§ط· ط§ظ„ط¥ط´ط¹ط§ط±ط§طھ ظپظٹ ظ‡ظˆط§طھظپ ط§ظ„ظ…ظ†ط¯ظˆط¨ظٹظ† ط¥ط±ط³ط§ظ„ ط§ظ„ط·ظ„ط¨ط§طھ ظ…ط¨ط§ط´ط±ط© ط¥ظ„ظ‰ ظ‡ط°ط§ ط§ظ„ط±ط§ط¨ط·:</p>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
               <input type="text" id="webhook-url-input" readonly class="form-input" style="direction:ltr; font-family:monospace; flex:1; min-width:250px;" value="/api/orders">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="copyWebhookUrl()">📋 نسخ الرابط</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="copyWebhookUrl()">ًں“‹ ظ†ط³ط® ط§ظ„ط±ط§ط¨ط·</button>
             </div>
             <div style="font-size:0.8rem; color:#94a3b8;">
-              يدعم إرسال <code>POST /api/orders</code> بصيغة JSON مع الحقول: <code>pickup_area</code>, <code>destination</code>, <code>price</code>, <code>raw_text</code>, <code>source_group</code>.
+              ظٹط¯ط¹ظ… ط¥ط±ط³ط§ظ„ <code>POST /api/orders</code> ط¨طµظٹط؛ط© JSON ظ…ط¹ ط§ظ„ط­ظ‚ظˆظ„: <code>pickup_area</code>, <code>destination</code>, <code>price</code>, <code>raw_text</code>, <code>source_group</code>.
             </div>
           </div>
         </div>
@@ -1576,32 +1585,32 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       <div id="tab-security" class="tab-content">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">🛡️ أمان الهاتف والبصمة وإعدادات المشرف</div>
+            <div class="card-title">ًں›،ï¸ڈ ط£ظ…ط§ظ† ط§ظ„ظ‡ط§طھظپ ظˆط§ظ„ط¨طµظ…ط© ظˆط¥ط¹ط¯ط§ط¯ط§طھ ط§ظ„ظ…ط´ط±ظپ</div>
           </div>
           <div style="padding: 1.5rem; display:flex; flex-direction:column; gap:1.25rem;">
             <p style="color:#94a3b8; font-size:0.9rem;">
-              إدارة أمان الحساب الحقيقي والربط بالبصمة الحيوية:
+              ط¥ط¯ط§ط±ط© ط£ظ…ط§ظ† ط§ظ„ط­ط³ط§ط¨ ط§ظ„ط­ظ‚ظٹظ‚ظٹ ظˆط§ظ„ط±ط¨ط· ط¨ط§ظ„ط¨طµظ…ط© ط§ظ„ط­ظٹظˆظٹط©:
             </p>
 
             <!-- Real Admin Credentials Management -->
             <div style="background:#090d16; border:1px solid #1f293d; border-radius:14px; padding:1.25rem;">
-              <div style="font-weight:800; color:#fff; margin-bottom:0.75rem; font-size:1.05rem;">🔑 تعديل بيانات المشرف الحقيقية (اسم المستخدم وكلمة المرور)</div>
-              <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:1rem;">قم بتعيين اسم المشرف وكلمة المرور الخاصة بك لتسجيل الدخول بأمان دون أي بيانات تجريبية:</p>
+              <div style="font-weight:800; color:#fff; margin-bottom:0.75rem; font-size:1.05rem;">ًں”‘ طھط¹ط¯ظٹظ„ ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط´ط±ظپ ط§ظ„ط­ظ‚ظٹظ‚ظٹط© (ط§ط³ظ… ط§ظ„ظ…ط³طھط®ط¯ظ… ظˆظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±)</div>
+              <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:1rem;">ظ‚ظ… ط¨طھط¹ظٹظٹظ† ط§ط³ظ… ط§ظ„ظ…ط´ط±ظپ ظˆظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ط§ظ„ط®ط§طµط© ط¨ظƒ ظ„طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„ ط¨ط£ظ…ط§ظ† ط¯ظˆظ† ط£ظٹ ط¨ظٹط§ظ†ط§طھ طھط¬ط±ظٹط¨ظٹط©:</p>
               <div style="display:flex; flex-direction:column; gap:0.75rem; max-width:440px;">
                 <div>
-                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">اسم المشرف الجديد</label>
-                  <input type="text" id="change-admin-username" class="form-input" placeholder="اسم المشرف">
+                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">ط§ط³ظ… ط§ظ„ظ…ط´ط±ظپ ط§ظ„ط¬ط¯ظٹط¯</label>
+                  <input type="text" id="change-admin-username" class="form-input" placeholder="ط§ط³ظ… ط§ظ„ظ…ط´ط±ظپ">
                 </div>
                 <div>
-                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">كلمة المرور الجديدة</label>
-                  <input type="password" id="change-admin-password" class="form-input" placeholder="كلمة المرور الجديدة">
+                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ط§ظ„ط¬ط¯ظٹط¯ط©</label>
+                  <input type="password" id="change-admin-password" class="form-input" placeholder="ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط± ط§ظ„ط¬ط¯ظٹط¯ط©">
                 </div>
                 <div>
-                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">تأكيد كلمة المرور</label>
-                  <input type="password" id="change-admin-password-confirm" class="form-input" placeholder="تأكيد كلمة المرور">
+                  <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:0.3rem;">طھط£ظƒظٹط¯ ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±</label>
+                  <input type="password" id="change-admin-password-confirm" class="form-input" placeholder="طھط£ظƒظٹط¯ ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±">
                 </div>
                 <button type="button" class="btn btn-primary" onclick="submitChangeAdminCreds()" style="margin-top:0.3rem;">
-                  💾 حفظ وتحديث بيانات المشرف
+                  ًں’¾ ط­ظپط¸ ظˆطھط­ط¯ظٹط« ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط´ط±ظپ
                 </button>
               </div>
             </div>
@@ -1612,41 +1621,41 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
                   <img src="/orderi-admin-logo.svg" alt="Orderi Admin APK Icon" style="width:100%; height:100%; object-fit:contain; display:block;">
                 </div>
                 <div>
-                  <div style="font-weight:900; font-size:1.05rem; color:#fff;">لوقو وأيقونة برنامج Orderi Admin (APK)</div>
-                  <div style="font-size:0.82rem; color:#94a3b8;">التصميم الرسمي المعتمد 3D: خريطة البحرين + صندوق الطرود + رادار المنظومة + درع ولوحة المشرف (Admin Panel) بخلفية شفافة</div>
+                  <div style="font-weight:900; font-size:1.05rem; color:#fff;">ظ„ظˆظ‚ظˆ ظˆط£ظٹظ‚ظˆظ†ط© ط¨ط±ظ†ط§ظ…ط¬ Orderi Admin (APK)</div>
+                  <div style="font-size:0.82rem; color:#94a3b8;">ط§ظ„طھطµظ…ظٹظ… ط§ظ„ط±ط³ظ…ظٹ ط§ظ„ظ…ط¹طھظ…ط¯ 3D: ط®ط±ظٹط·ط© ط§ظ„ط¨ط­ط±ظٹظ† + طµظ†ط¯ظˆظ‚ ط§ظ„ط·ط±ظˆط¯ + ط±ط§ط¯ط§ط± ط§ظ„ظ…ظ†ط¸ظˆظ…ط© + ط¯ط±ط¹ ظˆظ„ظˆط­ط© ط§ظ„ظ…ط´ط±ظپ (Admin Panel) ط¨ط®ظ„ظپظٹط© ط´ظپط§ظپط©</div>
                 </div>
               </div>
               <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                 <button type="button" onclick="downloadApkIconPng()" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:0.35rem;">
-                  <span>⬇️</span>
-                  <span>تحميل أيقونة APK (PNG 512px)</span>
+                  <span>â¬‡ï¸ڈ</span>
+                  <span>طھط­ظ…ظٹظ„ ط£ظٹظ‚ظˆظ†ط© APK (PNG 512px)</span>
                 </button>
                 <a href="/orderi-admin-logo.svg" download="orderi-admin-logo.svg" class="btn btn-secondary btn-sm" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
-                  <span>🎨</span>
-                  <span>تحميل المتجه (SVG)</span>
+                  <span>ًںژ¨</span>
+                  <span>طھط­ظ…ظٹظ„ ط§ظ„ظ…طھط¬ظ‡ (SVG)</span>
                 </a>
               </div>
             </div>
 
             <div style="background:#090d16; border:1px solid #1f293d; border-radius:14px; padding:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
               <div style="display:flex; align-items:center; gap:0.75rem;">
-                <div style="font-size:2rem; color:#10b981;">👆</div>
+                <div style="font-size:2rem; color:#10b981;">ًں‘†</div>
                 <div>
-                  <div style="font-weight:800; color:#fff;">بصمة الهاتف الحالي</div>
-                  <div style="font-size:0.8rem; color:#6ee7b7;" id="current-device-bio-status">مفعلة على هذا المتصفح</div>
+                  <div style="font-weight:800; color:#fff;">ط¨طµظ…ط© ط§ظ„ظ‡ط§طھظپ ط§ظ„ط­ط§ظ„ظٹ</div>
+                  <div style="font-size:0.8rem; color:#6ee7b7;" id="current-device-bio-status">ظ…ظپط¹ظ„ط© ط¹ظ„ظ‰ ظ‡ط°ط§ ط§ظ„ظ…طھطµظپط­</div>
                 </div>
               </div>
               <button class="btn btn-success btn-sm" onclick="registerCurrentDeviceBiometrics()">
-                🔄 إعادة تسجيل بصمة الجهاز
+                ًں”„ ط¥ط¹ط§ط¯ط© طھط³ط¬ظٹظ„ ط¨طµظ…ط© ط§ظ„ط¬ظ‡ط§ط²
               </button>
             </div>
 
             <div style="background:#090d16; border:1px solid #1f293d; border-radius:14px; padding:1.25rem;">
-              <div style="font-weight:800; color:#fff; margin-bottom:0.5rem;">معلومات الخادم والاتصال:</div>
+              <div style="font-weight:800; color:#fff; margin-bottom:0.5rem;">ظ…ط¹ظ„ظˆظ…ط§طھ ط§ظ„ط®ط§ط¯ظ… ظˆط§ظ„ط§طھطµط§ظ„:</div>
               <ul style="list-style:none; font-size:0.85rem; color:#cbd5e1; display:flex; flex-direction:column; gap:0.4rem;">
-                <li>• المنفذ النشط: <code>Port 3000 (0.0.0.0)</code></li>
-                <li>• تخزين البيانات: <code>${isSupabase ? "Supabase Postgres Remote" : "In-Memory Resilient Mode"}</code></li>
-                <li>• مستوى الأمان: <code>Admin Token + Device Binding + WebAuthn</code></li>
+                <li>â€¢ ط§ظ„ظ…ظ†ظپط° ط§ظ„ظ†ط´ط·: <code>Port 3000 (0.0.0.0)</code></li>
+                <li>â€¢ طھط®ط²ظٹظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ: <code>${isSupabase ? "Supabase Postgres Remote" : "In-Memory Resilient Mode"}</code></li>
+                <li>â€¢ ظ…ط³طھظˆظ‰ ط§ظ„ط£ظ…ط§ظ†: <code>Admin Token + Device Binding + WebAuthn</code></li>
               </ul>
             </div>
           </div>
@@ -1660,24 +1669,24 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     ========================================================= -->
     <nav class="mobile-bottom-bar">
       <button class="bottom-nav-btn active" id="bnav-dashboard" onclick="switchTab('dashboard')">
-        <span class="icon">🏠</span>
-        <span>الرئيسية</span>
+        <span class="icon">ًںڈ </span>
+        <span>ط§ظ„ط±ط¦ظٹط³ظٹط©</span>
       </button>
       <button class="bottom-nav-btn" id="bnav-users" onclick="switchTab('users')">
-        <span class="icon">👥</span>
-        <span>المندوبين</span>
+        <span class="icon">ًں‘¥</span>
+        <span>ط§ظ„ظ…ظ†ط¯ظˆط¨ظٹظ†</span>
       </button>
       <button class="bottom-nav-btn" id="bnav-codes" onclick="switchTab('codes')">
-        <span class="icon">🔑</span>
-        <span>الأكواد</span>
+        <span class="icon">ًں”‘</span>
+        <span>ط§ظ„ط£ظƒظˆط§ط¯</span>
       </button>
       <button class="bottom-nav-btn" id="bnav-devices" onclick="switchTab('devices')">
-        <span class="icon">📱</span>
-        <span>الأجهزة</span>
+        <span class="icon">ًں“±</span>
+        <span>ط§ظ„ط£ط¬ظ‡ط²ط©</span>
       </button>
       <button class="bottom-nav-btn" id="bnav-alerts" onclick="switchTab('alerts')">
-        <span class="icon">🚨</span>
-        <span>التنبيهات</span>
+        <span class="icon">ًںڑ¨</span>
+        <span>ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ</span>
         <span class="bottom-badge" id="bnav-alert-badge" style="display:none">0</span>
       </button>
     </nav>
@@ -1692,26 +1701,26 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <div class="modal-overlay" id="modal-code-generate">
     <div class="modal">
       <div class="modal-header">
-        <h3>إنشاء كود تفعيل مفرد</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-code-generate')">✕</button>
+        <h3>ط¥ظ†ط´ط§ط، ظƒظˆط¯ طھظپط¹ظٹظ„ ظ…ظپط±ط¯</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-code-generate')">âœ•</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>اسم الباقة</label>
-          <input type="text" id="gen-plan-name" class="form-input" value="باقة رادار 30 يوم">
+          <label>ط§ط³ظ… ط§ظ„ط¨ط§ظ‚ط©</label>
+          <input type="text" id="gen-plan-name" class="form-input" value="ط¨ط§ظ‚ط© ط±ط§ط¯ط§ط± 30 ظٹظˆظ…">
         </div>
         <div class="form-group">
-          <label>المدة بالأيام</label>
+          <label>ط§ظ„ظ…ط¯ط© ط¨ط§ظ„ط£ظٹط§ظ…</label>
           <input type="number" id="gen-duration" class="form-input" value="30">
         </div>
         <div class="form-group" style="flex-direction:row; align-items:center; gap:0.5rem;">
           <input type="checkbox" id="gen-is-vip" checked style="width:18px; height:18px;">
-          <label for="gen-is-vip" style="margin:0;">باقة VIP (ميزات إضافية وقبول تلقائي)</label>
+          <label for="gen-is-vip" style="margin:0;">ط¨ط§ظ‚ط© VIP (ظ…ظٹط²ط§طھ ط¥ط¶ط§ظپظٹط© ظˆظ‚ط¨ظˆظ„ طھظ„ظ‚ط§ط¦ظٹ)</label>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('modal-code-generate')">إلغاء</button>
-        <button class="btn btn-primary" onclick="submitCreateCode()">إنشاء الكود</button>
+        <button class="btn btn-secondary" onclick="closeModal('modal-code-generate')">ط¥ظ„ط؛ط§ط،</button>
+        <button class="btn btn-primary" onclick="submitCreateCode()">ط¥ظ†ط´ط§ط، ط§ظ„ظƒظˆط¯</button>
       </div>
     </div>
   </div>
@@ -1720,26 +1729,26 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <div class="modal-overlay" id="modal-bulk-codes">
     <div class="modal">
       <div class="modal-header">
-        <h3>إنشاء مجموعة أكواد دفعة واحدة</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-bulk-codes')">✕</button>
+        <h3>ط¥ظ†ط´ط§ط، ظ…ط¬ظ…ظˆط¹ط© ط£ظƒظˆط§ط¯ ط¯ظپط¹ط© ظˆط§ط­ط¯ط©</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-bulk-codes')">âœ•</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>عدد الأكواد المطلوبة</label>
+          <label>ط¹ط¯ط¯ ط§ظ„ط£ظƒظˆط§ط¯ ط§ظ„ظ…ط·ظ„ظˆط¨ط©</label>
           <input type="number" id="bulk-count" class="form-input" value="5" min="1" max="50">
         </div>
         <div class="form-group">
-          <label>اسم الباقة</label>
-          <input type="text" id="bulk-plan-name" class="form-input" value="باقة مندوبين جماعية">
+          <label>ط§ط³ظ… ط§ظ„ط¨ط§ظ‚ط©</label>
+          <input type="text" id="bulk-plan-name" class="form-input" value="ط¨ط§ظ‚ط© ظ…ظ†ط¯ظˆط¨ظٹظ† ط¬ظ…ط§ط¹ظٹط©">
         </div>
         <div class="form-group">
-          <label>مدة كل كود (أيام)</label>
+          <label>ظ…ط¯ط© ظƒظ„ ظƒظˆط¯ (ط£ظٹط§ظ…)</label>
           <input type="number" id="bulk-duration" class="form-input" value="30">
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('modal-bulk-codes')">إلغاء</button>
-        <button class="btn btn-primary" onclick="submitBulkCodes()">توليد الأكواد</button>
+        <button class="btn btn-secondary" onclick="closeModal('modal-bulk-codes')">ط¥ظ„ط؛ط§ط،</button>
+        <button class="btn btn-primary" onclick="submitBulkCodes()">طھظˆظ„ظٹط¯ ط§ظ„ط£ظƒظˆط§ط¯</button>
       </div>
     </div>
   </div>
@@ -1748,26 +1757,26 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <div class="modal-overlay" id="modal-extend-sub">
     <div class="modal">
       <div class="modal-header">
-        <h3>تمديد اشتراك المستخدم</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-extend-sub')">✕</button>
+        <h3>طھظ…ط¯ظٹط¯ ط§ط´طھط±ط§ظƒ ط§ظ„ظ…ط³طھط®ط¯ظ…</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-extend-sub')">âœ•</button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="extend-user-id">
         <p id="extend-user-name" style="color:var(--accent-hover); font-weight:700;"></p>
         <div class="form-group">
-          <label>عدد أيام التمديد</label>
+          <label>ط¹ط¯ط¯ ط£ظٹط§ظ… ط§ظ„طھظ…ط¯ظٹط¯</label>
           <select id="extend-days-select" class="form-select">
-            <option value="7">7 أيام (أسبوع إضافي)</option>
-            <option value="15">15 يوماً</option>
-            <option value="30" selected>30 يوماً (شهر كامل)</option>
-            <option value="60">60 يوماً</option>
-            <option value="90">90 يوماً (3 أشهر)</option>
+            <option value="7">7 ط£ظٹط§ظ… (ط£ط³ط¨ظˆط¹ ط¥ط¶ط§ظپظٹ)</option>
+            <option value="15">15 ظٹظˆظ…ط§ظ‹</option>
+            <option value="30" selected>30 ظٹظˆظ…ط§ظ‹ (ط´ظ‡ط± ظƒط§ظ…ظ„)</option>
+            <option value="60">60 ظٹظˆظ…ط§ظ‹</option>
+            <option value="90">90 ظٹظˆظ…ط§ظ‹ (3 ط£ط´ظ‡ط±)</option>
           </select>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('modal-extend-sub')">إلغاء</button>
-        <button class="btn btn-success" onclick="submitExtendSub()">تأكيد التمديد</button>
+        <button class="btn btn-secondary" onclick="closeModal('modal-extend-sub')">ط¥ظ„ط؛ط§ط،</button>
+        <button class="btn btn-success" onclick="submitExtendSub()">طھط£ظƒظٹط¯ ط§ظ„طھظ…ط¯ظٹط¯</button>
       </div>
     </div>
   </div>
@@ -1776,26 +1785,26 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
   <div class="modal-overlay" id="modal-add-user">
     <div class="modal">
       <div class="modal-header">
-        <h3>إضافة مستخدم جديد</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-add-user')">✕</button>
+        <h3>ط¥ط¶ط§ظپط© ظ…ط³طھط®ط¯ظ… ط¬ط¯ظٹط¯</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-add-user')">âœ•</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>اسم المستخدم (Username)</label>
+          <label>ط§ط³ظ… ط§ظ„ظ…ط³طھط®ط¯ظ… (Username)</label>
           <input type="text" id="add-username" class="form-input" placeholder="mandoub_salem">
         </div>
         <div class="form-group">
-          <label>كلمة المرور</label>
-          <input type="password" id="add-password" class="form-input" placeholder="••••••••">
+          <label>ظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±</label>
+          <input type="password" id="add-password" class="form-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
         </div>
         <div class="form-group">
-          <label>رقم الهاتف</label>
+          <label>ط±ظ‚ظ… ط§ظ„ظ‡ط§طھظپ</label>
           <input type="text" id="add-phone" class="form-input" placeholder="+97339000000">
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('modal-add-user')">إلغاء</button>
-        <button class="btn btn-primary" onclick="submitAddUser()">حفظ</button>
+        <button class="btn btn-secondary" onclick="closeModal('modal-add-user')">ط¥ظ„ط؛ط§ط،</button>
+        <button class="btn btn-primary" onclick="submitAddUser()">ط­ظپط¸</button>
       </div>
     </div>
   </div>
@@ -1807,9 +1816,10 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
        CLIENT-SIDE JAVASCRIPT: AUTH, BIOMETRICS, NAVIGATION & API
   ========================================================= -->
   <script>
-    const ORDERI_SERVER_URL = "https://orderi-server.onrender.com";
-    let activeToken = localStorage.getItem('orderi_admin_token') || "";
-    let currentAdminUser = localStorage.getItem('orderi_admin_user') || "admin";
+   const ORDERI_SERVER_URL = "https://orderi-server.onrender.com";
+
+let activeToken = localStorage.getItem('orderi_admin_token') || "";
+let currentAdminUser = localStorage.getItem('orderi_admin_user') || "admin";
     let allUsers = [];
 
     // Check if session exists on load
@@ -1821,7 +1831,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       }
     });
 
-    function showToast(msg, icon = '✓') {
+    function showToast(msg, icon = 'âœ“') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = 'toast';
@@ -1857,7 +1867,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       localStorage.removeItem('orderi_admin_user');
       activeToken = "";
       showLogin();
-      showToast('تم تسجيل الخروج بنجاح');
+      showToast('طھظ… طھط³ط¬ظٹظ„ ط§ظ„ط®ط±ظˆط¬ ط¨ظ†ط¬ط§ط­');
     }
 
     /* LOGIN HANDLER */
@@ -1868,7 +1878,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       const submitBtn = document.getElementById('btn-login-submit');
 
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span>جاري التحقق...</span>';
+      submitBtn.innerHTML = '<span>ط¬ط§ط±ظٹ ط§ظ„طھط­ظ‚ظ‚...</span>';
 
       try {
         const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
@@ -1889,16 +1899,16 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
             localStorage.setItem('orderi_bio_key', bioKey);
           }
 
-          showToast('مرحباً بك! تم تسجيل الدخول بنجاح');
+          showToast('ظ…ط±ط­ط¨ط§ظ‹ ط¨ظƒ! طھظ… طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„ ط¨ظ†ط¬ط§ط­');
           showDashboard();
         } else {
-          alert(res.error || 'فشل تسجيل الدخول. تأكد من اسم المستخدم وكلمة المرور.');
+          alert(res.error || 'ظپط´ظ„ طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„. طھط£ظƒط¯ ظ…ظ† ط§ط³ظ… ط§ظ„ظ…ط³طھط®ط¯ظ… ظˆظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±.');
         }
       } catch (err) {
-        alert('تعذر الاتصال بالخادم. يرجى التحقق من الشبكة.');
+        alert('طھط¹ط°ط± ط§ظ„ط§طھطµط§ظ„ ط¨ط§ظ„ط®ط§ط¯ظ…. ظٹط±ط¬ظ‰ ط§ظ„طھط­ظ‚ظ‚ ظ…ظ† ط§ظ„ط´ط¨ظƒط©.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>دخول للوحة التحكم</span> <span>←</span>';
+        submitBtn.innerHTML = '<span>ط¯ط®ظˆظ„ ظ„ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ…</span> <span>â†گ</span>';
       }
     }
 
@@ -1906,7 +1916,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     async function handleBiometricLoginClick() {
       const modal = document.getElementById('bio-modal');
       const statusEl = document.getElementById('bio-modal-status');
-      statusEl.innerText = 'بانتظار قراءة البصمة...';
+      statusEl.innerText = 'ط¨ط§ظ†طھط¸ط§ط± ظ‚ط±ط§ط،ط© ط§ظ„ط¨طµظ…ط©...';
       modal.style.display = 'flex';
 
       // Check for real WebAuthn support
@@ -1921,14 +1931,14 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           }).then(r => r.json());
 
           if (res.success) {
-            statusEl.innerText = '✓ تمت المصادقة بنجاح!';
+            statusEl.innerText = 'âœ“ طھظ…طھ ط§ظ„ظ…طµط§ط¯ظ‚ط© ط¨ظ†ط¬ط§ط­!';
             setTimeout(() => {
               closeBioModal();
               activeToken = res.token;
               currentAdminUser = res.admin?.username || 'admin';
               localStorage.setItem('orderi_admin_token', activeToken);
               localStorage.setItem('orderi_admin_user', currentAdminUser);
-              showToast('تم الدخول بالبصمة الحيوية بنجاح 👆');
+              showToast('طھظ… ط§ظ„ط¯ط®ظˆظ„ ط¨ط§ظ„ط¨طµظ…ط© ط§ظ„ط­ظٹظˆظٹط© ط¨ظ†ط¬ط§ط­ ًں‘†');
               showDashboard();
             }, 500);
             return;
@@ -1941,7 +1951,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 
     function confirmBiometricTouch() {
       const statusEl = document.getElementById('bio-modal-status');
-      statusEl.innerText = 'جاري مطابقة بصمة الهاتف...';
+      statusEl.innerText = 'ط¬ط§ط±ظٹ ظ…ط·ط§ط¨ظ‚ط© ط¨طµظ…ط© ط§ظ„ظ‡ط§طھظپ...';
       setTimeout(async () => {
         let storedBioKey = localStorage.getItem('orderi_bio_key');
         if (!storedBioKey) {
@@ -1956,18 +1966,18 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         }).then(r => r.json());
 
         if (res.success) {
-          statusEl.innerText = '✓ تم التعرف على البصمة!';
+          statusEl.innerText = 'âœ“ طھظ… ط§ظ„طھط¹ط±ظپ ط¹ظ„ظ‰ ط§ظ„ط¨طµظ…ط©!';
           setTimeout(() => {
             closeBioModal();
             activeToken = res.token;
             currentAdminUser = res.admin?.username || 'admin';
             localStorage.setItem('orderi_admin_token', activeToken);
             localStorage.setItem('orderi_admin_user', currentAdminUser);
-            showToast('تم التحقق من بصمة المشرف بنجاح');
+            showToast('طھظ… ط§ظ„طھط­ظ‚ظ‚ ظ…ظ† ط¨طµظ…ط© ط§ظ„ظ…ط´ط±ظپ ط¨ظ†ط¬ط§ط­');
             showDashboard();
           }, 400);
         } else {
-          statusEl.innerText = 'لم يتم التعرف على البصمة';
+          statusEl.innerText = 'ظ„ظ… ظٹطھظ… ط§ظ„طھط¹ط±ظپ ط¹ظ„ظ‰ ط§ظ„ط¨طµظ…ط©';
         }
       }, 400);
     }
@@ -1981,8 +1991,8 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       localStorage.setItem('orderi_bio_key', bioKey);
 
       const deviceName = navigator.userAgent.includes('Android') 
-        ? 'هاتف أندرويد' 
-        : (navigator.userAgent.includes('iPhone') ? 'هاتف آيفون' : 'جهاز المتصفح الحالي');
+        ? 'ظ‡ط§طھظپ ط£ظ†ط¯ط±ظˆظٹط¯' 
+        : (navigator.userAgent.includes('iPhone') ? 'ظ‡ط§طھظپ ط¢ظٹظپظˆظ†' : 'ط¬ظ‡ط§ط² ط§ظ„ظ…طھطµظپط­ ط§ظ„ط­ط§ظ„ظٹ');
 
       const res = await apiFetch('/api/admin/biometric/register', {
         method: 'POST',
@@ -1990,8 +2000,8 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       });
 
       if (res.success) {
-        showToast('تم تسجيل بصمة هذا الهاتف بنجاح 👆');
-        document.getElementById('current-device-bio-status').innerText = 'مفعلة (' + deviceName + ')';
+        showToast('طھظ… طھط³ط¬ظٹظ„ ط¨طµظ…ط© ظ‡ط°ط§ ط§ظ„ظ‡ط§طھظپ ط¨ظ†ط¬ط§ط­ ًں‘†');
+        document.getElementById('current-device-bio-status').innerText = 'ظ…ظپط¹ظ„ط© (' + deviceName + ')';
       }
     }
 
@@ -2012,16 +2022,16 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       if (bnav) bnav.classList.add('active');
 
       const tabsTitles = {
-        'dashboard': ['لوحة التحكم الرئيسية', 'نظرة عامة على نشاط الخادم والمستخدمين والتراخيص والأجهزة'],
-        'users': ['إدارة المستخدمين', 'التحكم في حسابات المستخدمين، التفعيل، وتمديد الاشتراكات'],
-        'codes': ['أكواد التفعيل (Licenses)', 'توليد وإدارة تراخيص تفعيل تطبيق Orderi'],
-        'devices': ['إدارة الأجهزة والمرتبطة', 'حماية الحسابات ومنع تكرار الأجهزة والتحكم بالأذونات'],
-        'subscriptions': ['إدارة الاشتراكات', 'متابعة تواريخ الانتهاء وتمديد الصلاحيات'],
-        'orders': ['الطلبات الملتقطة', 'سجل الطلبات الواردة من رادار الواتساب والمستخدمين'],
-        'logs': ['سجل العمليات (Audit Logs)', 'تسجيل وتدقيق كافة الأنشطة والمحاولات الحية'],
-        'alerts': ['التنبيهات والأخطاء', 'إشعارات النظام التلقائية والتحذيرات الأمنية'],
-        'whatsapp': ['رادار الواتساب', 'حالة بوابة الاستماع والتلقي والاقتران'],
-        'security': ['أمان الهاتف والبصمة', 'إدارة تسجيل الدخول البيومتري وبصمات الأجهزة'],
+        'dashboard': ['ظ„ظˆط­ط© ط§ظ„طھط­ظƒظ… ط§ظ„ط±ط¦ظٹط³ظٹط©', 'ظ†ط¸ط±ط© ط¹ط§ظ…ط© ط¹ظ„ظ‰ ظ†ط´ط§ط· ط§ظ„ط®ط§ط¯ظ… ظˆط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ظˆط§ظ„طھط±ط§ط®ظٹطµ ظˆط§ظ„ط£ط¬ظ‡ط²ط©'],
+        'users': ['ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†', 'ط§ظ„طھط­ظƒظ… ظپظٹ ط­ط³ط§ط¨ط§طھ ط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†طŒ ط§ظ„طھظپط¹ظٹظ„طŒ ظˆطھظ…ط¯ظٹط¯ ط§ظ„ط§ط´طھط±ط§ظƒط§طھ'],
+        'codes': ['ط£ظƒظˆط§ط¯ ط§ظ„طھظپط¹ظٹظ„ (Licenses)', 'طھظˆظ„ظٹط¯ ظˆط¥ط¯ط§ط±ط© طھط±ط§ط®ظٹطµ طھظپط¹ظٹظ„ طھط·ط¨ظٹظ‚ Orderi'],
+        'devices': ['ط¥ط¯ط§ط±ط© ط§ظ„ط£ط¬ظ‡ط²ط© ظˆط§ظ„ظ…ط±طھط¨ط·ط©', 'ط­ظ…ط§ظٹط© ط§ظ„ط­ط³ط§ط¨ط§طھ ظˆظ…ظ†ط¹ طھظƒط±ط§ط± ط§ظ„ط£ط¬ظ‡ط²ط© ظˆط§ظ„طھط­ظƒظ… ط¨ط§ظ„ط£ط°ظˆظ†ط§طھ'],
+        'subscriptions': ['ط¥ط¯ط§ط±ط© ط§ظ„ط§ط´طھط±ط§ظƒط§طھ', 'ظ…طھط§ط¨ط¹ط© طھظˆط§ط±ظٹط® ط§ظ„ط§ظ†طھظ‡ط§ط، ظˆطھظ…ط¯ظٹط¯ ط§ظ„طµظ„ط§ط­ظٹط§طھ'],
+        'orders': ['ط§ظ„ط·ظ„ط¨ط§طھ ط§ظ„ظ…ظ„طھظ‚ط·ط©', 'ط³ط¬ظ„ ط§ظ„ط·ظ„ط¨ط§طھ ط§ظ„ظˆط§ط±ط¯ط© ظ…ظ† ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨ ظˆط§ظ„ظ…ط³طھط®ط¯ظ…ظٹظ†'],
+        'logs': ['ط³ط¬ظ„ ط§ظ„ط¹ظ…ظ„ظٹط§طھ (Audit Logs)', 'طھط³ط¬ظٹظ„ ظˆطھط¯ظ‚ظٹظ‚ ظƒط§ظپط© ط§ظ„ط£ظ†ط´ط·ط© ظˆط§ظ„ظ…ط­ط§ظˆظ„ط§طھ ط§ظ„ط­ظٹط©'],
+        'alerts': ['ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظˆط§ظ„ط£ط®ط·ط§ط،', 'ط¥ط´ط¹ط§ط±ط§طھ ط§ظ„ظ†ط¸ط§ظ… ط§ظ„طھظ„ظ‚ط§ط¦ظٹط© ظˆط§ظ„طھط­ط°ظٹط±ط§طھ ط§ظ„ط£ظ…ظ†ظٹط©'],
+        'whatsapp': ['ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨', 'ط­ط§ظ„ط© ط¨ظˆط§ط¨ط© ط§ظ„ط§ط³طھظ…ط§ط¹ ظˆط§ظ„طھظ„ظ‚ظٹ ظˆط§ظ„ط§ظ‚طھط±ط§ظ†'],
+        'security': ['ط£ظ…ط§ظ† ط§ظ„ظ‡ط§طھظپ ظˆط§ظ„ط¨طµظ…ط©', 'ط¥ط¯ط§ط±ط© طھط³ط¬ظٹظ„ ط§ظ„ط¯ط®ظˆظ„ ط§ظ„ط¨ظٹظˆظ…طھط±ظٹ ظˆط¨طµظ…ط§طھ ط§ظ„ط£ط¬ظ‡ط²ط©'],
       };
 
       if (tabsTitles[tabId]) {
@@ -2052,7 +2062,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 
     function copyToClipboard(text) {
       navigator.clipboard.writeText(text);
-      showToast('تم نسخ الكود: ' + text);
+      showToast('طھظ… ظ†ط³ط® ط§ظ„ظƒظˆط¯: ' + text);
     }
 
     /* API REQUEST HELPER */
@@ -2063,7 +2073,8 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(options.body);
       }
-      const res = await fetch(url, options);
+      const fullUrl = url.startsWith('http') ? url : ORDERI_SERVER_URL + url;
+      const res = await fetch(fullUrl, options);
       if (res.status === 401) {
         logoutAdmin();
         throw new Error('Unauthorized');
@@ -2112,14 +2123,14 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           if (s.recentLogins && s.recentLogins.length) {
             tbody.innerHTML = s.recentLogins.map(u => \`
               <tr>
-                <td data-label="المستخدم"><strong>\${u.username}</strong></td>
-                <td data-label="الهاتف">\${u.phone || 'غير مسجل'}</td>
-                <td data-label="الجهاز"><span class="code-tag">\${u.bound_device_id || 'لا يوجد'}</span></td>
-                <td data-label="الوقت">\${new Date(u.last_login_at).toLocaleTimeString('ar-BH')}</td>
+                <td data-label="ط§ظ„ظ…ط³طھط®ط¯ظ…"><strong>\${u.username}</strong></td>
+                <td data-label="ط§ظ„ظ‡ط§طھظپ">\${u.phone || 'ط؛ظٹط± ظ…ط³ط¬ظ„'}</td>
+                <td data-label="ط§ظ„ط¬ظ‡ط§ط²"><span class="code-tag">\${u.bound_device_id || 'ظ„ط§ ظٹظˆط¬ط¯'}</span></td>
+                <td data-label="ط§ظ„ظˆظ‚طھ">\${new Date(u.last_login_at).toLocaleTimeString('ar-BH')}</td>
               </tr>
             \`).join('');
           } else {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#94a3b8;">لا توجد عمليات دخول حديثة</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#94a3b8;">ظ„ط§ طھظˆط¬ط¯ ط¹ظ…ظ„ظٹط§طھ ط¯ط®ظˆظ„ ط­ط¯ظٹط«ط©</td></tr>';
           }
         }
       } catch (err) {
@@ -2143,50 +2154,50 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     function renderUsersTable(users) {
       const tbody = document.getElementById('table-users-body');
       if (!users.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لا يوجد مستخدمون</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">ظ„ط§ ظٹظˆط¬ط¯ ظ…ط³طھط®ط¯ظ…ظˆظ†</td></tr>';
         return;
       }
 
       tbody.innerHTML = users.map(u => {
         const statusBadge = u.is_active 
-          ? '<span class="badge badge-success">نشط</span>' 
-          : '<span class="badge badge-danger">معلق</span>';
+          ? '<span class="badge badge-success">ظ†ط´ط·</span>' 
+          : '<span class="badge badge-danger">ظ…ط¹ظ„ظ‚</span>';
         
-        let subBadge = '<span class="badge badge-gray">بدون اشتراك</span>';
+        let subBadge = '<span class="badge badge-gray">ط¨ط¯ظˆظ† ط§ط´طھط±ط§ظƒ</span>';
         if (u.subscription) {
           const exp = new Date(u.subscription.expires_at).getTime();
           const now = Date.now();
           if (exp <= now) {
-            subBadge = '<span class="badge badge-danger">منتهي</span>';
+            subBadge = '<span class="badge badge-danger">ظ…ظ†طھظ‡ظٹ</span>';
           } else {
             const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
-            subBadge = '<span class="badge badge-success">متبقي ' + daysLeft + ' يوم</span>';
+            subBadge = '<span class="badge badge-success">ظ…طھط¨ظ‚ظٹ ' + daysLeft + ' ظٹظˆظ…</span>';
           }
         }
 
         const device = u.bound_device_id 
           ? '<span class="code-tag">' + u.bound_device_id + '</span>' 
-          : '<span style="color:#64748b">غير مرتبط</span>';
+          : '<span style="color:#64748b">ط؛ظٹط± ظ…ط±طھط¨ط·</span>';
 
         return \`
           <tr>
-            <td data-label="المندوب"><strong>\${u.username}</strong></td>
-            <td data-label="الهاتف">\${u.phone || '-'}</td>
-            <td data-label="الحالة">\${statusBadge}</td>
-            <td data-label="الاشتراك">\${subBadge}</td>
-            <td data-label="الجهاز">\${device}</td>
-            <td data-label="آخر نشاط">\${u.last_seen_at ? new Date(u.last_seen_at).toLocaleTimeString('ar-BH') : '-'}</td>
-            <td data-label="الإجراءات">
+            <td data-label="ط§ظ„ظ…ظ†ط¯ظˆط¨"><strong>\${u.username}</strong></td>
+            <td data-label="ط§ظ„ظ‡ط§طھظپ">\${u.phone || '-'}</td>
+            <td data-label="ط§ظ„ط­ط§ظ„ط©">\${statusBadge}</td>
+            <td data-label="ط§ظ„ط§ط´طھط±ط§ظƒ">\${subBadge}</td>
+            <td data-label="ط§ظ„ط¬ظ‡ط§ط²">\${device}</td>
+            <td data-label="ط¢ط®ط± ظ†ط´ط§ط·">\${u.last_seen_at ? new Date(u.last_seen_at).toLocaleTimeString('ar-BH') : '-'}</td>
+            <td data-label="ط§ظ„ط¥ط¬ط±ط§ط،ط§طھ">
               <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
                 <button class="btn \${u.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleUserStatus('\${u.id}', \${!u.is_active})">
-                  \${u.is_active ? 'تعليق' : 'تفعيل'}
+                  \${u.is_active ? 'طھط¹ظ„ظٹظ‚' : 'طھظپط¹ظٹظ„'}
                 </button>
                 <button class="btn btn-secondary btn-sm" onclick="openExtendModal('\${u.id}', '\${u.username}')">
-                  تمديد
+                  طھظ…ط¯ظٹط¯
                 </button>
                 \${u.bound_device_id ? \`
-                  <button class="btn btn-secondary btn-sm" title="فصل الجهاز" onclick="unlinkUserDevice('\${u.id}')">
-                    فصل الجهاز
+                  <button class="btn btn-secondary btn-sm" title="ظپطµظ„ ط§ظ„ط¬ظ‡ط§ط²" onclick="unlinkUserDevice('\${u.id}')">
+                    ظپطµظ„ ط§ظ„ط¬ظ‡ط§ط²
                   </button>
                 \` : ''}
               </div>
@@ -2210,7 +2221,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         body: { is_active: newStatus }
       });
       if (res.success) {
-        showToast(newStatus ? 'تم تفعيل الحساب' : 'تم تعليق الحساب');
+        showToast(newStatus ? 'طھظ… طھظپط¹ظٹظ„ ط§ظ„ط­ط³ط§ط¨' : 'طھظ… طھط¹ظ„ظٹظ‚ ط§ظ„ط­ط³ط§ط¨');
         fetchUsers();
         fetchStats();
       }
@@ -2218,7 +2229,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 
     function openExtendModal(id, username) {
       document.getElementById('extend-user-id').value = id;
-      document.getElementById('extend-user-name').innerText = 'المستخدم: ' + username;
+      document.getElementById('extend-user-name').innerText = 'ط§ظ„ظ…ط³طھط®ط¯ظ…: ' + username;
       openModal('modal-extend-sub');
     }
 
@@ -2230,7 +2241,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         body: { days }
       });
       if (res.success) {
-        showToast('تم تمديد الاشتراك بنجاح لمدة ' + days + ' يوماً');
+        showToast('طھظ… طھظ…ط¯ظٹط¯ ط§ظ„ط§ط´طھط±ط§ظƒ ط¨ظ†ط¬ط§ط­ ظ„ظ…ط¯ط© ' + days + ' ظٹظˆظ…ط§ظ‹');
         closeModal('modal-extend-sub');
         fetchUsers();
         fetchStats();
@@ -2238,10 +2249,10 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     }
 
     async function unlinkUserDevice(id) {
-      if (!confirm('فصل الجهاز المسجل عن هذا المستخدم والسماح بربط جهاز جديد؟')) return;
+      if (!confirm('ظپطµظ„ ط§ظ„ط¬ظ‡ط§ط² ط§ظ„ظ…ط³ط¬ظ„ ط¹ظ† ظ‡ط°ط§ ط§ظ„ظ…ط³طھط®ط¯ظ… ظˆط§ظ„ط³ظ…ط§ط­ ط¨ط±ط¨ط· ط¬ظ‡ط§ط² ط¬ط¯ظٹط¯طں')) return;
       const res = await apiFetch('/api/admin/users/' + id + '/unlink-device', { method: 'POST' });
       if (res.success) {
-        showToast('تم فصل الجهاز بنجاح');
+        showToast('طھظ… ظپطµظ„ ط§ظ„ط¬ظ‡ط§ط² ط¨ظ†ط¬ط§ط­');
         fetchUsers();
         fetchStats();
       }
@@ -2253,23 +2264,23 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       const phone = document.getElementById('add-phone').value.trim();
 
       if (!username || !password) {
-        alert('يرجى كتابة اسم المستخدم وكلمة المرور');
+        alert('ظٹط±ط¬ظ‰ ظƒطھط§ط¨ط© ط§ط³ظ… ط§ظ„ظ…ط³طھط®ط¯ظ… ظˆظƒظ„ظ…ط© ط§ظ„ظ…ط±ظˆط±');
         return;
       }
 
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(ORDERI_SERVER_URL + '/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, phone })
       }).then(r => r.json());
 
       if (res.success) {
-        showToast('تمت إضافة المستخدم بنجاح');
+        showToast('طھظ…طھ ط¥ط¶ط§ظپط© ط§ظ„ظ…ط³طھط®ط¯ظ… ط¨ظ†ط¬ط§ط­');
         closeModal('modal-add-user');
         fetchUsers();
         fetchStats();
       } else {
-        alert(res.error || 'فشل إضافة المستخدم');
+        alert(res.error || 'ظپط´ظ„ ط¥ط¶ط§ظپط© ط§ظ„ظ…ط³طھط®ط¯ظ…');
       }
     }
 
@@ -2281,32 +2292,32 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           const tbody = document.getElementById('table-codes-body');
           const list = data.activation_codes || [];
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">لا توجد أكواد</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ ط£ظƒظˆط§ط¯</td></tr>';
             return;
           }
 
           tbody.innerHTML = list.map(c => {
-            let status = '<span class="badge badge-success">متاح</span>';
-            if (c.is_cancelled) status = '<span class="badge badge-gray">ملغى</span>';
-            else if (c.is_used) status = '<span class="badge badge-info">مستخدم</span>';
+            let status = '<span class="badge badge-success">ظ…طھط§ط­</span>';
+            if (c.is_cancelled) status = '<span class="badge badge-gray">ظ…ظ„ط؛ظ‰</span>';
+            else if (c.is_used) status = '<span class="badge badge-info">ظ…ط³طھط®ط¯ظ…</span>';
 
             return \`
               <tr>
-                <td data-label="الكود">
+                <td data-label="ط§ظ„ظƒظˆط¯">
                   <span class="code-tag">
                     \${c.code}
-                    <button class="copy-btn" onclick="copyToClipboard('\${c.code}')" title="نسخ">📋</button>
+                    <button class="copy-btn" onclick="copyToClipboard('\${c.code}')" title="ظ†ط³ط®">ًں“‹</button>
                   </span>
                 </td>
-                <td data-label="الباقة">\${c.plan_name}</td>
-                <td data-label="المدة">\${c.duration_days} يوم</td>
-                <td data-label="VIP">\${c.is_vip ? '<span class="badge badge-warning">VIP</span>' : 'عادي'}</td>
-                <td data-label="الحالة">\${status}</td>
-                <td data-label="المستخدم">\${c.used_by_username ? '<strong>' + c.used_by_username + '</strong>' : '-'}</td>
-                <td data-label="التاريخ">\${new Date(c.created_at).toLocaleDateString('ar-BH')}</td>
-                <td data-label="الإجراء">
+                <td data-label="ط§ظ„ط¨ط§ظ‚ط©">\${c.plan_name}</td>
+                <td data-label="ط§ظ„ظ…ط¯ط©">\${c.duration_days} ظٹظˆظ…</td>
+                <td data-label="VIP">\${c.is_vip ? '<span class="badge badge-warning">VIP</span>' : 'ط¹ط§ط¯ظٹ'}</td>
+                <td data-label="ط§ظ„ط­ط§ظ„ط©">\${status}</td>
+                <td data-label="ط§ظ„ظ…ط³طھط®ط¯ظ…">\${c.used_by_username ? '<strong>' + c.used_by_username + '</strong>' : '-'}</td>
+                <td data-label="ط§ظ„طھط§ط±ظٹط®">\${new Date(c.created_at).toLocaleDateString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط¥ط¬ط±ط§ط،">
                   \${!c.is_used && !c.is_cancelled ? \`
-                    <button class="btn btn-danger btn-sm" onclick="cancelCode('\${c.id}')">إلغاء</button>
+                    <button class="btn btn-danger btn-sm" onclick="cancelCode('\${c.id}')">ط¥ظ„ط؛ط§ط،</button>
                   \` : '-'}
                 </td>
               </tr>
@@ -2329,7 +2340,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       });
 
       if (res.success) {
-        showToast('تم إنشاء الكود: ' + res.activation_code.code);
+        showToast('طھظ… ط¥ظ†ط´ط§ط، ط§ظ„ظƒظˆط¯: ' + res.activation_code.code);
         closeModal('modal-code-generate');
         fetchCodes();
         fetchStats();
@@ -2347,7 +2358,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       });
 
       if (res.success) {
-        showToast('تم إنشاء ' + res.count + ' كود بنجاح');
+        showToast('طھظ… ط¥ظ†ط´ط§ط، ' + res.count + ' ظƒظˆط¯ ط¨ظ†ط¬ط§ط­');
         closeModal('modal-bulk-codes');
         fetchCodes();
         fetchStats();
@@ -2355,10 +2366,10 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     }
 
     async function cancelCode(id) {
-      if (!confirm('إلغاء كود التفعيل هذا؟')) return;
+      if (!confirm('ط¥ظ„ط؛ط§ط، ظƒظˆط¯ ط§ظ„طھظپط¹ظٹظ„ ظ‡ط°ط§طں')) return;
       const res = await apiFetch('/api/admin/activation-codes/' + id + '/cancel', { method: 'PATCH' });
       if (res.success) {
-        showToast('تم إلغاء الكود');
+        showToast('طھظ… ط¥ظ„ط؛ط§ط، ط§ظ„ظƒظˆط¯');
         fetchCodes();
         fetchStats();
       }
@@ -2372,30 +2383,30 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           const tbody = document.getElementById('table-devices-body');
           const list = data.devices || [];
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لا توجد أجهزة مسجلة</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ ط£ط¬ظ‡ط²ط© ظ…ط³ط¬ظ„ط©</td></tr>';
             return;
           }
 
           tbody.innerHTML = list.map(d => {
             const status = d.is_blocked 
-              ? '<span class="badge badge-danger">محظور</span>' 
-              : '<span class="badge badge-success">نشط</span>';
+              ? '<span class="badge badge-danger">ظ…ط­ط¸ظˆط±</span>' 
+              : '<span class="badge badge-success">ظ†ط´ط·</span>';
 
             return \`
               <tr>
                 <td data-label="Device ID"><span class="code-tag">\${d.device_id}</span></td>
-                <td data-label="المستخدم"><strong>\${d.username}</strong></td>
-                <td data-label="الجهاز">\${d.device_name}</td>
-                <td data-label="الإصدار"><span class="badge badge-info">\${d.app_version}</span></td>
-                <td data-label="الحالة">\${status}</td>
-                <td data-label="آخر اتصال">\${new Date(d.last_active_at).toLocaleTimeString('ar-BH')}</td>
-                <td data-label="الإجراء">
+                <td data-label="ط§ظ„ظ…ط³طھط®ط¯ظ…"><strong>\${d.username}</strong></td>
+                <td data-label="ط§ظ„ط¬ظ‡ط§ط²">\${d.device_name}</td>
+                <td data-label="ط§ظ„ط¥طµط¯ط§ط±"><span class="badge badge-info">\${d.app_version}</span></td>
+                <td data-label="ط§ظ„ط­ط§ظ„ط©">\${status}</td>
+                <td data-label="ط¢ط®ط± ط§طھطµط§ظ„">\${new Date(d.last_active_at).toLocaleTimeString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط¥ط¬ط±ط§ط،">
                   <div style="display:flex; gap:0.4rem;">
                     <button class="btn \${d.is_blocked ? 'btn-success' : 'btn-danger'} btn-sm" onclick="toggleBlockDevice('\${d.id}', \${!d.is_blocked})">
-                      \${d.is_blocked ? 'فك الحظر' : 'حظر'}
+                      \${d.is_blocked ? 'ظپظƒ ط§ظ„ط­ط¸ط±' : 'ط­ط¸ط±'}
                     </button>
                     <button class="btn btn-secondary btn-sm" onclick="unlinkDeviceRecord('\${d.id}')">
-                      فصل
+                      ظپطµظ„
                     </button>
                   </div>
                 </td>
@@ -2412,17 +2423,17 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       const action = block ? 'block' : 'unblock';
       const res = await apiFetch('/api/admin/devices/' + id + '/' + action, { method: 'POST' });
       if (res.success) {
-        showToast(block ? 'تم حظر الجهاز' : 'تم فك حظر الجهاز');
+        showToast(block ? 'طھظ… ط­ط¸ط± ط§ظ„ط¬ظ‡ط§ط²' : 'طھظ… ظپظƒ ط­ط¸ط± ط§ظ„ط¬ظ‡ط§ط²');
         fetchDevices();
         fetchStats();
       }
     }
 
     async function unlinkDeviceRecord(id) {
-      if (!confirm('فصل هذا الجهاز عن حساب المستخدم؟')) return;
+      if (!confirm('ظپطµظ„ ظ‡ط°ط§ ط§ظ„ط¬ظ‡ط§ط² ط¹ظ† ط­ط³ط§ط¨ ط§ظ„ظ…ط³طھط®ط¯ظ…طں')) return;
       const res = await apiFetch('/api/admin/devices/' + id + '/unlink', { method: 'DELETE' });
       if (res.success) {
-        showToast('تم فصل الجهاز');
+        showToast('طھظ… ظپطµظ„ ط§ظ„ط¬ظ‡ط§ط²');
         fetchDevices();
         fetchStats();
       }
@@ -2436,7 +2447,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           const tbody = document.getElementById('table-subs-body');
           const list = data.subscriptions || [];
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">لا توجد اشتراكات</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ ط§ط´طھط±ط§ظƒط§طھ</td></tr>';
             return;
           }
 
@@ -2448,16 +2459,16 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
             
             return \`
               <tr>
-                <td data-label="المستخدم"><strong>\${s.username}</strong></td>
-                <td data-label="الباقة">\${s.plan_name}</td>
-                <td data-label="البداية">\${new Date(s.starts_at).toLocaleDateString('ar-BH')}</td>
-                <td data-label="الانتهاء">\${new Date(s.expires_at).toLocaleDateString('ar-BH')}</td>
-                <td data-label="الحالة">
-                  \${isExp ? '<span class="badge badge-danger">منتهي</span>' : '<span class="badge badge-success">فعال (' + daysLeft + ' يوم)</span>'}
+                <td data-label="ط§ظ„ظ…ط³طھط®ط¯ظ…"><strong>\${s.username}</strong></td>
+                <td data-label="ط§ظ„ط¨ط§ظ‚ط©">\${s.plan_name}</td>
+                <td data-label="ط§ظ„ط¨ط¯ط§ظٹط©">\${new Date(s.starts_at).toLocaleDateString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط§ظ†طھظ‡ط§ط،">\${new Date(s.expires_at).toLocaleDateString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط­ط§ظ„ط©">
+                  \${isExp ? '<span class="badge badge-danger">ظ…ظ†طھظ‡ظٹ</span>' : '<span class="badge badge-success">ظپط¹ط§ظ„ (' + daysLeft + ' ظٹظˆظ…)</span>'}
                 </td>
-                <td data-label="الإجراء">
+                <td data-label="ط§ظ„ط¥ط¬ط±ط§ط،">
                   <button class="btn btn-primary btn-sm" onclick="openExtendModal('\${s.user_id}', '\${s.username}')">
-                    تمديد يدوي
+                    طھظ…ط¯ظٹط¯ ظٹط¯ظˆظٹ
                   </button>
                 </td>
               </tr>
@@ -2475,23 +2486,23 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         const data = await apiFetch('/api/orders');
         if (data.success) {
           const list = data.orders || [];
-          document.getElementById('orders-count-badge').innerText = list.length + ' طلب';
+          document.getElementById('orders-count-badge').innerText = list.length + ' ط·ظ„ط¨';
           const tbody = document.getElementById('table-orders-body');
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">لا توجد طلبات</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ ط·ظ„ط¨ط§طھ</td></tr>';
             return;
           }
 
           tbody.innerHTML = list.map(o => \`
             <tr>
-              <td data-label="الرقم"><span class="code-tag">\${o.id}</span></td>
-              <td data-label="الاستلام">\${o.pickup_area}</td>
-              <td data-label="الوجهة">\${o.destination || '-'}</td>
-              <td data-label="السعر"><strong>\${o.price ? o.price + ' د.ب' : '-'}</strong></td>
-              <td data-label="المسافة">\${o.distance_km ? o.distance_km + ' كم' : '-'}</td>
-              <td data-label="المصدر">\${o.source_group || o.source}</td>
-              <td data-label="الحالة"><span class="badge badge-info">\${o.status}</span></td>
-              <td data-label="الوقت">\${new Date(o.created_at).toLocaleTimeString('ar-BH')}</td>
+              <td data-label="ط§ظ„ط±ظ‚ظ…"><span class="code-tag">\${o.id}</span></td>
+              <td data-label="ط§ظ„ط§ط³طھظ„ط§ظ…">\${o.pickup_area}</td>
+              <td data-label="ط§ظ„ظˆط¬ظ‡ط©">\${o.destination || '-'}</td>
+              <td data-label="ط§ظ„ط³ط¹ط±"><strong>\${o.price ? o.price + ' ط¯.ط¨' : '-'}</strong></td>
+              <td data-label="ط§ظ„ظ…ط³ط§ظپط©">\${o.distance_km ? o.distance_km + ' ظƒظ…' : '-'}</td>
+              <td data-label="ط§ظ„ظ…طµط¯ط±">\${o.source_group || o.source}</td>
+              <td data-label="ط§ظ„ط­ط§ظ„ط©"><span class="badge badge-info">\${o.status}</span></td>
+              <td data-label="ط§ظ„ظˆظ‚طھ">\${new Date(o.created_at).toLocaleTimeString('ar-BH')}</td>
             </tr>
           \`).join('');
         }
@@ -2508,23 +2519,23 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           const tbody = document.getElementById('table-logs-body');
           const list = data.logs || [];
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">لا توجد سجلات</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ ط³ط¬ظ„ط§طھ</td></tr>';
             return;
           }
 
           tbody.innerHTML = list.map(l => {
-            let status = '<span class="badge badge-success">ناجح</span>';
-            if (l.status === 'warning') status = '<span class="badge badge-warning">تحذير</span>';
-            if (l.status === 'error') status = '<span class="badge badge-danger">خطأ</span>';
+            let status = '<span class="badge badge-success">ظ†ط§ط¬ط­</span>';
+            if (l.status === 'warning') status = '<span class="badge badge-warning">طھط­ط°ظٹط±</span>';
+            if (l.status === 'error') status = '<span class="badge badge-danger">ط®ط·ط£</span>';
 
             return \`
               <tr>
-                <td data-label="الوقت">\${new Date(l.created_at).toLocaleTimeString('ar-BH')}</td>
-                <td data-label="العملية"><span class="code-tag">\${l.action}</span></td>
-                <td data-label="المستخدم"><strong>\${l.username || 'النظام'}</strong></td>
-                <td data-label="التفاصيل">\${l.details}</td>
+                <td data-label="ط§ظ„ظˆظ‚طھ">\${new Date(l.created_at).toLocaleTimeString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط¹ظ…ظ„ظٹط©"><span class="code-tag">\${l.action}</span></td>
+                <td data-label="ط§ظ„ظ…ط³طھط®ط¯ظ…"><strong>\${l.username || 'ط§ظ„ظ†ط¸ط§ظ…'}</strong></td>
+                <td data-label="ط§ظ„طھظپط§طµظٹظ„">\${l.details}</td>
                 <td data-label="IP"><code>\${l.ip}</code></td>
-                <td data-label="الحالة">\${status}</td>
+                <td data-label="ط§ظ„ط­ط§ظ„ط©">\${status}</td>
               </tr>
             \`;
           }).join('');
@@ -2547,35 +2558,35 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           if (recentTable) {
             recentTable.innerHTML = list.slice(0, 5).map(a => \`
               <tr>
-                <td data-label="الخطورة"><span class="badge badge-\${a.severity === 'critical' ? 'danger' : (a.severity === 'warning' ? 'warning' : 'info')}">\${a.severity}</span></td>
-                <td data-label="العنوان"><strong>\${a.title}</strong></td>
-                <td data-label="الرسالة">\${a.message}</td>
-                <td data-label="الحالة">\${a.is_read ? 'مقروء' : '<span style="color:var(--danger)">جديد</span>'}</td>
+                <td data-label="ط§ظ„ط®ط·ظˆط±ط©"><span class="badge badge-\${a.severity === 'critical' ? 'danger' : (a.severity === 'warning' ? 'warning' : 'info')}">\${a.severity}</span></td>
+                <td data-label="ط§ظ„ط¹ظ†ظˆط§ظ†"><strong>\${a.title}</strong></td>
+                <td data-label="ط§ظ„ط±ط³ط§ظ„ط©">\${a.message}</td>
+                <td data-label="ط§ظ„ط­ط§ظ„ط©">\${a.is_read ? 'ظ…ظ‚ط±ظˆط،' : '<span style="color:var(--danger)">ط¬ط¯ظٹط¯</span>'}</td>
               </tr>
             \`).join('');
           }
 
           if (!list.length) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">لا توجد تنبيهات نشطة</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">ظ„ط§ طھظˆط¬ط¯ طھظ†ط¨ظٹظ‡ط§طھ ظ†ط´ط·ط©</td></tr>';
             return;
           }
 
           tbody.innerHTML = list.map(a => {
-            let sev = '<span class="badge badge-info">عادي</span>';
-            if (a.severity === 'warning') sev = '<span class="badge badge-warning">تحذير</span>';
-            if (a.severity === 'critical') sev = '<span class="badge badge-danger">حرج</span>';
+            let sev = '<span class="badge badge-info">ط¹ط§ط¯ظٹ</span>';
+            if (a.severity === 'warning') sev = '<span class="badge badge-warning">طھط­ط°ظٹط±</span>';
+            if (a.severity === 'critical') sev = '<span class="badge badge-danger">ط­ط±ط¬</span>';
 
             return \`
               <tr>
-                <td data-label="الخطورة">\${sev}</td>
-                <td data-label="النوع"><code>\${a.type}</code></td>
-                <td data-label="العنوان"><strong>\${a.title}</strong></td>
-                <td data-label="الرسالة">\${a.message}</td>
-                <td data-label="الوقت">\${new Date(a.created_at).toLocaleTimeString('ar-BH')}</td>
-                <td data-label="الإجراء">
+                <td data-label="ط§ظ„ط®ط·ظˆط±ط©">\${sev}</td>
+                <td data-label="ط§ظ„ظ†ظˆط¹"><code>\${a.type}</code></td>
+                <td data-label="ط§ظ„ط¹ظ†ظˆط§ظ†"><strong>\${a.title}</strong></td>
+                <td data-label="ط§ظ„ط±ط³ط§ظ„ط©">\${a.message}</td>
+                <td data-label="ط§ظ„ظˆظ‚طھ">\${new Date(a.created_at).toLocaleTimeString('ar-BH')}</td>
+                <td data-label="ط§ظ„ط¥ط¬ط±ط§ط،">
                   \${!a.is_read ? \`
-                    <button class="btn btn-secondary btn-sm" onclick="markAlertRead('\${a.id}')">قراءة</button>
-                  \` : '<span style="color:#64748b">تمت المراجعة</span>'}
+                    <button class="btn btn-secondary btn-sm" onclick="markAlertRead('\${a.id}')">ظ‚ط±ط§ط،ط©</button>
+                  \` : '<span style="color:#64748b">طھظ…طھ ط§ظ„ظ…ط±ط§ط¬ط¹ط©</span>'}
                 </td>
               </tr>
             \`;
@@ -2589,7 +2600,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     async function markAlertRead(id) {
       const res = await apiFetch('/api/admin/alerts/' + id + '/read', { method: 'PATCH' });
       if (res.success) {
-        showToast('تم تعليم التنبيه كمقروء');
+        showToast('طھظ… طھط¹ظ„ظٹظ… ط§ظ„طھظ†ط¨ظٹظ‡ ظƒظ…ظ‚ط±ظˆط،');
         fetchAlerts();
         fetchStats();
       }
@@ -2598,7 +2609,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     async function clearAllAlerts() {
       const res = await apiFetch('/api/admin/alerts/clear-all', { method: 'POST' });
       if (res.success) {
-        showToast('تم تعليم جميع التنبيهات كمقروءة');
+        showToast('طھظ… طھط¹ظ„ظٹظ… ط¬ظ…ظٹط¹ ط§ظ„طھظ†ط¨ظٹظ‡ط§طھ ظƒظ…ظ‚ط±ظˆط،ط©');
         fetchAlerts();
         fetchStats();
       }
@@ -2618,14 +2629,14 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           }
 
           const badge = document.getElementById('wa-status-badge');
-          badge.innerText = s.status === 'connected' ? 'متصل ومقترن' : 'بانتظار المسح';
+          badge.innerText = s.status === 'connected' ? 'ظ…طھطµظ„ ظˆظ…ظ‚طھط±ظ†' : 'ط¨ط§ظ†طھط¸ط§ط± ط§ظ„ظ…ط³ط­';
           badge.className = 'badge ' + (s.status === 'connected' ? 'badge-success' : 'badge-warning');
 
-          document.getElementById('wa-phone-val').innerText = s.connected_phone || 'غير مقترن';
+          document.getElementById('wa-phone-val').innerText = s.connected_phone || 'ط؛ظٹط± ظ…ظ‚طھط±ظ†';
           document.getElementById('wa-device-val').innerText = s.device_name;
-          document.getElementById('wa-battery-val').innerText = '🔋 ' + s.battery_level + '%';
-          document.getElementById('wa-groups-val').innerText = s.groups_monitored_count + ' قروب';
-          document.getElementById('wa-orders-val').innerText = s.total_orders_captured + ' طلب';
+          document.getElementById('wa-battery-val').innerText = 'ًں”‹ ' + s.battery_level + '%';
+          document.getElementById('wa-groups-val').innerText = s.groups_monitored_count + ' ظ‚ط±ظˆط¨';
+          document.getElementById('wa-orders-val').innerText = s.total_orders_captured + ' ط·ظ„ط¨';
         }
       } catch (err) {
         console.error('WhatsApp fetch error:', err);
@@ -2635,24 +2646,24 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     async function refreshWhatsAppQR() {
       const res = await apiFetch('/api/whatsapp/session/refresh-qr', { method: 'POST' });
       if (res.success) {
-        showToast('تم تحديث كود QR للرادار');
+        showToast('طھظ… طھط­ط¯ظٹط« ظƒظˆط¯ QR ظ„ظ„ط±ط§ط¯ط§ط±');
         fetchWhatsApp();
       }
     }
 
     async function openPairWhatsAppModal() {
-      const phone = prompt('أدخل رقم هاتف الواتساب الفعلي لربط بوابة الرادار (+973...):', '+973');
+      const phone = prompt('ط£ط¯ط®ظ„ ط±ظ‚ظ… ظ‡ط§طھظپ ط§ظ„ظˆط§طھط³ط§ط¨ ط§ظ„ظپط¹ظ„ظٹ ظ„ط±ط¨ط· ط¨ظˆط§ط¨ط© ط§ظ„ط±ط§ط¯ط§ط± (+973...):', '+973');
       if (!phone || phone.length < 8) return;
       const res = await apiFetch('/api/whatsapp/session/pair', {
         method: 'POST',
         body: { phone }
       });
       if (res.success) {
-        showToast('تم ربط بوابة الواتساب بالرقم ' + phone);
+        showToast('طھظ… ط±ط¨ط· ط¨ظˆط§ط¨ط© ط§ظ„ظˆط§طھط³ط§ط¨ ط¨ط§ظ„ط±ظ‚ظ… ' + phone);
         fetchWhatsApp();
         fetchStats();
       } else {
-        alert(res.error || 'تعذر ربط الرقم');
+        alert(res.error || 'طھط¹ط°ط± ط±ط¨ط· ط§ظ„ط±ظ‚ظ…');
       }
     }
 
@@ -2662,9 +2673,9 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       input.value = fullUrl;
       input.select();
       navigator.clipboard.writeText(fullUrl).then(() => {
-        showToast('تم نسخ رابط استقبال الطلبات');
+        showToast('طھظ… ظ†ط³ط® ط±ط§ط¨ط· ط§ط³طھظ‚ط¨ط§ظ„ ط§ظ„ط·ظ„ط¨ط§طھ');
       }).catch(() => {
-        showToast('تم تحديد الرابط، يمكنك نسخه يدوياً');
+        showToast('طھظ… طھط­ط¯ظٹط¯ ط§ظ„ط±ط§ط¨ط·طŒ ظٹظ…ظƒظ†ظƒ ظ†ط³ط®ظ‡ ظٹط¯ظˆظٹط§ظ‹');
       });
     }
 
@@ -2674,11 +2685,11 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       const confirmPass = document.getElementById('change-admin-password-confirm').value;
 
       if (!newUsername && !newPassword) {
-        alert('يرجى إدخال اسم مستخدم أو كلمة مرور جديدة');
+        alert('ظٹط±ط¬ظ‰ ط¥ط¯ط®ط§ظ„ ط§ط³ظ… ظ…ط³طھط®ط¯ظ… ط£ظˆ ظƒظ„ظ…ط© ظ…ط±ظˆط± ط¬ط¯ظٹط¯ط©');
         return;
       }
       if (newPassword && newPassword !== confirmPass) {
-        alert('كلمات المرور غير متطابقة، يرجى التأكد');
+        alert('ظƒظ„ظ…ط§طھ ط§ظ„ظ…ط±ظˆط± ط؛ظٹط± ظ…طھط·ط§ط¨ظ‚ط©طŒ ظٹط±ط¬ظ‰ ط§ظ„طھط£ظƒط¯');
         return;
       }
 
@@ -2688,7 +2699,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       });
 
       if (res.success) {
-        showToast('تم تحديث بيانات حساب المشرف بنجاح');
+        showToast('طھظ… طھط­ط¯ظٹط« ط¨ظٹط§ظ†ط§طھ ط­ط³ط§ط¨ ط§ظ„ظ…ط´ط±ظپ ط¨ظ†ط¬ط§ط­');
         if (newUsername) {
           currentAdminUser = newUsername;
           localStorage.setItem('orderi_admin_user', newUsername);
@@ -2698,15 +2709,15 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         document.getElementById('change-admin-password').value = '';
         document.getElementById('change-admin-password-confirm').value = '';
       } else {
-        alert(res.error || 'حدث خطأ أثناء التحديث');
+        alert(res.error || 'ط­ط¯ط« ط®ط·ط£ ط£ط«ظ†ط§ط، ط§ظ„طھط­ط¯ظٹط«');
       }
     }
 
     async function disconnectWhatsApp() {
-      if (!confirm('فصل رادار الواتساب؟')) return;
+      if (!confirm('ظپطµظ„ ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨طں')) return;
       const res = await apiFetch('/api/whatsapp/session/disconnect', { method: 'POST' });
       if (res.success) {
-        showToast('تم فصل رادار الواتساب');
+        showToast('طھظ… ظپطµظ„ ط±ط§ط¯ط§ط± ط§ظ„ظˆط§طھط³ط§ط¨');
         fetchWhatsApp();
       }
     }
@@ -2728,9 +2739,9 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-          showToast('تم تحميل أيقونة APK بصيغة PNG (512x512) بنجاح');
+          showToast('طھظ… طھط­ظ…ظٹظ„ ط£ظٹظ‚ظˆظ†ط© APK ط¨طµظٹط؛ط© PNG (512x512) ط¨ظ†ط¬ط§ط­');
         } catch (e) {
-          showToast('تعذر استخراج PNG، يتم فتح ملف الشعار');
+          showToast('طھط¹ط°ط± ط§ط³طھط®ط±ط§ط¬ PNGطŒ ظٹطھظ… ظپطھط­ ظ…ظ„ظپ ط§ظ„ط´ط¹ط§ط±');
           window.open('/orderi-admin-logo.svg', '_blank');
         }
       };
@@ -2747,3 +2758,9 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
 </body>
 </html>`;
 }
+
+
+
+
+
+

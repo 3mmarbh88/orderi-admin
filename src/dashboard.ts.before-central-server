@@ -1807,7 +1807,6 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
        CLIENT-SIDE JAVASCRIPT: AUTH, BIOMETRICS, NAVIGATION & API
   ========================================================= -->
   <script>
-    const ORDERI_SERVER_URL = "https://orderi-server.onrender.com";
     let activeToken = localStorage.getItem('orderi_admin_token') || "";
     let currentAdminUser = localStorage.getItem('orderi_admin_user') || "admin";
     let allUsers = [];
@@ -1871,7 +1870,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
       submitBtn.innerHTML = '<span>جاري التحقق...</span>';
 
       try {
-        const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+        const res = await fetch('/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -1914,7 +1913,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
         try {
           const storedBioKey = localStorage.getItem('orderi_bio_key') || 'orderi-biometric-master';
           // Send request with biometric token
-          const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+          const res = await fetch('/api/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ biometricKey: storedBioKey })
@@ -1949,7 +1948,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
           localStorage.setItem('orderi_bio_key', storedBioKey);
         }
 
-        const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+        const res = await fetch('/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ biometricKey: storedBioKey })
@@ -2058,7 +2057,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     /* API REQUEST HELPER */
     async function apiFetch(url, options = {}) {
       options.headers = options.headers || {};
-      options.headers['Authorization'] = activeToken ? 'Bearer ' + activeToken : '';
+      options.headers['X-Admin-Token'] = activeToken || "${defaultAdminToken}";
       if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
         options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(options.body);
@@ -2657,7 +2656,7 @@ export function renderDashboardHtml(defaultAdminToken: string, isSupabase: boole
     }
 
     function copyWebhookUrl() {
-      const fullUrl = ORDERI_SERVER_URL + '/api/orders';
+      const fullUrl = window.location.origin + '/api/orders';
       const input = document.getElementById('webhook-url-input');
       input.value = fullUrl;
       input.select();
