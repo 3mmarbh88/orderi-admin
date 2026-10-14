@@ -1778,7 +1778,7 @@
   <div class="modal-overlay" id="modal-add-user">
     <div class="modal">
       <div class="modal-header">
-        <h3>إضافة مستخدم جديد</h3>
+        <h3>➕ إضافة مستخدم جديد</h3>
         <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-add-user')">✕</button>
       </div>
       <div class="modal-body">
@@ -1794,10 +1794,61 @@
           <label>رقم الهاتف</label>
           <input type="text" id="add-phone" class="form-input" placeholder="+97339000000">
         </div>
+        <div class="form-group">
+          <label>مدة الاشتراك الأولي</label>
+          <select id="add-user-days" class="form-input">
+            <option value="0">بدون اشتراك أولي (يتطلب كود تفعيل لاحقاً)</option>
+            <option value="30" selected>30 يوم (شهر)</option>
+            <option value="60">60 يوم (شهرين)</option>
+            <option value="90">90 يوم (3 أشهر)</option>
+            <option value="365">365 يوم (سنة كاملة)</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('modal-add-user')">إلغاء</button>
-        <button class="btn btn-primary" onclick="submitAddUser()">حفظ</button>
+        <button class="btn btn-primary" onclick="submitAddUser()">حفظ وإنشاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit User -->
+  <div class="modal-overlay" id="modal-edit-user">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ تعديل بيانات المستخدم</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-edit-user')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-id">
+        <div class="form-group">
+          <label>اسم المستخدم (Username)</label>
+          <input type="text" id="edit-user-username" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <input type="text" id="edit-user-phone" class="form-input" placeholder="+97339000000">
+        </div>
+        <div class="form-group">
+          <label>تعيين كلمة مرور جديدة (اتركه فارغاً دون تغيير)</label>
+          <input type="password" id="edit-user-password" class="form-input" placeholder="كلمة مرور جديدة...">
+        </div>
+        <div class="form-group">
+          <label>حالة الحساب</label>
+          <select id="edit-user-status" class="form-input">
+            <option value="true">نشط (Active)</option>
+            <option value="false">معلق (Suspended)</option>
+          </select>
+        </div>
+        <div style="margin-top: 1rem; border-top: 1px solid #1f293d; padding-top: 0.75rem;">
+          <button type="button" class="btn btn-danger btn-sm" onclick="submitDeleteUserFromModal()" style="width: 100%;">
+            🗑️ حذف حساب المستخدم نهائياً
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-edit-user')">إلغاء</button>
+        <button class="btn btn-primary" onclick="submitEditUser()">حفظ التعديلات</button>
       </div>
     </div>
   </div>
@@ -1809,8 +1860,8 @@
        CLIENT-SIDE JAVASCRIPT: AUTH, BIOMETRICS, NAVIGATION & API
   ========================================================= -->
   <script>
-    const ORDERI_SERVER_URL = "https://orderi-server.onrender.com";
-    let activeToken = localStorage.getItem('orderi_admin_token') || "";
+    const DEFAULT_SERVER_ADMIN_TOKEN = "";
+    let activeToken = localStorage.getItem('orderi_admin_token') || DEFAULT_SERVER_ADMIN_TOKEN;
     let currentAdminUser = localStorage.getItem('orderi_admin_user') || "admin";
     let allUsers = [];
 
@@ -1854,12 +1905,28 @@
       fetchAlerts();
     }
 
-    function logoutAdmin() {
+    function logoutAdmin(showToastMsg = true) {
       localStorage.removeItem('orderi_admin_token');
       localStorage.removeItem('orderi_admin_user');
       activeToken = "";
       showLogin();
-      showToast('تم تسجيل الخروج بنجاح');
+      if (showToastMsg) {
+        showToast('تم تسجيل الخروج بنجاح');
+      }
+    }
+
+    async function safeFetchJson(url, options = {}) {
+      try {
+        const res = await fetch(url, options);
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const data = await res.json();
+          return { ok: res.ok, status: res.status, data };
+        }
+        return { ok: false, status: res.status, data: { success: false, error: 'استجابة غير متوقعة من الخادم' } };
+      } catch (err) {
+        return { ok: false, status: 0, data: { success: false, error: 'تعذر الاتصال بالخادم' } };
+      }
     }
 
     /* LOGIN HANDLER */
@@ -1873,15 +1940,15 @@
       submitBtn.innerHTML = '<span>جاري التحقق...</span>';
 
       try {
-        const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+        const { ok, data } = await safeFetchJson('/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
-        }).then(r => r.json());
+        });
 
-        if (res.success && res.token) {
-          activeToken = res.token;
-          currentAdminUser = res.admin?.username || username;
+        if (ok && data && data.success && data.token) {
+          activeToken = data.token;
+          currentAdminUser = data.admin?.username || username;
           localStorage.setItem('orderi_admin_token', activeToken);
           localStorage.setItem('orderi_admin_user', currentAdminUser);
 
@@ -1894,7 +1961,7 @@
           showToast('مرحباً بك! تم تسجيل الدخول بنجاح');
           showDashboard();
         } else {
-          alert(res.error || 'فشل تسجيل الدخول. تأكد من اسم المستخدم وكلمة المرور.');
+          alert(data?.error || 'فشل تسجيل الدخول. تأكد من اسم المستخدم وكلمة المرور.');
         }
       } catch (err) {
         alert('تعذر الاتصال بالخادم. يرجى التحقق من الشبكة.');
@@ -1915,19 +1982,18 @@
       if (window.PublicKeyCredential && navigator.credentials) {
         try {
           const storedBioKey = localStorage.getItem('orderi_bio_key') || 'orderi-biometric-master';
-          // Send request with biometric token
-          const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+          const { ok, data } = await safeFetchJson('/api/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ biometricKey: storedBioKey })
-          }).then(r => r.json());
+          });
 
-          if (res.success) {
+          if (ok && data && data.success) {
             statusEl.innerText = '✓ تمت المصادقة بنجاح!';
             setTimeout(() => {
               closeBioModal();
-              activeToken = res.token;
-              currentAdminUser = res.admin?.username || 'admin';
+              activeToken = data.token;
+              currentAdminUser = data.admin?.username || 'admin';
               localStorage.setItem('orderi_admin_token', activeToken);
               localStorage.setItem('orderi_admin_user', currentAdminUser);
               showToast('تم الدخول بالبصمة الحيوية بنجاح 👆');
@@ -1951,18 +2017,18 @@
           localStorage.setItem('orderi_bio_key', storedBioKey);
         }
 
-        const res = await fetch(ORDERI_SERVER_URL + '/api/admin/login', {
+        const { ok, data } = await safeFetchJson('/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ biometricKey: storedBioKey })
-        }).then(r => r.json());
+        });
 
-        if (res.success) {
+        if (ok && data && data.success) {
           statusEl.innerText = '✓ تم التعرف على البصمة!';
           setTimeout(() => {
             closeBioModal();
-            activeToken = res.token;
-            currentAdminUser = res.admin?.username || 'admin';
+            activeToken = data.token;
+            currentAdminUser = data.admin?.username || 'admin';
             localStorage.setItem('orderi_admin_token', activeToken);
             localStorage.setItem('orderi_admin_user', currentAdminUser);
             showToast('تم التحقق من بصمة المشرف بنجاح');
@@ -2059,25 +2125,41 @@
 
     /* API REQUEST HELPER */
     async function apiFetch(url, options = {}) {
+      if (!activeToken) {
+        showLogin();
+        return { success: false, error: 'Unauthenticated' };
+      }
       options.headers = options.headers || {};
-      options.headers['Authorization'] = activeToken ? 'Bearer ' + activeToken : '';
+      options.headers['Authorization'] = 'Bearer ' + activeToken;
+      options.headers['X-Admin-Token'] = activeToken;
       if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
         options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(options.body);
       }
-      const res = await fetch(url, options);
-      if (res.status === 401) {
-        logoutAdmin();
-        throw new Error('Unauthorized');
+      try {
+        const res = await fetch(url, options);
+        if (res.status === 401) {
+          logoutAdmin(false);
+          return { success: false, error: 'Unauthorized' };
+        }
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          console.warn('API returned non-JSON response from ' + url);
+          return { success: false, error: 'Non-JSON response' };
+        }
+        return await res.json();
+      } catch (err) {
+        console.warn('Network error during fetch to ' + url + ':', err);
+        return { success: false, error: err.message || 'Network error' };
       }
-      return res.json();
     }
 
     /* DASHBOARD STATS */
     async function fetchStats() {
       try {
+        if (!activeToken) return;
         const data = await apiFetch('/api/admin/dashboard/stats');
-        if (data.success && data.stats) {
+        if (data && data.success && data.stats) {
           const s = data.stats;
           document.getElementById('stat-total-users').innerText = s.users.total;
           document.getElementById('stat-active-users').innerText = s.users.active;
@@ -2183,6 +2265,9 @@
                 <button class="btn ${u.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleUserStatus('${u.id}', ${!u.is_active})">
                   ${u.is_active ? 'تعليق' : 'تفعيل'}
                 </button>
+                <button class="btn btn-secondary btn-sm" onclick="openEditUserModal('${u.id}')">
+                  ✏️ تعديل
+                </button>
                 <button class="btn btn-secondary btn-sm" onclick="openExtendModal('${u.id}', '${u.username}')">
                   تمديد
                 </button>
@@ -2249,25 +2334,87 @@
       }
     }
 
+    function openEditUserModal(id) {
+      const user = allUsers.find(u => u.id === id);
+      if (!user) return;
+      document.getElementById('edit-user-id').value = user.id;
+      document.getElementById('edit-user-username').value = user.username || '';
+      document.getElementById('edit-user-phone').value = user.phone || '';
+      document.getElementById('edit-user-password').value = '';
+      document.getElementById('edit-user-status').value = user.is_active ? 'true' : 'false';
+      openModal('modal-edit-user');
+    }
+
+    async function submitEditUser() {
+      const id = document.getElementById('edit-user-id').value;
+      const username = document.getElementById('edit-user-username').value.trim();
+      const phone = document.getElementById('edit-user-phone').value.trim();
+      const password = document.getElementById('edit-user-password').value;
+      const is_active = document.getElementById('edit-user-status').value === 'true';
+
+      if (!username) {
+        alert('اسم المستخدم مطلوب');
+        return;
+      }
+
+      const body = { username, phone, is_active };
+      if (password) {
+        body.password = password;
+      }
+
+      const res = await apiFetch('/api/admin/users/' + id, {
+        method: 'PATCH',
+        body
+      });
+
+      if (res.success) {
+        showToast('تم حفظ تعديلات المستخدم بنجاح');
+        closeModal('modal-edit-user');
+        fetchUsers();
+        fetchStats();
+      } else {
+        alert(res.error || 'فشل تحديث بيانات المستخدم');
+      }
+    }
+
+    async function submitDeleteUserFromModal() {
+      const id = document.getElementById('edit-user-id').value;
+      const user = allUsers.find(u => u.id === id);
+      if (!confirm('هل أنت متأكد من حذف حساب المستخدم ' + (user?.username || '') + ' نهائياً؟')) return;
+
+      const res = await apiFetch('/api/admin/users/' + id, { method: 'DELETE' });
+      if (res.success) {
+        showToast('تم حذف حساب المستخدم بنجاح');
+        closeModal('modal-edit-user');
+        fetchUsers();
+        fetchStats();
+      } else {
+        alert(res.error || 'فشل حذف المستخدم');
+      }
+    }
+
     async function submitAddUser() {
       const username = document.getElementById('add-username').value.trim();
       const password = document.getElementById('add-password').value;
       const phone = document.getElementById('add-phone').value.trim();
+      const days = Number(document.getElementById('add-user-days').value || 0);
 
       if (!username || !password) {
         alert('يرجى كتابة اسم المستخدم وكلمة المرور');
         return;
       }
 
-      const res = await fetch('/api/auth/register', {
+      const res = await apiFetch('/api/admin/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, phone })
-      }).then(r => r.json());
+        body: { username, password, phone, days }
+      });
 
       if (res.success) {
-        showToast('تمت إضافة المستخدم بنجاح');
+        showToast('تمت إضافة المستخدم بنجاح' + (days > 0 ? (' مع اشتراك ' + days + ' يوم') : ''));
         closeModal('modal-add-user');
+        document.getElementById('add-username').value = '';
+        document.getElementById('add-password').value = '';
+        document.getElementById('add-phone').value = '';
         fetchUsers();
         fetchStats();
       } else {
