@@ -14,13 +14,56 @@ async function run() {
   const metadata = await sharp(rawBuffer).metadata();
   console.log('Source image loaded:', metadata.width, 'x', metadata.height);
 
-  // 1. Generate master 1024x1024 buffer
-  const masterBuffer = await sharp(rawBuffer)
+  // 1. Overlay seamless "ادمن" typography in Arabic onto the 512x512 logo
+  const overlaySvg = `
+  <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Gradient matching card surface -->
+      <linearGradient id="topCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="60%" stop-color="#fcfdfe"/>
+        <stop offset="100%" stop-color="#f5f7fa"/>
+      </linearGradient>
+
+      <!-- Gradient matching 3D pill surface -->
+      <linearGradient id="pillSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="35%" stop-color="#f5f7fa"/>
+        <stop offset="100%" stop-color="#e1e6ed"/>
+      </linearGradient>
+
+      <!-- Soft blend mask for top rect to eliminate any hard edges -->
+      <filter id="blurPatch" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" />
+      </filter>
+    </defs>
+    
+    <!-- Feathered patch covering old text completely -->
+    <rect x="86" y="72" width="100" height="38" rx="8" fill="url(#topCardGrad)" filter="url(#blurPatch)"/>
+    <rect x="90" y="76" width="92" height="30" rx="6" fill="url(#topCardGrad)"/>
+    
+    <!-- Crisp bold Arabic text 'ادمن' -->
+    <text x="136" y="99" font-family="Lemonada, sans-serif" font-size="23" font-weight="800" fill="#243447" text-anchor="middle">ادمن</text>
+
+    <!-- Bottom-right pill badge: clean seamless cover and crisp text -->
+    <rect x="313" y="393" width="128" height="33" rx="14" fill="url(#pillSurface)"/>
+    <text x="377" y="417" font-family="Lemonada, sans-serif" font-size="19" font-weight="800" fill="#243447" text-anchor="middle">ادمن</text>
+  </svg>
+  `;
+
+  // Apply overlay onto base 512x512
+  const edited512Buffer = await sharp(rawBuffer)
+    .composite([{ input: Buffer.from(overlaySvg), top: 0, left: 0 }])
+    .png()
+    .toBuffer();
+
+  // 2. Generate master 1024x1024 buffer
+  const masterBuffer = await sharp(edited512Buffer)
     .resize(1024, 1024, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toBuffer();
 
-  // 2. Generate embedded SVG for fallback/vector consumers
+  // 3. Generate embedded SVG for vector consumers
   const base64Png = masterBuffer.toString('base64');
   const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <image href="data:image/png;base64,${base64Png}" x="0" y="0" width="512" height="512" preserveAspectRatio="xMidYMid meet" />
@@ -30,7 +73,7 @@ async function run() {
   fs.writeFileSync('src/assets/orderi-logo.svg', svgContent, 'utf8');
   fs.writeFileSync('public/favicon.svg', svgContent, 'utf8');
 
-  // 3. Targets for web and app assets
+  // 4. Targets for web and app assets
   const targets = [
     // Web / PWA / App assets
     { path: 'public/orderi-admin-logo.png', size: 512 },
@@ -107,7 +150,7 @@ async function run() {
   const fav32 = await sharp(masterBuffer).resize(32, 32).png().toBuffer();
   fs.writeFileSync('public/favicon.ico', fav32);
 
-  // 4. Android Splash screens (Dark `#090d16` background with centered logo)
+  // 5. Android Splash screens (Dark `#090d16` background with centered logo)
   const splashTargets = [
     { p: 'android/app/src/main/res/drawable/splash.png', w: 480, h: 800, logoSize: 220 },
     { p: 'android/app/src/main/res/drawable-port-mdpi/splash.png', w: 320, h: 480, logoSize: 150 },
@@ -143,7 +186,7 @@ async function run() {
       .toFile(s.p);
   }
 
-  console.log('Successfully generated all icons and splash screens!');
+  console.log('Successfully generated all icons and splash screens with Arabic ادمن typography!');
 }
 
 run().catch((err) => {
