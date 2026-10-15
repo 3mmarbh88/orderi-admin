@@ -3655,152 +3655,44 @@ function App() {
 
           {page === "analytics" && (
             <div className="analytics-section">
-              <div className="analytics-grid">
-                <div className="chart-card">
-                  <div className="chart-card-header">
-                    <h4>معدل تفعيل الاشتراكات (آخر 7 أيام)</h4>
-                    <span className="chart-badge">+18.5% نمو</span>
-                  </div>
-                  <div className="bar-chart-container">
-                    {[
-                      { day: "السبت", count: 4, height: 40 },
-                      { day: "الأحد", count: 7, height: 65 },
-                      { day: "الإثنين", count: 9, height: 85 },
-                      { day: "الثلاثاء", count: 6, height: 55 },
-                      { day: "الأربعاء", count: 12, height: 100 },
-                      { day: "الخميس", count: 11, height: 90 },
-                      { day: "الجمعة", count: 8, height: 75 },
-                    ].map((item, idx) => (
-                      <div className="bar-column" key={idx}>
-                        <span className="bar-value">{item.count}</span>
-                        <div
-                          className="bar-pill"
-                          style={{ height: `${item.height}%` }}
-                          title={`${item.day}: ${item.count} تفعيل`}
-                        />
-                        <span className="bar-label">{item.day}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="chart-card">
-                  <div className="chart-card-header">
-                    <h4>توزيع الأجهزة المفعلة للمستخدمين</h4>
-                    <span className="chart-badge">متوسط 2.1 جهاز</span>
-                  </div>
-                  <div className="donut-stats-row">
-                    <div style={{ position: "relative", width: "120px", height: "120px" }}>
-                      <svg width="120" height="120" viewBox="0 0 42 42">
-                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--border)" strokeWidth="4" />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#38bdf8"
-                          strokeWidth="4"
-                          strokeDasharray="50 50"
-                          strokeDashoffset="25"
-                        />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#6366f1"
-                          strokeWidth="4"
-                          strokeDasharray="30 70"
-                          strokeDashoffset="75"
-                        />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#34d399"
-                          strokeWidth="4"
-                          strokeDasharray="20 80"
-                          strokeDashoffset="5"
-                        />
-                      </svg>
-                      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <strong style={{ fontSize: "18px", color: "var(--text)" }}>{users.length}</strong>
-                        <span style={{ fontSize: "10px", color: "var(--muted)" }}>مستخدم</span>
-                      </div>
-                    </div>
-                    <div className="donut-legend">
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#38bdf8" }} />
-                        <span>جهازين (50%)</span>
-                      </div>
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#6366f1" }} />
-                        <span>3 أجهزة (30%)</span>
-                      </div>
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#34d399" }} />
-                        <span>جهاز واحد (20%)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className="panel full-panel">
                 <div className="panel-header">
                   <div>
-                    <h3>المؤشرات الحيوية للسيرفر والشبكة</h3>
-                    <p>المعايير التشغيلية في الوقت الفعلي لنظام Orderi Platform</p>
+                    <h3>إحصاءات فعلية من بيانات السيرفر</h3>
+                    <p>الأرقام التالية محسوبة من بيانات المستخدمين وأكواد التفعيل التي تم تحميلها من قاعدة البيانات، ولا تستخدم بيانات تجريبية.</p>
                   </div>
                   <button
                     className="icon-text-button"
-                    onClick={() => {
-                      checkServerStatus();
-                      showToast("success", "تم فحص المؤشرات الحيوية بنجاح");
-                    }}
+                    onClick={() => void loadData()}
+                    disabled={loading}
                   >
                     <Icon name="refresh" size={16} />
-                    فحص الآن
+                    {loading ? "جارٍ التحديث..." : "تحديث البيانات"}
                   </button>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", padding: "16px" }}>
+                <div className="analytics-grid">
                   <div className="info-card">
-                    <span>استهلاك المعالج (CPU Load)</span>
-                    <strong>14.2%</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "14%", height: "100%", background: "#34d399" }} />
-                    </div>
-                    <small style={{ color: "#34d399", marginTop: "4px" }}>أداء مستقر جداً</small>
+                    <span>المستخدمون المحمّلون من السيرفر</span>
+                    <strong>{users.length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>استهلاك الذاكرة (Memory Usage)</span>
-                    <strong>218 MB / 1024 MB</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "21%", height: "100%", background: "#38bdf8" }} />
-                    </div>
-                    <small style={{ color: "var(--muted)", marginTop: "4px" }}>حجم التخزين المؤقت مثالي</small>
+                    <span>أكواد التفعيل المتاحة</span>
+                    <strong>{codes.filter((code) => !code.is_used && !isExpired(code.expires_at)).length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>زمن الاستجابة (Latency)</span>
-                    <strong>38 ms</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "85%", height: "100%", background: "#6366f1" }} />
-                    </div>
-                    <small style={{ color: "#6366f1", marginTop: "4px" }}>اتصال فائق السرعة</small>
+                    <span>أكواد التفعيل المستخدمة</span>
+                    <strong>{codes.filter((code) => code.is_used).length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>حوض اتصالات قاعدة البيانات</span>
-                    <strong>12 / 60 Connection</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "20%", height: "100%", background: "#f59e0b" }} />
-                    </div>
-                    <small style={{ color: "var(--muted)", marginTop: "4px" }}>جاهز للضغط العالي</small>
+                    <span>حالة الاتصال بالسيرفر</span>
+                    <strong>{serverOnline ? "متصل" : "غير متصل"}</strong>
                   </div>
                 </div>
+                {!serverOnline && (
+                  <p style={{ padding: "0 16px 16px", color: "var(--danger)" }}>
+                    لا يمكن عرض إحصاءات مباشرة حتى يعود اتصال السيرفر.
+                  </p>
+                )}
               </div>
             </div>
           )}
