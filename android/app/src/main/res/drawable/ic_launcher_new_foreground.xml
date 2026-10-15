@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/ic_launcher" />
-</layer-list>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Bahrain-inspired island silhouette -->
+    <path android:fillColor="#16B981" android:strokeColor="#A7F3D0" android:strokeWidth="1.4"
+        android:pathData="M30,23 L41,18 L48,21 L55,16 L63,20 L67,27 L63,33 L70,38 L66,46 L60,50 L62,60 L57,70 L53,82 L47,75 L43,63 L35,59 L32,50 L26,46 L28,38 L23,33 Z"/>
+    <path android:fillColor="#0F766E" android:pathData="M48,21 L55,16 L63,20 L67,27 L63,33 L70,38 L66,46 L60,50 L62,60 L57,70 L53,82 L50,66 L53,53 L49,43 L53,34 Z"/>
+    <!-- Radar rings -->
+    <path android:fillColor="#00000000" android:strokeColor="#D1FAE5" android:strokeWidth="1.5"
+        android:pathData="M20,49a29,29 0,1 0,58 0a29,29 0,1 0,-58 0"/>
+    <path android:fillColor="#00000000" android:strokeColor="#6EE7B7" android:strokeWidth="1.2"
+        android:pathData="M26,49a23,23 0,1 0,46 0a23,23 0,1 0,-46 0"/>
+    <path android:fillColor="#00000000" android:strokeColor="#34D399" android:strokeWidth="1"
+        android:pathData="M32,49a17,17 0,1 0,34 0a17,17 0,1 0,-34 0"/>
+    <!-- Delivery parcel -->
+    <path android:fillColor="#F1C27D" android:pathData="M36,40 L49,33 L63,41 L50,49 Z"/>
+    <path android:fillColor="#C58B4E" android:pathData="M36,40 L50,49 L50,64 L36,55 Z"/>
+    <path android:fillColor="#A96F35" android:pathData="M50,49 L63,41 L63,56 L50,64 Z"/>
+    <path android:fillColor="#FDE68A" android:pathData="M46,35 L51,38 L38,45 L34,42 Z"/>
+    <path android:fillColor="#FFF7D6" android:pathData="M47,35 L51,37 L51,60 L47,58 Z"/>
+    <!-- Admin badge -->
+    <path android:fillColor="#E2E8F0" android:pathData="M26,26a7,7 0,1 0,14 0a7,7 0,1 0,-14 0"/>
+    <path android:fillColor="#94A3B8" android:pathData="M23,37c0,-5 4,-8 10,-8s10,3 10,8z"/>
+    <path android:fillColor="#FBBF24" android:pathData="M38,17 L40,12 L44,16 L48,11 L50,18 Z"/>
+    <!-- Connected service nodes -->
+    <path android:fillColor="#D1FAE5" android:pathData="M75,29a3,3 0,1 0,6 0a3,3 0,1 0,-6 0 M82,39a2.5,2.5 0,1 0,5 0a2.5,2.5 0,1 0,-5 0 M72,43a2.5,2.5 0,1 0,5 0a2.5,2.5 0,1 0,-5 0"/>
+</vector>
