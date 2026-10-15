@@ -561,12 +561,37 @@ button:disabled {
   height: 145px;
   object-fit: contain;
   display: block;
+  cursor: pointer;
+  user-select: none;
   filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 25px rgba(34, 197, 94, 0.35));
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
 }
 
 .hero-logo-img:hover {
   transform: scale(1.06) rotate(-2deg);
+  filter: drop-shadow(0 20px 38px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 35px rgba(34, 197, 94, 0.6));
+}
+
+.hero-logo-img:active {
+  transform: scale(0.94);
+}
+
+.hero-logo-img.refreshing-spin {
+  animation: heroLogoRefreshSpin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes heroLogoRefreshSpin {
+  0% {
+    transform: rotate(0deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.12);
+    filter: drop-shadow(0 0 45px rgba(34, 197, 94, 0.85));
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+  }
 }
 
 @media (max-width: 900px) {

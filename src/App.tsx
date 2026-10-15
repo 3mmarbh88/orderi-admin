@@ -632,6 +632,7 @@ function App() {
   const [codes, setCodes] = useState<ActivationCode[]>([]);
 
   const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
   const [biometricAvailable, setBiometricAvailable] =
@@ -881,6 +882,31 @@ function App() {
       setServerOnline(false);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleProgramServerRefresh() {
+    if (isRefreshing || loading) return;
+    setIsRefreshing(true);
+    try {
+      await loadData();
+      showToast(
+        "success",
+        lang === "ar"
+          ? "تم تحديث بيانات البرنامج والاتصال بالسيرفر بنجاح 🔄"
+          : "Program data & server refreshed successfully 🔄"
+      );
+    } catch {
+      showToast(
+        "error",
+        lang === "ar"
+          ? "تعذر تحديث البرنامج أو السيرفر، يرجى التحقق من الاتصال"
+          : "Failed to refresh program or server"
+      );
+    } finally {
+      window.setTimeout(() => {
+        setIsRefreshing(false);
+      }, 750);
     }
   }
 
@@ -2298,7 +2324,21 @@ function App() {
                   <img
                     src={orderiLogo}
                     alt="Orderi Admin Logo"
-                    className="hero-logo-img"
+                    className={`hero-logo-img ${isRefreshing ? "refreshing-spin" : ""}`}
+                    onClick={() => void handleProgramServerRefresh()}
+                    title={
+                      lang === "ar"
+                        ? "انقر لتحديث البرنامج وفحص اتصال السيرفر"
+                        : "Click to refresh program & check server connection"
+                    }
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        void handleProgramServerRefresh();
+                      }
+                    }}
                   />
                 </div>
 
