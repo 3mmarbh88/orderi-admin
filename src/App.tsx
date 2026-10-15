@@ -4534,7 +4534,7 @@ function App() {
 
               <div className="modal-body">
                 <label className="modal-field">
-                  اسم المستخدم
+                  رقم الهاتف
 
                   <input
                     value={
@@ -4573,27 +4573,6 @@ function App() {
                   />
                 </label>
 
-                <label className="modal-field">
-                  البريد الإلكتروني
-
-                  <input
-                    type="email"
-                    value={
-                      userForm.email
-                    }
-                    onChange={(e) =>
-                      setUserForm(
-                        (current) => ({
-                          ...current,
-                          email:
-                            e.target.value,
-                        })
-                      )
-                    }
-                    placeholder="example@email.com"
-                  />
-                </label>
-
                 <div
                   style={{
                     display:
@@ -4603,37 +4582,6 @@ function App() {
                     gap: "12px",
                   }}
                 >
-                  <label className="modal-field">
-                    الحد الأقصى للأجهزة
-
-                    <input
-                      type="number"
-                      min={1}
-                      max={20}
-                      value={
-                        userForm.maxDevices
-                      }
-                      onChange={(e) =>
-                        setUserForm(
-                          (current) => ({
-                            ...current,
-                            maxDevices:
-                              Math.min(
-                                20,
-                                Math.max(
-                                  1,
-                                  Number(
-                                    e.target
-                                      .value
-                                  ) || 1
-                                )
-                              ),
-                          })
-                        )
-                      }
-                    />
-                  </label>
-
                   <label className="modal-field">
                     تمديد التفعيل
 
