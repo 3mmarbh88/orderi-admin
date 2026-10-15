@@ -7,6 +7,7 @@ import {
   checkServer,
   createActivationCodes,
   deleteUser,
+  deleteActivationCode,
   getActivationCodes,
   getApiUrl,
   getUsers,
@@ -476,88 +477,6 @@ function isExpired(value?: string | null) {
   return time < Date.now();
 }
 
-const SAMPLE_USERS: User[] = [
-  {
-    id: "usr_1",
-    username: "ahmed_khalil",
-    email: "ahmed@example.com",
-    full_name: "أحمد خليل",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 25 * 86400000).toISOString(),
-    max_devices: 2,
-    created_at: new Date(Date.now() - 10 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_2",
-    username: "fatima_ali",
-    email: "fatima@example.com",
-    full_name: "فاطمة علي",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 60 * 86400000).toISOString(),
-    max_devices: 3,
-    created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_3",
-    username: "mohammed_bh",
-    email: "mohammed@example.com",
-    full_name: "محمد جاسم",
-    is_active: false,
-    activation_expires_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    max_devices: 1,
-    created_at: new Date(Date.now() - 40 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_4",
-    username: "sarah_tech",
-    email: "sarah@example.com",
-    full_name: "سارة محمود",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 90 * 86400000).toISOString(),
-    max_devices: 2,
-    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
-
-const SAMPLE_CODES: ActivationCode[] = [
-  {
-    id: "cod_1",
-    code: "ORD-2026-X9A2-7K4M",
-    duration_days: 30,
-    is_used: false,
-    created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_2",
-    code: "ORD-2026-B8V1-9L0P",
-    duration_days: 90,
-    is_used: true,
-    used_by: "ahmed_khalil",
-    expires_at: new Date(Date.now() + 25 * 86400000).toISOString(),
-    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_3",
-    code: "ORD-2026-C3D4-5E6F",
-    duration_days: 365,
-    is_used: false,
-    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_4",
-    code: "ORD-2026-Z7Y8-1W2Q",
-    duration_days: 30,
-    is_used: true,
-    used_by: "fatima_ali",
-    expires_at: new Date(Date.now() + 60 * 86400000).toISOString(),
-    created_at: new Date(Date.now() - 12 * 86400000).toISOString(),
-  },
-];
-
 type AuditLog = {
   id: string;
   action: string;
@@ -567,45 +486,6 @@ type AuditLog = {
   status: "success" | "warning" | "error";
   details?: string;
 };
-
-const INITIAL_AUDIT_LOGS: AuditLog[] = [
-  {
-    id: "log_1",
-    action: "تسجيل دخول إداري آمن",
-    target: "جلسة المشرف العام",
-    category: "auth",
-    timestamp: new Date(Date.now() - 4 * 60000).toISOString(),
-    status: "success",
-    details: "تم تسجيل الدخول وتفعيل لوحة تحكم Orderi Admin",
-  },
-  {
-    id: "log_2",
-    action: "فحص ومزامنة قاعدة البيانات",
-    target: "Supabase Live Cluster",
-    category: "server",
-    timestamp: new Date(Date.now() - 12 * 60000).toISOString(),
-    status: "success",
-    details: "استجابة السيرفر ممتازة: 38ms بدون أخطاء",
-  },
-  {
-    id: "log_3",
-    action: "جاهزية المصادقة بالبصمة",
-    target: "WebAuthn / Biometrics",
-    category: "system",
-    timestamp: new Date(Date.now() - 25 * 60000).toISOString(),
-    status: "success",
-    details: "تم التحقق من دعم مستشعر البصمة وFace ID",
-  },
-  {
-    id: "log_4",
-    action: "توليد كود اشتراك جديد",
-    target: "ORD-2026-X9A2-7K4M",
-    category: "code",
-    timestamp: new Date(Date.now() - 90 * 60000).toISOString(),
-    status: "success",
-    details: "صلاحية 30 يوماً متوفرة للتفعيل الفوري",
-  },
-];
 
 function exportUsersToCSV(userList: User[]) {
   const headers = ["ID", "اسم المستخدم", "الاسم الكامل", "البريد الإلكتروني", "الحالة", "عدد الأجهزة", "تاريخ الانتهاء", "تاريخ التسجيل"];
@@ -824,7 +704,7 @@ function App() {
   const [commandOpen, setCommandOpen] = useState(false);
   const [commandQuery, setCommandQuery] = useState("");
   const [qrModalCode, setQrModalCode] = useState<ActivationCode | null>(null);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INITIAL_AUDIT_LOGS);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [auditFilter, setAuditFilter] = useState<string>("all");
 
   function addAudit(
@@ -971,37 +851,32 @@ function App() {
     setError("");
 
     try {
-      const [server, userResult, codeResult] =
-        await Promise.all([
-          checkServer().catch(() => null),
-          getUsers().catch(() => null),
-          getActivationCodes().catch(() => null),
-        ]);
+      const [server, userResult, codeResult] = await Promise.all([
+        checkServer(),
+        getUsers(),
+        getActivationCodes(),
+      ]);
 
       setServerOnline(server?.success === true);
+      setServerTime(server?.timestamp || server?.time || "");
 
-      setServerTime(
-        server?.timestamp ||
-          server?.time ||
-          new Date().toLocaleTimeString("ar-BH")
-      );
-
-      const loadedUsers = userResult?.users || userResult?.data;
-      if (Array.isArray(loadedUsers) && loadedUsers.length > 0) {
-        setUsers(loadedUsers);
-      } else {
-        setUsers((prev) => (prev.length > 0 ? prev : SAMPLE_USERS));
+      const loadedUsers = userResult?.users ?? userResult?.data;
+      if (!Array.isArray(loadedUsers)) {
+        throw new Error("استجابة السيرفر لقائمة المستخدمين غير صحيحة.");
       }
+      setUsers(loadedUsers);
 
-      const loadedCodes = codeResult?.codes || codeResult?.data;
-      if (Array.isArray(loadedCodes) && loadedCodes.length > 0) {
-        setCodes(loadedCodes);
-      } else {
-        setCodes((prev) => (prev.length > 0 ? prev : SAMPLE_CODES));
+      const loadedCodes = codeResult?.codes ?? codeResult?.data;
+      if (!Array.isArray(loadedCodes)) {
+        throw new Error("استجابة السيرفر لأكواد التفعيل غير صحيحة.");
       }
-    } catch {
-      setUsers((prev) => (prev.length > 0 ? prev : SAMPLE_USERS));
-      setCodes((prev) => (prev.length > 0 ? prev : SAMPLE_CODES));
+      setCodes(loadedCodes);
+      setError("");
+    } catch (err) {
+      setUsers([]);
+      setCodes([]);
+      setError(err instanceof Error ? err.message : "تعذر تحميل البيانات الحقيقية من السيرفر.");
+      setServerOnline(false);
     } finally {
       setLoading(false);
     }
@@ -1300,14 +1175,7 @@ function App() {
           : (lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully")
       );
     } catch (err) {
-      if ((username.trim() === "admin" && (password === "admin" || password === "123456" || password === "password" || !password)) || username.trim() === "demo") {
-        localStorage.setItem("orderi_admin_token", "demo_admin_jwt_local");
-        localStorage.setItem("orderi_biometric_username", username.trim() || "admin");
-        setLoggedIn(true);
-        setPassword("");
-        showToast("success", lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully");
-        return;
-      }
+      setLoggedIn(false);
       setError(
         err instanceof Error
           ? err.message
@@ -1367,43 +1235,21 @@ function App() {
     setError("");
 
     try {
-      const result = await createActivationCodes(durationDays, count).catch(() => null);
-      const newCodes = result?.codes || result?.data;
-
-      if (Array.isArray(newCodes) && newCodes.length > 0) {
-        setCodes((current) => [...newCodes, ...current]);
-      } else {
-        const generated: ActivationCode[] = Array.from({ length: count }, (_, i) => ({
-          id: `cod_${Date.now()}_${i}`,
-          code: `ORD-${Math.floor(1000 + Math.random() * 9000)}-${Math.random()
-            .toString(36)
-            .substring(2, 6)
-            .toUpperCase()}`,
-          duration_days: durationDays,
-          is_used: false,
-          created_at: new Date().toISOString(),
-        }));
-        setCodes((current) => [...generated, ...current]);
+      const result = await createActivationCodes(durationDays, count);
+      const newCodes = result?.codes ?? result?.data;
+      if (!Array.isArray(newCodes)) {
+        throw new Error("لم يرجع السيرفر أكواد التفعيل المحفوظة.");
       }
 
+      setCodes((current) => [...newCodes, ...current]);
       setShowConfirmModal(false);
       setShowCreateModal(false);
-      showToast("success", `تم إنشاء ${count} كود تفعيل بنجاح`);
-    } catch {
-      const generated: ActivationCode[] = Array.from({ length: count }, (_, i) => ({
-        id: `cod_${Date.now()}_${i}`,
-        code: `ORD-${Math.floor(1000 + Math.random() * 9000)}-${Math.random()
-          .toString(36)
-          .substring(2, 6)
-          .toUpperCase()}`,
-        duration_days: durationDays,
-        is_used: false,
-        created_at: new Date().toISOString(),
-      }));
-      setCodes((current) => [...generated, ...current]);
-      setShowConfirmModal(false);
-      setShowCreateModal(false);
-      showToast("success", `تم إنشاء ${count} كود تفعيل بنجاح`);
+      showToast("success", `تم إنشاء ${newCodes.length} كود تفعيل وحفظها في قاعدة البيانات`);
+      await loadData();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "تعذر إنشاء أكواد التفعيل.";
+      setError(message);
+      showToast("error", message);
     } finally {
       setLoading(false);
     }
@@ -3780,10 +3626,17 @@ function App() {
                           <button
                             type="button"
                             className="icon-button"
-                            onClick={() => {
-                              setCodes((current) => current.filter((c) => c.id !== code.id));
-                              addAudit("حذف كود تفعيل", `كود ${code.code}`, "code");
-                              showToast("success", "تم حذف الكود بنجاح");
+                            onClick={async () => {
+                              try {
+                                await deleteActivationCode(code.id);
+                                setCodes((current) => current.filter((c) => c.id !== code.id));
+                                addAudit("حذف كود تفعيل", `كود ${code.code}`, "code");
+                                showToast("success", "تم حذف كود التفعيل من قاعدة البيانات");
+                              } catch (err) {
+                                const message = err instanceof Error ? err.message : "تعذر حذف كود التفعيل من السيرفر.";
+                                setError(message);
+                                showToast("error", message);
+                              }
                             }}
                             style={{ width: "38px", height: "38px", color: "var(--danger)" }}
                             title="حذف الكود"
