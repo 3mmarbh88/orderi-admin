@@ -84,7 +84,6 @@ async function request(path: string, options: RequestInit = {}) {
     ...(token
       ? {
           Authorization: `Bearer ${token}`,
-          "X-Admin-Token": token,
         }
       : {}),
     ...((options.headers as Record<string, string>) || {}),
@@ -150,7 +149,6 @@ export async function checkServer() {
     ...(token
       ? {
           Authorization: `Bearer ${token}`,
-          "X-Admin-Token": token,
         }
       : {}),
   };
