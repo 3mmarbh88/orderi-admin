@@ -248,7 +248,19 @@ export async function getDashboardStats() {
  * جلب قائمة المستخدمين.
  */
 export async function getUsers() {
-  return request("/api/admin/users");
+  const result = await request("/api/admin/users");
+  const users = result?.users ?? result?.data;
+  if (!Array.isArray(users)) throw new Error("استجابة السيرفر لقائمة المستخدمين غير صحيحة.");
+  return {
+    ...result,
+    users: users.map((user: any) => ({
+      ...user,
+      username: user.username ?? user.phone ?? "",
+      full_name: user.full_name ?? user.name ?? "",
+      activation_expires_at: user.activation_expires_at ?? user.expires_at ?? user.subscription?.expires_at ?? null,
+      is_active: user.is_active !== false,
+    })),
+  };
 }
 
 /**
