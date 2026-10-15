@@ -7,6 +7,7 @@ import {
   checkServer,
   createActivationCodes,
   deleteUser,
+  deleteActivationCode,
   getActivationCodes,
   getApiUrl,
   getUsers,
@@ -476,88 +477,6 @@ function isExpired(value?: string | null) {
   return time < Date.now();
 }
 
-const SAMPLE_USERS: User[] = [
-  {
-    id: "usr_1",
-    username: "ahmed_khalil",
-    email: "ahmed@example.com",
-    full_name: "أحمد خليل",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 25 * 86400000).toISOString(),
-    max_devices: 2,
-    created_at: new Date(Date.now() - 10 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_2",
-    username: "fatima_ali",
-    email: "fatima@example.com",
-    full_name: "فاطمة علي",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 60 * 86400000).toISOString(),
-    max_devices: 3,
-    created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_3",
-    username: "mohammed_bh",
-    email: "mohammed@example.com",
-    full_name: "محمد جاسم",
-    is_active: false,
-    activation_expires_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    max_devices: 1,
-    created_at: new Date(Date.now() - 40 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "usr_4",
-    username: "sarah_tech",
-    email: "sarah@example.com",
-    full_name: "سارة محمود",
-    is_active: true,
-    activation_expires_at: new Date(Date.now() + 90 * 86400000).toISOString(),
-    max_devices: 2,
-    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
-
-const SAMPLE_CODES: ActivationCode[] = [
-  {
-    id: "cod_1",
-    code: "ORD-2026-X9A2-7K4M",
-    duration_days: 30,
-    is_used: false,
-    created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_2",
-    code: "ORD-2026-B8V1-9L0P",
-    duration_days: 90,
-    is_used: true,
-    used_by: "ahmed_khalil",
-    expires_at: new Date(Date.now() + 25 * 86400000).toISOString(),
-    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_3",
-    code: "ORD-2026-C3D4-5E6F",
-    duration_days: 365,
-    is_used: false,
-    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-  },
-  {
-    id: "cod_4",
-    code: "ORD-2026-Z7Y8-1W2Q",
-    duration_days: 30,
-    is_used: true,
-    used_by: "fatima_ali",
-    expires_at: new Date(Date.now() + 60 * 86400000).toISOString(),
-    created_at: new Date(Date.now() - 12 * 86400000).toISOString(),
-  },
-];
-
 type AuditLog = {
   id: string;
   action: string;
@@ -567,45 +486,6 @@ type AuditLog = {
   status: "success" | "warning" | "error";
   details?: string;
 };
-
-const INITIAL_AUDIT_LOGS: AuditLog[] = [
-  {
-    id: "log_1",
-    action: "تسجيل دخول إداري آمن",
-    target: "جلسة المشرف العام",
-    category: "auth",
-    timestamp: new Date(Date.now() - 4 * 60000).toISOString(),
-    status: "success",
-    details: "تم تسجيل الدخول وتفعيل لوحة تحكم Orderi Admin",
-  },
-  {
-    id: "log_2",
-    action: "فحص ومزامنة قاعدة البيانات",
-    target: "Supabase Live Cluster",
-    category: "server",
-    timestamp: new Date(Date.now() - 12 * 60000).toISOString(),
-    status: "success",
-    details: "استجابة السيرفر ممتازة: 38ms بدون أخطاء",
-  },
-  {
-    id: "log_3",
-    action: "جاهزية المصادقة بالبصمة",
-    target: "WebAuthn / Biometrics",
-    category: "system",
-    timestamp: new Date(Date.now() - 25 * 60000).toISOString(),
-    status: "success",
-    details: "تم التحقق من دعم مستشعر البصمة وFace ID",
-  },
-  {
-    id: "log_4",
-    action: "توليد كود اشتراك جديد",
-    target: "ORD-2026-X9A2-7K4M",
-    category: "code",
-    timestamp: new Date(Date.now() - 90 * 60000).toISOString(),
-    status: "success",
-    details: "صلاحية 30 يوماً متوفرة للتفعيل الفوري",
-  },
-];
 
 function exportUsersToCSV(userList: User[]) {
   const headers = ["ID", "اسم المستخدم", "الاسم الكامل", "البريد الإلكتروني", "الحالة", "عدد الأجهزة", "تاريخ الانتهاء", "تاريخ التسجيل"];
@@ -824,7 +704,7 @@ function App() {
   const [commandOpen, setCommandOpen] = useState(false);
   const [commandQuery, setCommandQuery] = useState("");
   const [qrModalCode, setQrModalCode] = useState<ActivationCode | null>(null);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INITIAL_AUDIT_LOGS);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [auditFilter, setAuditFilter] = useState<string>("all");
 
   function addAudit(
@@ -971,37 +851,32 @@ function App() {
     setError("");
 
     try {
-      const [server, userResult, codeResult] =
-        await Promise.all([
-          checkServer().catch(() => null),
-          getUsers().catch(() => null),
-          getActivationCodes().catch(() => null),
-        ]);
+      const [server, userResult, codeResult] = await Promise.all([
+        checkServer(),
+        getUsers(),
+        getActivationCodes(),
+      ]);
 
       setServerOnline(server?.success === true);
+      setServerTime(server?.timestamp || server?.time || "");
 
-      setServerTime(
-        server?.timestamp ||
-          server?.time ||
-          new Date().toLocaleTimeString("ar-BH")
-      );
-
-      const loadedUsers = userResult?.users || userResult?.data;
-      if (Array.isArray(loadedUsers) && loadedUsers.length > 0) {
-        setUsers(loadedUsers);
-      } else {
-        setUsers((prev) => (prev.length > 0 ? prev : SAMPLE_USERS));
+      const loadedUsers = userResult?.users ?? userResult?.data;
+      if (!Array.isArray(loadedUsers)) {
+        throw new Error("استجابة السيرفر لقائمة المستخدمين غير صحيحة.");
       }
+      setUsers(loadedUsers);
 
-      const loadedCodes = codeResult?.codes || codeResult?.data;
-      if (Array.isArray(loadedCodes) && loadedCodes.length > 0) {
-        setCodes(loadedCodes);
-      } else {
-        setCodes((prev) => (prev.length > 0 ? prev : SAMPLE_CODES));
+      const loadedCodes = codeResult?.codes ?? codeResult?.data;
+      if (!Array.isArray(loadedCodes)) {
+        throw new Error("استجابة السيرفر لأكواد التفعيل غير صحيحة.");
       }
-    } catch {
-      setUsers((prev) => (prev.length > 0 ? prev : SAMPLE_USERS));
-      setCodes((prev) => (prev.length > 0 ? prev : SAMPLE_CODES));
+      setCodes(loadedCodes);
+      setError("");
+    } catch (err) {
+      setUsers([]);
+      setCodes([]);
+      setError(err instanceof Error ? err.message : "تعذر تحميل البيانات الحقيقية من السيرفر.");
+      setServerOnline(false);
     } finally {
       setLoading(false);
     }
@@ -1109,65 +984,9 @@ function App() {
       }
     }
 
-    // 2. Web / WebAuthn platform authenticator (Touch ID, Face ID, Windows Hello)
-    if (
-      typeof window !== "undefined" &&
-      window.PublicKeyCredential &&
-      navigator.credentials &&
-      window.isSecureContext
-    ) {
-      try {
-        const isPlatformAuth = await window.PublicKeyCredential
-          .isUserVerifyingPlatformAuthenticatorAvailable()
-          .catch(() => false);
-
-        if (isPlatformAuth) {
-          const challenge = new Uint8Array(32);
-          window.crypto.getRandomValues(challenge);
-          const cred = await navigator.credentials
-            .get({
-              publicKey: {
-                challenge,
-                timeout: 60000,
-                userVerification: "preferred",
-                rpId: window.location.hostname || "localhost",
-              },
-            })
-            .catch(() => null);
-
-          if (cred) return true;
-        }
-      } catch (webauthnErr) {
-        console.warn("WebAuthn skipped, displaying biometric modal:", webauthnErr);
-      }
-    }
-
-    // 3. Interactive In-App Biometric Scanner Modal (Face ID / Touch ID)
-    return new Promise((resolve) => {
-      setBiometricModal({
-        isOpen: true,
-        mode,
-        status: "scanning",
-        message:
-          mode === "face"
-            ? "انظر إلى الشاشة وضَع وجهك في الإطار لمسح الملامح (Face ID)..."
-            : "ضع إصبعك على مستشعر البصمة للمتابعة...",
-        onSuccess: () => {
-          setBiometricModal((prev) => ({
-            ...prev,
-            status: "success",
-            message:
-              mode === "face"
-                ? "تم التعرف على الوجه بنجاح (Face ID Verified)!"
-                : "تم التحقق من البصمة بنجاح!",
-          }));
-          setTimeout(() => {
-            setBiometricModal((prev) => ({ ...prev, isOpen: false }));
-            resolve(true);
-          }, 650);
-        },
-      });
-    });
+    throw new Error(
+      "التحقق بالبصمة الحقيقي غير متاح في هذا المتصفح. استخدم تطبيق Android المدعوم أو سجّل الدخول بكلمة المرور."
+    );
   }
 
   async function handleBiometricLogin(mode: "face" | "fingerprint" = "face") {
@@ -1300,14 +1119,7 @@ function App() {
           : (lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully")
       );
     } catch (err) {
-      if ((username.trim() === "admin" && (password === "admin" || password === "123456" || password === "password" || !password)) || username.trim() === "demo") {
-        localStorage.setItem("orderi_admin_token", "demo_admin_jwt_local");
-        localStorage.setItem("orderi_biometric_username", username.trim() || "admin");
-        setLoggedIn(true);
-        setPassword("");
-        showToast("success", lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully");
-        return;
-      }
+      setLoggedIn(false);
       setError(
         err instanceof Error
           ? err.message
@@ -1367,43 +1179,21 @@ function App() {
     setError("");
 
     try {
-      const result = await createActivationCodes(durationDays, count).catch(() => null);
-      const newCodes = result?.codes || result?.data;
-
-      if (Array.isArray(newCodes) && newCodes.length > 0) {
-        setCodes((current) => [...newCodes, ...current]);
-      } else {
-        const generated: ActivationCode[] = Array.from({ length: count }, (_, i) => ({
-          id: `cod_${Date.now()}_${i}`,
-          code: `ORD-${Math.floor(1000 + Math.random() * 9000)}-${Math.random()
-            .toString(36)
-            .substring(2, 6)
-            .toUpperCase()}`,
-          duration_days: durationDays,
-          is_used: false,
-          created_at: new Date().toISOString(),
-        }));
-        setCodes((current) => [...generated, ...current]);
+      const result = await createActivationCodes(durationDays, count);
+      const newCodes = result?.codes ?? result?.data;
+      if (!Array.isArray(newCodes)) {
+        throw new Error("لم يرجع السيرفر أكواد التفعيل المحفوظة.");
       }
 
+      setCodes((current) => [...newCodes, ...current]);
       setShowConfirmModal(false);
       setShowCreateModal(false);
-      showToast("success", `تم إنشاء ${count} كود تفعيل بنجاح`);
-    } catch {
-      const generated: ActivationCode[] = Array.from({ length: count }, (_, i) => ({
-        id: `cod_${Date.now()}_${i}`,
-        code: `ORD-${Math.floor(1000 + Math.random() * 9000)}-${Math.random()
-          .toString(36)
-          .substring(2, 6)
-          .toUpperCase()}`,
-        duration_days: durationDays,
-        is_used: false,
-        created_at: new Date().toISOString(),
-      }));
-      setCodes((current) => [...generated, ...current]);
-      setShowConfirmModal(false);
-      setShowCreateModal(false);
-      showToast("success", `تم إنشاء ${count} كود تفعيل بنجاح`);
+      showToast("success", `تم إنشاء ${newCodes.length} كود تفعيل وحفظها في قاعدة البيانات`);
+      await loadData();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "تعذر إنشاء أكواد التفعيل.";
+      setError(message);
+      showToast("error", message);
     } finally {
       setLoading(false);
     }
@@ -3780,13 +3570,20 @@ function App() {
                           <button
                             type="button"
                             className="icon-button"
-                            onClick={() => {
-                              setCodes((current) => current.filter((c) => c.id !== code.id));
-                              addAudit("حذف كود تفعيل", `كود ${code.code}`, "code");
-                              showToast("success", "تم حذف الكود بنجاح");
+                            onClick={async () => {
+                              try {
+                                await deleteActivationCode(code.id);
+                                setCodes((current) => current.filter((c) => c.id !== code.id));
+                                addAudit("إلغاء كود تفعيل", `كود ${code.code}`, "code");
+                                showToast("success", "تم إلغاء كود التفعيل في قاعدة البيانات");
+                              } catch (err) {
+                                const message = err instanceof Error ? err.message : "تعذر حذف كود التفعيل من السيرفر.";
+                                setError(message);
+                                showToast("error", message);
+                              }
                             }}
                             style={{ width: "38px", height: "38px", color: "var(--danger)" }}
-                            title="حذف الكود"
+                            title="إلغاء كود التفعيل"
                           >
                             <Icon name="trash" size={15} />
                           </button>
@@ -3802,152 +3599,44 @@ function App() {
 
           {page === "analytics" && (
             <div className="analytics-section">
-              <div className="analytics-grid">
-                <div className="chart-card">
-                  <div className="chart-card-header">
-                    <h4>معدل تفعيل الاشتراكات (آخر 7 أيام)</h4>
-                    <span className="chart-badge">+18.5% نمو</span>
-                  </div>
-                  <div className="bar-chart-container">
-                    {[
-                      { day: "السبت", count: 4, height: 40 },
-                      { day: "الأحد", count: 7, height: 65 },
-                      { day: "الإثنين", count: 9, height: 85 },
-                      { day: "الثلاثاء", count: 6, height: 55 },
-                      { day: "الأربعاء", count: 12, height: 100 },
-                      { day: "الخميس", count: 11, height: 90 },
-                      { day: "الجمعة", count: 8, height: 75 },
-                    ].map((item, idx) => (
-                      <div className="bar-column" key={idx}>
-                        <span className="bar-value">{item.count}</span>
-                        <div
-                          className="bar-pill"
-                          style={{ height: `${item.height}%` }}
-                          title={`${item.day}: ${item.count} تفعيل`}
-                        />
-                        <span className="bar-label">{item.day}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="chart-card">
-                  <div className="chart-card-header">
-                    <h4>توزيع الأجهزة المفعلة للمستخدمين</h4>
-                    <span className="chart-badge">متوسط 2.1 جهاز</span>
-                  </div>
-                  <div className="donut-stats-row">
-                    <div style={{ position: "relative", width: "120px", height: "120px" }}>
-                      <svg width="120" height="120" viewBox="0 0 42 42">
-                        <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--border)" strokeWidth="4" />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#38bdf8"
-                          strokeWidth="4"
-                          strokeDasharray="50 50"
-                          strokeDashoffset="25"
-                        />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#6366f1"
-                          strokeWidth="4"
-                          strokeDasharray="30 70"
-                          strokeDashoffset="75"
-                        />
-                        <circle
-                          cx="21"
-                          cy="21"
-                          r="15.915"
-                          fill="transparent"
-                          stroke="#34d399"
-                          strokeWidth="4"
-                          strokeDasharray="20 80"
-                          strokeDashoffset="5"
-                        />
-                      </svg>
-                      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <strong style={{ fontSize: "18px", color: "var(--text)" }}>{users.length}</strong>
-                        <span style={{ fontSize: "10px", color: "var(--muted)" }}>مستخدم</span>
-                      </div>
-                    </div>
-                    <div className="donut-legend">
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#38bdf8" }} />
-                        <span>جهازين (50%)</span>
-                      </div>
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#6366f1" }} />
-                        <span>3 أجهزة (30%)</span>
-                      </div>
-                      <div className="legend-item">
-                        <span className="legend-color" style={{ background: "#34d399" }} />
-                        <span>جهاز واحد (20%)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className="panel full-panel">
                 <div className="panel-header">
                   <div>
-                    <h3>المؤشرات الحيوية للسيرفر والشبكة</h3>
-                    <p>المعايير التشغيلية في الوقت الفعلي لنظام Orderi Platform</p>
+                    <h3>إحصاءات فعلية من بيانات السيرفر</h3>
+                    <p>الأرقام التالية محسوبة من بيانات المستخدمين وأكواد التفعيل التي تم تحميلها من قاعدة البيانات، ولا تستخدم بيانات تجريبية.</p>
                   </div>
                   <button
                     className="icon-text-button"
-                    onClick={() => {
-                      checkServerStatus();
-                      showToast("success", "تم فحص المؤشرات الحيوية بنجاح");
-                    }}
+                    onClick={() => void loadData()}
+                    disabled={loading}
                   >
                     <Icon name="refresh" size={16} />
-                    فحص الآن
+                    {loading ? "جارٍ التحديث..." : "تحديث البيانات"}
                   </button>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", padding: "16px" }}>
+                <div className="analytics-grid">
                   <div className="info-card">
-                    <span>استهلاك المعالج (CPU Load)</span>
-                    <strong>14.2%</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "14%", height: "100%", background: "#34d399" }} />
-                    </div>
-                    <small style={{ color: "#34d399", marginTop: "4px" }}>أداء مستقر جداً</small>
+                    <span>المستخدمون المحمّلون من السيرفر</span>
+                    <strong>{users.length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>استهلاك الذاكرة (Memory Usage)</span>
-                    <strong>218 MB / 1024 MB</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "21%", height: "100%", background: "#38bdf8" }} />
-                    </div>
-                    <small style={{ color: "var(--muted)", marginTop: "4px" }}>حجم التخزين المؤقت مثالي</small>
+                    <span>أكواد التفعيل المتاحة</span>
+                    <strong>{codes.filter((code) => !code.is_used && !isExpired(code.expires_at)).length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>زمن الاستجابة (Latency)</span>
-                    <strong>38 ms</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "85%", height: "100%", background: "#6366f1" }} />
-                    </div>
-                    <small style={{ color: "#6366f1", marginTop: "4px" }}>اتصال فائق السرعة</small>
+                    <span>أكواد التفعيل المستخدمة</span>
+                    <strong>{codes.filter((code) => code.is_used).length}</strong>
                   </div>
-
                   <div className="info-card">
-                    <span>حوض اتصالات قاعدة البيانات</span>
-                    <strong>12 / 60 Connection</strong>
-                    <div style={{ width: "100%", height: "6px", background: "var(--border)", borderRadius: "3px", overflow: "hidden", marginTop: "8px" }}>
-                      <div style={{ width: "20%", height: "100%", background: "#f59e0b" }} />
-                    </div>
-                    <small style={{ color: "var(--muted)", marginTop: "4px" }}>جاهز للضغط العالي</small>
+                    <span>حالة الاتصال بالسيرفر</span>
+                    <strong>{serverOnline ? "متصل" : "غير متصل"}</strong>
                   </div>
                 </div>
+                {!serverOnline && (
+                  <p style={{ padding: "0 16px 16px", color: "var(--danger)" }}>
+                    لا يمكن عرض إحصاءات مباشرة حتى يعود اتصال السيرفر.
+                  </p>
+                )}
               </div>
             </div>
           )}
