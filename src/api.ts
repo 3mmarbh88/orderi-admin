@@ -344,7 +344,12 @@ export async function unlinkUserDevice(id: string) {
  * جلب أكواد التفعيل والتراخيص.
  */
 export async function getActivationCodes() {
-  return request("/api/admin/activation-codes");
+  const result = await request("/api/admin/activation-codes");
+  const codes = result?.activation_codes ?? result?.codes ?? result?.data;
+  if (!Array.isArray(codes)) {
+    throw new Error("استجابة السيرفر لأكواد التفعيل غير صحيحة.");
+  }
+  return { ...result, codes };
 }
 
 /**
@@ -355,7 +360,7 @@ export async function createActivationCodes(
   count: number,
   isVip: boolean = false
 ) {
-  return request("/api/admin/activation-codes", {
+  const result = await request("/api/admin/activation-codes/bulk", {
     method: "POST",
     body: JSON.stringify({
       durationDays,
@@ -364,14 +369,19 @@ export async function createActivationCodes(
       is_vip: isVip,
     }),
   });
+  const codes = result?.activation_codes ?? result?.codes ?? result?.data;
+  if (!Array.isArray(codes)) {
+    throw new Error("السيرفر لم يرجع أكواد التفعيل المحفوظة.");
+  }
+  return { ...result, codes };
 }
 
 /**
  * إلغاء كود تفعيل.
  */
 export async function deleteActivationCode(id: string) {
-  return request(`/api/admin/activation-codes/${encodeURIComponent(id)}`, {
-    method: "DELETE",
+  return request(`/api/admin/activation-codes/${encodeURIComponent(id)}/cancel`, {
+    method: "PATCH",
   });
 }
 
