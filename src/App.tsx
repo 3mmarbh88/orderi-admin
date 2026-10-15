@@ -1066,7 +1066,6 @@ function App() {
           await adminLogin(username, password);
 
           localStorage.setItem("orderi_biometric_username", username.trim());
-          localStorage.setItem("orderi_biometric_pass", password);
           localStorage.setItem("orderi_biometric_enabled", "true");
           setBiometricEnabled(true);
           setLoggedIn(true);
@@ -1109,14 +1108,12 @@ function App() {
       }
 
       if (!sessionValid) {
-        const u = savedUsername || username || "admin";
+        const u = savedUsername || username;
         const p = savedPassword;
         if (p) {
           await adminLogin(u, p);
-        } else if (!token && !refreshToken) {
-          throw new Error(
-            "انتهت جلسة الدخول. سجّل الدخول بكلمة المرور لتجديد ربط البصمة."
-          );
+        } else {
+          throw new Error("انتهت جلسة المشرف. سجّل الدخول بكلمة المرور أولاً ثم استخدم البصمة.");
         }
       }
 
@@ -1158,10 +1155,6 @@ function App() {
       );
 
       if (rememberBiometric) {
-        localStorage.setItem(
-          "orderi_biometric_pass",
-          password
-        );
         localStorage.setItem(
           "orderi_biometric_enabled",
           "true"
