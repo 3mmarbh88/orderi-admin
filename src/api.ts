@@ -226,31 +226,15 @@ export async function adminLogin(username: string, password: string) {
 /**
  * تسجيل الدخول باستخدام البصمة الحيوية (Biometric).
  */
-export async function adminBiometricLogin(biometricKey: string) {
-  const result = await request("/api/admin/login", {
-    method: "POST",
-    body: JSON.stringify({ biometricKey }),
-  });
-
-  const token =
-    result?.token ||
-    result?.accessToken ||
-    result?.data?.token ||
-    result?.data?.accessToken;
-
-  if (token) {
-    localStorage.setItem("orderi_admin_token", token);
-    localStorage.setItem("natan_admin_token", token);
-  }
-
-  return result;
+export async function adminBiometricLogin(_biometricKey: string) {
+  throw new Error("تسجيل الدخول بالبصمة يحتاج جلسة صالحة أو إعادة تسجيل الدخول بكلمة المرور.");
 }
 
 /**
  * التحقق من صلاحية جلسة المشرف.
  */
 export async function verifyAdminSession() {
-  return request("/api/admin/users");
+  return request("/api/admin/me");
 }
 
 /**
@@ -404,9 +388,8 @@ export async function unlinkDevice(id: string) {
  * حظر أو فك حظر جهاز.
  */
 export async function toggleBlockDevice(id: string, isBlocked: boolean) {
-  return request(`/api/admin/devices/${encodeURIComponent(id)}/block`, {
-    method: "PATCH",
-    body: JSON.stringify({ is_blocked: isBlocked }),
+  return request(`/api/admin/devices/${encodeURIComponent(id)}/${isBlocked ? "block" : "unblock"}`, {
+    method: "POST",
   });
 }
 
@@ -445,12 +428,18 @@ export async function clearAllAlerts() {
 /**
  * تسجيل الخروج.
  */
-export function adminLogout() {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("orderi_admin_token");
-    localStorage.removeItem("orderi_admin_refresh_token");
-    localStorage.removeItem("orderi_admin_user");
-    localStorage.removeItem("natan_admin_token");
-    localStorage.removeItem("natan_admin_refresh_token");
+export async function adminLogout() {
+  try {
+    if (localStorage.getItem("orderi_admin_token") || localStorage.getItem("natan_admin_token")) {
+      await request("/api/admin/logout", { method: "POST" });
+    }
+  } finally {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("orderi_admin_token");
+      localStorage.removeItem("orderi_admin_refresh_token");
+      localStorage.removeItem("orderi_admin_user");
+      localStorage.removeItem("natan_admin_token");
+      localStorage.removeItem("natan_admin_refresh_token");
+    }
   }
 }
