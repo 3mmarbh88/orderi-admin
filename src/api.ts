@@ -349,7 +349,8 @@ export async function getActivationCodes() {
   if (!Array.isArray(codes)) {
     throw new Error("استجابة السيرفر لأكواد التفعيل غير صحيحة.");
   }
-  return { ...result, codes };
+  // Cancelled codes remain in the database for audit, but are not offered as usable codes.
+  return { ...result, codes: codes.filter((code: any) => code?.is_cancelled !== true) };
 }
 
 /**
