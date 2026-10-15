@@ -2044,16 +2044,6 @@ function App() {
           </div>
 
           <div className="topbar-left">
-            {/* Quick Language Toggle in Topbar */}
-            <button
-              type="button"
-              className="lang-toggle-btn"
-              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-              title={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-            >
-              <Icon name="globe" size={17} />
-              <span>{lang === "ar" ? "EN" : "عربي"}</span>
-            </button>
 
             <button
               className="command-trigger-btn"
