@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <!-- Outer Drop Shadows -->
-    <filter id="iconPlateShadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.28"/>
-      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.18"/>
+    <!-- Outer Soft Drop Shadows -->
+    <filter id="iconPlateShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#07131e" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#022c22" flood-opacity="0.2"/>
     </filter>
 
     <filter id="islandShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#022c22" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#022c22" flood-opacity="0.45"/>
     </filter>
 
     <filter id="boxShadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="-2" dy="8" stdDeviation="6" flood-color="#064e3b" flood-opacity="0.4"/>
+      <feDropShadow dx="-2" dy="10" stdDeviation="8" flood-color="#022c22" flood-opacity="0.5"/>
     </filter>
 
-    <filter id="glassShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#0f172a" flood-opacity="0.15"/>
+    <filter id="glassShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#07131e" flood-opacity="0.22"/>
     </filter>
 
     <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
@@ -34,64 +34,65 @@
       </feMerge>
     </filter>
 
-    <!-- Outer Bezel & Inner Plate Gradients -->
+    <!-- Bezel & Plate Gradients -->
     <linearGradient id="bezelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="25%" stop-color="#e8ecf1"/>
-      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="20%" stop-color="#f1f5f9"/>
+      <stop offset="65%" stop-color="#cbd5e1"/>
       <stop offset="100%" stop-color="#94a3b8"/>
     </linearGradient>
 
-    <linearGradient id="innerPlateGrad" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="45%" stop-color="#f1f5f9"/>
-      <stop offset="80%" stop-color="#e2e8f0"/>
+    <linearGradient id="innerPlateGrad" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#f8fafc"/>
+      <stop offset="75%" stop-color="#e2e8f0"/>
       <stop offset="100%" stop-color="#cbd5e1"/>
     </linearGradient>
 
     <linearGradient id="innerPlateBevel" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#64748b" stop-opacity="0.25"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#64748b" stop-opacity="0.3"/>
     </linearGradient>
 
-    <!-- 3D Bahrain Island Gradients -->
-    <linearGradient id="islandSurface" x1="15%" y1="0%" x2="85%" y2="100%">
-      <stop offset="0%" stop-color="#6ee7b7"/>
-      <stop offset="20%" stop-color="#34d399"/>
-      <stop offset="50%" stop-color="#10b981"/>
-      <stop offset="80%" stop-color="#059669"/>
+    <!-- 3D Bahrain Island Shading -->
+    <linearGradient id="islandSurface" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="18%" stop-color="#4ade80"/>
+      <stop offset="45%" stop-color="#22c55e"/>
+      <stop offset="75%" stop-color="#16a34a"/>
       <stop offset="100%" stop-color="#0d9488"/>
     </linearGradient>
 
     <linearGradient id="islandExtrudeLight" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#059669"/>
-      <stop offset="50%" stop-color="#047857"/>
-      <stop offset="100%" stop-color="#065f46"/>
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="50%" stop-color="#166534"/>
+      <stop offset="100%" stop-color="#14532d"/>
     </linearGradient>
 
     <linearGradient id="islandExtrudeDark" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#047857"/>
-      <stop offset="50%" stop-color="#064e3b"/>
-      <stop offset="100%" stop-color="#022c22"/>
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="50%" stop-color="#14532d"/>
+      <stop offset="100%" stop-color="#052e16"/>
     </linearGradient>
 
     <linearGradient id="islandGloss" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
-      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.1"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
 
-    <!-- Hawar Islands Teal -->
+    <!-- Hawar Islands Turquoise -->
     <linearGradient id="hawarSurface" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#2dd4bf"/>
-      <stop offset="60%" stop-color="#0d9488"/>
-      <stop offset="100%" stop-color="#0f766e"/>
+      <stop offset="55%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#115e59"/>
     </linearGradient>
 
-    <!-- Cardboard Box Gradients -->
+    <!-- Cardboard Box -->
     <linearGradient id="boxTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f5d09d"/>
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="10%" stop-color="#f5d09d"/>
       <stop offset="100%" stop-color="#dfb278"/>
     </linearGradient>
     <linearGradient id="boxLeft" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -103,293 +104,188 @@
       <stop offset="100%" stop-color="#8c5d26"/>
     </linearGradient>
     <linearGradient id="tapeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef3c7"/>
-      <stop offset="100%" stop-color="#fde68a"/>
+      <stop offset="0%" stop-color="#fef9c3"/>
+      <stop offset="100%" stop-color="#fef08a"/>
     </linearGradient>
 
-    <!-- Radar Gradients -->
+    <!-- Holographic Radar -->
     <radialGradient id="radarSweep" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#34d399" stop-opacity="0.5"/>
-      <stop offset="50%" stop-color="#10b981" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#059669" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#4ade80" stop-opacity="0.6"/>
+      <stop offset="45%" stop-color="#22c55e" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#16a34a" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Frosted Glass Badges -->
+    <!-- Frosted Glass Components -->
     <linearGradient id="glassFill" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
-      <stop offset="50%" stop-color="#f8fafc" stop-opacity="0.5"/>
-      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.65"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.82"/>
+      <stop offset="50%" stop-color="#f8fafc" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.75"/>
     </linearGradient>
     <linearGradient id="glassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#94a3b8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#94a3b8" stop-opacity="0.45"/>
     </linearGradient>
 
-    <!-- Golden Shield Badge -->
+    <!-- Gold Shield Badge -->
     <linearGradient id="shieldGold" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fef08a"/>
-      <stop offset="40%" stop-color="#f59e0b"/>
-      <stop offset="85%" stop-color="#d97706"/>
+      <stop offset="35%" stop-color="#f59e0b"/>
+      <stop offset="80%" stop-color="#d97706"/>
       <stop offset="100%" stop-color="#92400e"/>
     </linearGradient>
   </defs>
 
-  <!-- =========================================================================
-       1. APP ICON BASE CONTAINER (SQUIRCLE WITH METALLIC BEZEL)
-       TRANSPARENT BACKGROUND OUTSIDE THE SQUIRCLE
-  ========================================================================= -->
   <g filter="url(#iconPlateShadow)">
-    <!-- Outer Beveled Frame / Rim -->
-    <rect x="48" y="44" width="416" height="416" rx="92" fill="url(#bezelGrad)"/>
-    <!-- Outer Highlight Border -->
-    <rect x="49" y="45" width="414" height="414" rx="91" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-
-    <!-- Inner Recessed Plate Surface -->
-    <rect x="58" y="54" width="396" height="396" rx="82" fill="url(#innerPlateGrad)"/>
-    <rect x="58" y="54" width="396" height="396" rx="82" fill="none" stroke="url(#innerPlateBevel)" stroke-width="2.5"/>
+    <rect x="46" y="42" width="420" height="420" rx="94" fill="url(#bezelGrad)"/>
+    <rect x="47" y="43" width="418" height="418" rx="93" fill="none" stroke="#ffffff" stroke-width="2.2" opacity="0.85"/>
+    <rect x="56" y="52" width="400" height="400" rx="84" fill="url(#innerPlateGrad)"/>
+    <rect x="56" y="52" width="400" height="400" rx="84" fill="none" stroke="url(#innerPlateBevel)" stroke-width="2.5"/>
   </g>
 
-  <!-- =========================================================================
-       2. TOP-LEFT "ADMIN" EMBOSSED TITLE
-  ========================================================================= -->
-  <!-- Subtle Emboss Shadow / Highlight -->
-  <text x="96" y="104" font-family="'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="900" fill="#ffffff" letter-spacing="1.5" opacity="0.9">ADMIN</text>
-  <text x="96" y="103" font-family="'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="900" fill="#64748b" letter-spacing="1.5">ADMIN</text>
+  <text x="96" y="103" font-family="'Cairo', system-ui, -apple-system, sans-serif" font-size="26" font-weight="900" fill="#ffffff" letter-spacing="1.5" opacity="0.95">ADMIN</text>
+  <text x="96" y="102" font-family="'Cairo', system-ui, -apple-system, sans-serif" font-size="26" font-weight="900" fill="#475569" letter-spacing="1.5">ADMIN</text>
 
-  <!-- =========================================================================
-       3. 3D ISOMETRIC BAHRAIN ARCHIPELAGO
-  ========================================================================= -->
-  <!-- Shadow Under Bahrain -->
-  <g opacity="0.4" filter="url(#islandShadow)">
-    <path d="M 235 125 C 275 110 300 135 305 165 C 310 185 295 205 285 230 C 275 255 295 290 290 335 C 285 375 265 425 240 445 C 215 455 195 420 195 380 C 195 340 180 305 175 270 C 170 230 180 185 200 150 Z" fill="#022c22"/>
-    <!-- Muharraq Shadow -->
-    <path d="M 285 85 C 320 75 350 95 345 130 C 335 155 310 150 285 85 Z" fill="#022c22"/>
+  <g opacity="0.45" filter="url(#islandShadow)">
+    <path d="M 235 110 C 265 95 285 105 295 125 C 305 145 295 170 285 195 C 275 220 295 255 315 285 C 325 310 320 340 310 375 C 300 415 280 445 260 455 C 240 465 225 440 215 410 C 205 380 190 350 180 320 C 170 280 165 240 175 200 C 185 160 205 125 235 110 Z" fill="#022c22"/>
+    <path d="M 295 75 C 330 65 365 85 360 125 C 350 150 320 145 295 75 Z" fill="#022c22"/>
   </g>
 
-  <!-- Main Island 3D Extrusion Side Walls -->
+  <g opacity="0.75" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4,3">
+    <line x1="285" y1="120" x2="310" y2="95"/>
+    <line x1="275" y1="135" x2="320" y2="115"/>
+    <line x1="285" y1="210" x2="315" y2="215"/>
+    <line x1="180" y1="200" x2="148" y2="195"/>
+  </g>
+
   <g>
-    <!-- South & West Extrusion Wall -->
-    <path d="M 175 270 L 175 298 C 170 338 185 368 195 408 C 195 448 215 483 240 473 L 240 445 C 215 455 195 420 195 380 C 195 340 180 305 175 270 Z" fill="url(#islandExtrudeLight)"/>
-    <!-- East Extrusion Wall (Deep Shadow) -->
-    <path d="M 240 473 C 265 453 285 403 290 363 L 290 335 C 285 375 265 425 240 445 Z" fill="url(#islandExtrudeDark)"/>
-    <path d="M 290 363 C 295 318 275 283 285 258 L 285 230 C 275 255 295 290 290 335 Z" fill="url(#islandExtrudeDark)"/>
-    <path d="M 285 258 C 295 233 310 213 305 193 L 305 165 C 310 185 295 205 285 230 Z" fill="url(#islandExtrudeDark)"/>
-
-    <!-- Main Island Top Face (Vibrant Glossy Relief) -->
-    <path d="M 235 125 C 275 110 300 135 305 165 C 310 185 295 205 285 230 C 275 255 295 290 290 335 C 285 375 265 425 240 445 C 215 455 195 420 195 380 C 195 340 180 305 175 270 C 170 230 180 185 200 150 Z" fill="url(#islandSurface)"/>
-    <!-- Island Top Specular Highlight -->
-    <path d="M 235 125 C 275 110 300 135 305 165 C 310 185 295 205 285 230 C 275 255 295 290 290 335 C 285 375 265 425 240 445 C 215 455 195 420 195 380 C 195 340 180 305 175 270 C 170 230 180 185 200 150 Z" fill="url(#islandGloss)"/>
+    <path d="M 175 200 L 175 226 C 165 266 170 306 180 346 C 190 376 205 406 215 436 C 225 466 240 488 260 478 L 260 455 C 240 465 225 440 215 410 C 205 380 190 350 180 320 C 170 280 165 240 175 200 Z" fill="url(#islandExtrudeLight)"/>
+    <path d="M 260 478 C 280 468 300 438 310 398 L 310 375 C 300 415 280 445 260 455 Z" fill="url(#islandExtrudeDark)"/>
+    <path d="M 310 398 C 320 363 325 333 315 308 L 315 285 C 325 310 320 340 310 375 Z" fill="url(#islandExtrudeDark)"/>
+    <path d="M 315 308 C 295 278 275 243 285 218 L 285 195 C 275 220 295 255 315 285 Z" fill="url(#islandExtrudeDark)"/>
+    <path d="M 285 218 C 295 193 305 168 295 148 L 295 125 C 305 145 295 170 285 195 Z" fill="url(#islandExtrudeDark)"/>
+    <path d="M 235 110 C 265 95 285 105 295 125 C 305 145 295 170 285 195 C 275 220 295 255 315 285 C 325 310 320 340 310 375 C 300 415 280 445 260 455 C 240 465 225 440 215 410 C 205 380 190 350 180 320 C 170 280 165 240 175 200 C 185 160 205 125 235 110 Z" fill="url(#islandSurface)"/>
+    <path d="M 235 110 C 265 95 285 105 295 125 C 305 145 295 170 285 195 C 275 220 295 255 315 285 C 325 310 320 340 310 375 C 300 415 280 445 260 455 C 240 465 225 440 215 410 C 205 380 190 350 180 320 C 170 280 165 240 175 200 C 185 160 205 125 235 110 Z" fill="url(#islandGloss)"/>
   </g>
 
-  <!-- Muharraq Island (Top-Right 3D Extruded) -->
   <g>
-    <!-- Extrusion Wall -->
-    <path d="M 285 85 L 285 105 C 310 170 335 175 345 150 L 345 130 C 335 155 310 150 285 85 Z" fill="url(#islandExtrudeLight)"/>
-    <path d="M 345 150 C 350 115 320 95 285 105 L 285 85 C 320 75 350 95 345 130 Z" fill="url(#islandExtrudeDark)"/>
-    <!-- Top Face -->
-    <path d="M 285 85 C 320 75 350 95 345 130 C 335 155 310 150 285 85 Z" fill="url(#islandSurface)"/>
-    <path d="M 285 85 C 320 75 350 95 345 130 C 335 155 310 150 285 85 Z" fill="url(#islandGloss)"/>
+    <path d="M 295 75 L 295 98 C 320 168 350 170 360 148 L 360 125 C 350 150 320 145 295 75 Z" fill="url(#islandExtrudeLight)"/>
+    <path d="M 360 148 C 365 108 330 88 295 98 L 295 75 C 330 65 365 85 360 125 Z" fill="url(#islandExtrudeDark)"/>
+    <path d="M 295 75 C 330 65 365 85 360 125 C 350 150 320 145 295 75 Z" fill="url(#islandSurface)"/>
+    <path d="M 295 75 C 330 65 365 85 360 125 C 350 150 320 145 295 75 Z" fill="url(#islandGloss)"/>
   </g>
 
-  <!-- Umm an Nasan Island (Left 3D Extruded) -->
-  <g transform="translate(130, 160)">
-    <!-- Shadow -->
-    <ellipse cx="20" cy="45" rx="15" ry="25" fill="#022c22" opacity="0.3"/>
-    <!-- Extrusion -->
-    <path d="M 8 20 L 8 45 C 8 60 32 60 32 45 L 32 20 Z" fill="url(#islandExtrudeLight)"/>
-    <!-- Top Face -->
-    <ellipse cx="20" cy="20" rx="14" ry="20" fill="url(#islandSurface)"/>
-    <!-- Tech Pin Antenna on Island -->
-    <circle cx="20" cy="14" r="3.5" fill="#10b981" filter="url(#neonGlow)"/>
+  <g transform="translate(305, 195)">
+    <ellipse cx="14" cy="35" rx="10" ry="18" fill="#022c22" opacity="0.3"/>
+    <path d="M 4 12 L 4 32 C 4 44 24 44 24 32 L 24 12 Z" fill="url(#islandExtrudeDark)"/>
+    <ellipse cx="14" cy="12" rx="10" ry="16" fill="url(#islandSurface)"/>
   </g>
 
-  <!-- Hawar Islands Archipelago (Bottom-Right Turquoise 3D Pillars) -->
-  <g transform="translate(350, 270)">
-    <!-- Shadow -->
-    <ellipse cx="35" cy="95" rx="25" ry="15" fill="#022c22" opacity="0.25"/>
-    
-    <!-- Island Pillar 1 -->
-    <path d="M 10 30 L 10 75 C 10 85 24 85 24 75 L 24 30 Z" fill="#0f766e"/>
-    <ellipse cx="17" cy="30" rx="7" ry="10" fill="url(#hawarSurface)"/>
-
-    <!-- Island Pillar 2 (Main Curved Ridge) -->
-    <path d="M 22 45 L 22 95 C 22 105 45 105 45 95 L 45 45 Z" fill="#0f766e"/>
-    <path d="M 22 45 C 22 35 32 30 40 38 C 45 44 45 55 40 60 C 32 65 22 55 22 45 Z" fill="url(#hawarSurface)"/>
-
-    <!-- Island Pillar 3 (Small Islet) -->
-    <path d="M 46 65 L 46 95 C 46 102 56 102 56 95 L 56 65 Z" fill="#0f766e"/>
-    <ellipse cx="51" cy="65" rx="5" ry="7" fill="url(#hawarSurface)"/>
+  <g transform="translate(125, 160)">
+    <ellipse cx="18" cy="45" rx="15" ry="22" fill="#022c22" opacity="0.3"/>
+    <path d="M 6 18 L 6 42 C 6 56 30 56 30 42 L 30 18 Z" fill="url(#islandExtrudeLight)"/>
+    <ellipse cx="18" cy="18" rx="13" ry="18" fill="url(#islandSurface)"/>
+    <circle cx="18" cy="12" r="3.5" fill="#22c55e" filter="url(#neonGlow)"/>
   </g>
 
-  <!-- =========================================================================
-       4. HOLOGRAPHIC RADAR WAVES & SCANNER BEAM
-  ========================================================================= -->
+  <g transform="translate(365, 275)">
+    <ellipse cx="28" cy="95" rx="25" ry="14" fill="#022c22" opacity="0.25"/>
+    <path d="M 8 28 L 8 72 C 8 82 22 82 22 72 L 22 28 Z" fill="#0f766e"/>
+    <ellipse cx="15" cy="28" rx="7" ry="10" fill="url(#hawarSurface)"/>
+    <path d="M 20 42 L 20 92 C 20 102 44 102 44 92 L 44 42 Z" fill="#0f766e"/>
+    <path d="M 20 42 C 20 32 30 28 38 36 C 44 42 44 52 38 58 C 30 64 20 52 20 42 Z" fill="url(#hawarSurface)"/>
+    <path d="M 44 62 L 44 92 C 44 98 54 98 54 92 L 54 62 Z" fill="#0f766e"/>
+    <ellipse cx="49" cy="62" rx="5" ry="7" fill="url(#hawarSurface)"/>
+  </g>
+
   <g transform="translate(256, 245)" filter="url(#radarSweepGlow)">
-    <!-- Radial Scanner Beam Cone -->
-    <path d="M 0 0 L 75 -95 A 120 120 0 0 0 -25 -118 Z" fill="url(#radarSweep)"/>
-    <!-- Bright Sweep Edge Line -->
-    <line x1="0" y1="0" x2="75" y2="-95" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
-
-    <!-- Concentric Holographic Radar Rings -->
-    <ellipse cx="0" cy="0" rx="42" ry="32" fill="none" stroke="#34d399" stroke-width="2.5" opacity="0.85"/>
-    <ellipse cx="0" cy="0" rx="76" ry="58" fill="none" stroke="#10b981" stroke-width="2.2" opacity="0.75"/>
-    <ellipse cx="0" cy="0" rx="108" ry="82" fill="none" stroke="#34d399" stroke-width="2" opacity="0.65"/>
-    <ellipse cx="0" cy="0" rx="136" ry="104" fill="none" stroke="#059669" stroke-width="1.8" stroke-dasharray="6,8" opacity="0.45"/>
+    <path d="M 0 0 L 80 -100 A 130 130 0 0 0 -30 -125 Z" fill="url(#radarSweep)"/>
+    <line x1="0" y1="0" x2="80" y2="-100" stroke="#86efac" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <ellipse cx="0" cy="0" rx="44" ry="34" fill="none" stroke="#4ade80" stroke-width="2.5" opacity="0.9"/>
+    <ellipse cx="0" cy="0" rx="80" ry="62" fill="none" stroke="#22c55e" stroke-width="2.2" opacity="0.8"/>
+    <ellipse cx="0" cy="0" rx="114" ry="88" fill="none" stroke="#4ade80" stroke-width="2" opacity="0.7"/>
+    <ellipse cx="0" cy="0" rx="142" ry="110" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="6,8" opacity="0.5"/>
   </g>
 
-  <!-- =========================================================================
-       5. 3D CARDBOARD PARCEL / DELIVERY PACKAGE (CENTER OF ORDERI)
-  ========================================================================= -->
-  <g transform="translate(215, 195)" filter="url(#boxShadow)">
-    <!-- 3D Cube Faces -->
-    <!-- Top Face -->
-    <polygon points="40,0 82,22 42,44 0,22" fill="url(#boxTop)"/>
-    <!-- Left Face -->
-    <polygon points="0,22 42,44 42,94 0,72" fill="url(#boxLeft)"/>
-    <!-- Right Face -->
-    <polygon points="42,44 82,22 82,72 42,94" fill="url(#boxRight)"/>
+  <g transform="translate(212, 192)" filter="url(#boxShadow)">
+    <polygon points="44,0 88,24 44,48 0,24" fill="url(#boxTop)"/>
+    <polygon points="0,24 44,48 44,100 0,76" fill="url(#boxLeft)"/>
+    <polygon points="44,48 88,24 88,76 44,100" fill="url(#boxRight)"/>
+    <polygon points="40,2 50,7 28,50 18,45" fill="url(#tapeGrad)" opacity="0.92"/>
+    <polygon points="18,45 28,50 28,100 18,96" fill="url(#tapeGrad)" opacity="0.85"/>
+    <polygon points="50,7 60,12 60,62 50,57" fill="url(#tapeGrad)" opacity="0.85"/>
 
-    <!-- Sealing Tape Across Top -->
-    <polygon points="36,2 46,7 26,46 16,41" fill="url(#tapeGrad)" opacity="0.9"/>
-    <!-- Tape Down Left Face -->
-    <polygon points="16,41 26,46 26,94 16,90" fill="url(#tapeGrad)" opacity="0.8"/>
-    <!-- Tape Down Right Face -->
-    <polygon points="46,7 56,12 56,58 46,53" fill="url(#tapeGrad)" opacity="0.8"/>
-
-    <!-- White Shipping Barcode Label on Right Face -->
-    <g transform="translate(49, 48) skewY(15)">
-      <rect width="18" height="24" rx="2" fill="#ffffff" opacity="0.95"/>
-      <!-- Barcode Lines -->
-      <line x1="3" y1="5" x2="3" y2="17" stroke="#1e293b" stroke-width="1"/>
-      <line x1="5" y1="5" x2="5" y2="17" stroke="#1e293b" stroke-width="1.5"/>
-      <line x1="8" y1="5" x2="8" y2="17" stroke="#1e293b" stroke-width="0.8"/>
-      <line x1="11" y1="5" x2="11" y2="17" stroke="#1e293b" stroke-width="1.2"/>
-      <line x1="14" y1="5" x2="14" y2="17" stroke="#1e293b" stroke-width="1"/>
+    <g transform="translate(54, 50) skewY(15)">
+      <rect width="20" height="26" rx="2" fill="#ffffff" opacity="0.98"/>
+      <line x1="3" y1="5" x2="3" y2="19" stroke="#1e293b" stroke-width="1.2"/>
+      <line x1="6" y1="5" x2="6" y2="19" stroke="#1e293b" stroke-width="1.8"/>
+      <line x1="9" y1="5" x2="9" y2="19" stroke="#1e293b" stroke-width="0.9"/>
+      <line x1="12" y1="5" x2="12" y2="19" stroke="#1e293b" stroke-width="1.4"/>
+      <line x1="16" y1="5" x2="16" y2="19" stroke="#1e293b" stroke-width="1.2"/>
     </g>
 
-    <!-- Fragile / Handling Stamps on Left Face -->
-    <g transform="translate(5, 58) skewY(-15)" opacity="0.6">
-      <!-- Up Arrows Stamp -->
-      <path d="M 6 12 L 6 6 M 4 8 L 6 6 L 8 8" stroke="#78350f" stroke-width="1.2" stroke-linecap="round"/>
-      <path d="M 12 12 L 12 6 M 10 8 L 12 6 L 14 8" stroke="#78350f" stroke-width="1.2" stroke-linecap="round"/>
-      <!-- Glass / Umbrella Icon Stamp -->
-      <path d="M 22 6 A 4 4 0 0 1 28 6 L 25 12" fill="none" stroke="#78350f" stroke-width="1.2"/>
+    <g transform="translate(6, 62) skewY(-15)" opacity="0.65">
+      <path d="M 6 12 L 6 6 M 4 8 L 6 6 L 8 8" stroke="#78350f" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 14 12 L 14 6 M 12 8 L 14 6 L 16 8" stroke="#78350f" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 24 6 A 4 4 0 0 1 30 6 L 27 12" fill="none" stroke="#78350f" stroke-width="1.3"/>
     </g>
   </g>
 
-  <!-- =========================================================================
-       6. MASTER SECURITY KEY WITH GOLD SHIELD CREST
-  ========================================================================= -->
-  <g transform="translate(162, 280)">
-    <!-- Key Shadow -->
-    <path d="M 18 35 L 75 -2 M 80 5 L 85 -2" stroke="#064e3b" stroke-width="10" opacity="0.4" stroke-linecap="round"/>
-
-    <!-- Key Shaft -->
-    <path d="M 18 30 L 75 -5" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round"/>
-    <path d="M 18 30 L 75 -5" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-    <!-- Key Teeth -->
-    <path d="M 50 10 L 56 6 M 62 3 L 68 -1" stroke="#cbd5e1" stroke-width="5" stroke-linecap="round"/>
-
-    <!-- Key Head Ring / Base (Frosted Halo) -->
-    <circle cx="16" cy="32" r="22" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2.5" filter="url(#glassShadow)"/>
-    <circle cx="16" cy="32" r="22" fill="none" stroke="#34d399" stroke-width="1.5" opacity="0.7"/>
-
-    <!-- 3D Gold Security Shield Inside Key Ring -->
-    <path d="M 16 19 L 26 23 C 26 31 22 38 16 43 C 10 38 6 31 6 23 Z" fill="url(#shieldGold)" stroke="#fef08a" stroke-width="1.5" filter="url(#neonGlow)"/>
-    <!-- Shield Core Highlight -->
-    <path d="M 16 22 L 23 25 C 23 31 20 36 16 40 C 12 36 9 31 9 25 Z" fill="#fde047" opacity="0.3"/>
+  <g transform="translate(156, 278)">
+    <path d="M 20 36 L 80 -4 M 86 4 L 92 -4" stroke="#064e3b" stroke-width="10" opacity="0.45" stroke-linecap="round"/>
+    <path d="M 20 30 L 82 -7" stroke="#cbd5e1" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M 20 30 L 82 -7" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+    <path d="M 54 8 L 60 4 M 68 0 L 74 -4" stroke="#cbd5e1" stroke-width="5.5" stroke-linecap="round"/>
+    <circle cx="18" cy="32" r="23" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2.5" filter="url(#glassShadow)"/>
+    <circle cx="18" cy="32" r="23" fill="none" stroke="#4ade80" stroke-width="1.5" opacity="0.75"/>
+    <path d="M 18 18 L 29 22 C 29 31 25 39 18 44 C 11 39 7 31 7 22 Z" fill="url(#shieldGold)" stroke="#fef08a" stroke-width="1.6" filter="url(#neonGlow)"/>
+    <path d="M 18 21 L 26 24 C 26 31 22 37 18 41 C 14 37 10 31 10 24 Z" fill="#fde047" opacity="0.35"/>
   </g>
 
-  <!-- =========================================================================
-       7. FLOATING HOLOGRAPHIC TELEMETRY GLASS WIDGETS
-  ========================================================================= -->
-
-  <!-- WIDGET A: TOP USER / ADMIN PROFILE BADGE WITH CROWN & GEAR -->
-  <g transform="translate(235, 140)" filter="url(#glassShadow)">
-    <!-- Connecting Holographic Data Stem -->
-    <line x1="22" y1="44" x2="22" y2="60" stroke="#34d399" stroke-width="2" stroke-dasharray="3,3" opacity="0.8"/>
-
-    <!-- Frosted Glass Circle Base -->
-    <circle cx="22" cy="22" r="24" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
-    <circle cx="22" cy="22" r="24" fill="none" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
-
-    <!-- User Avatar Icon Inside Disc -->
-    <!-- Head -->
-    <circle cx="22" cy="17" r="7.5" fill="#94a3b8"/>
-    <!-- Body -->
-    <path d="M 12 33 C 12 27 16 25 22 25 C 28 25 32 27 32 33 Z" fill="#94a3b8"/>
-
-    <!-- Golden Crown Above User (VIP / Mandoub Leader) -->
-    <path d="M 28 8 L 30 14 L 35 11 L 38 17 L 26 17 L 28 8 Z" fill="url(#shieldGold)" stroke="#fde047" stroke-width="0.8"/>
-
-    <!-- Settings Gear Next to Avatar -->
-    <g transform="translate(26, 22) scale(0.7)">
+  <g transform="translate(232, 134)" filter="url(#glassShadow)">
+    <line x1="24" y1="48" x2="24" y2="64" stroke="#4ade80" stroke-width="2" stroke-dasharray="3,3" opacity="0.85"/>
+    <circle cx="24" cy="24" r="25" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
+    <circle cx="24" cy="24" r="25" fill="none" stroke="#4ade80" stroke-width="1.5" opacity="0.65"/>
+    <circle cx="24" cy="18" r="8" fill="#94a3b8"/>
+    <path d="M 13 35 C 13 28 17 26 24 26 C 31 26 35 28 35 35 Z" fill="#94a3b8"/>
+    <path d="M 30 8 L 32 15 L 38 12 L 41 18 L 28 18 L 30 8 Z" fill="url(#shieldGold)" stroke="#fde047" stroke-width="0.8"/>
+    <g transform="translate(28, 24) scale(0.72)">
       <circle cx="10" cy="10" r="5" fill="#64748b"/>
       <circle cx="10" cy="10" r="2.5" fill="#f8fafc"/>
       <path d="M 10 3 L 10 17 M 3 10 L 17 10 M 5 5 L 15 15 M 5 15 L 15 5" stroke="#64748b" stroke-width="2"/>
     </g>
   </g>
 
-  <!-- WIDGET B: RIGHT DEVICE NETWORK GRAPH TILE -->
-  <g transform="translate(360, 195)" filter="url(#glassShadow)">
-    <!-- Data Connection Line to Island -->
-    <line x1="-15" y1="28" x2="0" y2="28" stroke="#34d399" stroke-width="2" opacity="0.7"/>
-
-    <!-- Glass Rounded Tile -->
-    <rect width="66" height="56" rx="14" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
-
-    <!-- Connected Network Topology Graph -->
-    <!-- Connection Lines -->
-    <line x1="33" y1="28" x2="16" y2="16" stroke="#34d399" stroke-width="2" opacity="0.85"/>
-    <line x1="33" y1="28" x2="50" y2="16" stroke="#34d399" stroke-width="2" opacity="0.85"/>
-    <line x1="33" y1="28" x2="16" y2="40" stroke="#34d399" stroke-width="2" opacity="0.85"/>
-    <line x1="33" y1="28" x2="50" y2="40" stroke="#34d399" stroke-width="2" opacity="0.85"/>
-
-    <!-- Center Master Node -->
-    <circle cx="33" cy="28" r="6" fill="#10b981" filter="url(#neonGlow)"/>
-    <circle cx="33" cy="28" r="3" fill="#ffffff"/>
-
-    <!-- Peripheral Device Nodes -->
-    <circle cx="16" cy="16" r="4.5" fill="#34d399"/>
-    <circle cx="50" cy="16" r="4.5" fill="#34d399"/>
-    <circle cx="16" cy="40" r="4.5" fill="#34d399"/>
-    <circle cx="50" cy="40" r="4.5" fill="#34d399"/>
+  <g transform="translate(365, 192)" filter="url(#glassShadow)">
+    <line x1="-16" y1="28" x2="0" y2="28" stroke="#4ade80" stroke-width="2" opacity="0.75"/>
+    <rect width="68" height="58" rx="14" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
+    <line x1="34" y1="29" x2="16" y2="16" stroke="#4ade80" stroke-width="2" opacity="0.9"/>
+    <line x1="34" y1="29" x2="52" y2="16" stroke="#4ade80" stroke-width="2" opacity="0.9"/>
+    <line x1="34" y1="29" x2="16" y2="42" stroke="#4ade80" stroke-width="2" opacity="0.9"/>
+    <line x1="34" y1="29" x2="52" y2="42" stroke="#4ade80" stroke-width="2" opacity="0.9"/>
+    <circle cx="34" cy="29" r="6.5" fill="#22c55e" filter="url(#neonGlow)"/>
+    <circle cx="34" cy="29" r="3" fill="#ffffff"/>
+    <circle cx="16" cy="16" r="4.5" fill="#4ade80"/>
+    <circle cx="52" cy="16" r="4.5" fill="#4ade80"/>
+    <circle cx="16" cy="42" r="4.5" fill="#4ade80"/>
+    <circle cx="52" cy="42" r="4.5" fill="#4ade80"/>
   </g>
 
-  <!-- WIDGET C: LEFT ANALYTICS GROWTH BAR CHART TILE -->
-  <g transform="translate(75, 275)" filter="url(#glassShadow)">
-    <!-- Data Connection Line to Island -->
-    <line x1="68" y1="28" x2="88" y2="28" stroke="#34d399" stroke-width="2" opacity="0.7"/>
-
-    <!-- Glass Rounded Tile -->
-    <rect width="68" height="56" rx="14" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
-
-    <!-- Subtle Chart Grid Line -->
-    <line x1="12" y1="14" x2="26" y2="14" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-    <line x1="12" y1="18" x2="20" y2="18" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-
-    <!-- Analytics Vertical Growth Bars -->
-    <g transform="translate(14, 18)">
-      <!-- Bar 1 -->
-      <rect x="4" y="18" width="5.5" height="12" rx="2" fill="#34d399"/>
-      <!-- Bar 2 -->
-      <rect x="13" y="12" width="5.5" height="18" rx="2" fill="#10b981"/>
-      <!-- Bar 3 -->
-      <rect x="22" y="6" width="5.5" height="24" rx="2" fill="#059669"/>
-      <!-- Bar 4 (Highest Growth) -->
-      <rect x="31" y="0" width="5.5" height="30" rx="2" fill="#34d399" filter="url(#neonGlow)"/>
+  <g transform="translate(72, 272)" filter="url(#glassShadow)">
+    <line x1="70" y1="29" x2="92" y2="29" stroke="#4ade80" stroke-width="2" opacity="0.75"/>
+    <rect width="70" height="58" rx="14" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="2"/>
+    <line x1="12" y1="14" x2="28" y2="14" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="12" y1="18" x2="22" y2="18" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+    <g transform="translate(15, 18)">
+      <rect x="4" y="19" width="5.5" height="13" rx="2" fill="#4ade80"/>
+      <rect x="13" y="13" width="5.5" height="19" rx="2" fill="#22c55e"/>
+      <rect x="22" y="7" width="5.5" height="25" rx="2" fill="#16a34a"/>
+      <rect x="31" y="0" width="5.5" height="32" rx="2" fill="#4ade80" filter="url(#neonGlow)"/>
     </g>
   </g>
 
-  <!-- =========================================================================
-       8. BOTTOM-RIGHT "ADMIN PANEL" GLASS BADGE
-  ========================================================================= -->
-  <g transform="translate(300, 392)" filter="url(#glassShadow)">
-    <!-- Glass Badge Base -->
-    <rect width="138" height="42" rx="13" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="1.8"/>
-    <!-- Glass Top Reflection Line -->
-    <line x1="10" y1="3" x2="128" y2="3" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-    <!-- Badge Text -->
-    <text x="69" y="26" text-anchor="middle" font-family="'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12.5" font-weight="900" fill="#334155" letter-spacing="0.8">ADMIN PANEL</text>
+  <g transform="translate(306, 390)" filter="url(#glassShadow)">
+    <rect width="142" height="44" rx="14" fill="url(#glassFill)" stroke="url(#glassBorder)" stroke-width="1.8"/>
+    <line x1="10" y1="3" x2="132" y2="3" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" opacity="0.95"/>
+    <text x="71" y="27" text-anchor="middle" font-family="'Cairo', system-ui, -apple-system, sans-serif" font-size="13" font-weight="900" fill="#334155" letter-spacing="0.8">ADMIN PANEL</text>
   </g>
 </svg>
