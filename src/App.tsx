@@ -984,65 +984,9 @@ function App() {
       }
     }
 
-    // 2. Web / WebAuthn platform authenticator (Touch ID, Face ID, Windows Hello)
-    if (
-      typeof window !== "undefined" &&
-      window.PublicKeyCredential &&
-      navigator.credentials &&
-      window.isSecureContext
-    ) {
-      try {
-        const isPlatformAuth = await window.PublicKeyCredential
-          .isUserVerifyingPlatformAuthenticatorAvailable()
-          .catch(() => false);
-
-        if (isPlatformAuth) {
-          const challenge = new Uint8Array(32);
-          window.crypto.getRandomValues(challenge);
-          const cred = await navigator.credentials
-            .get({
-              publicKey: {
-                challenge,
-                timeout: 60000,
-                userVerification: "preferred",
-                rpId: window.location.hostname || "localhost",
-              },
-            })
-            .catch(() => null);
-
-          if (cred) return true;
-        }
-      } catch (webauthnErr) {
-        console.warn("WebAuthn skipped, displaying biometric modal:", webauthnErr);
-      }
-    }
-
-    // 3. Interactive In-App Biometric Scanner Modal (Face ID / Touch ID)
-    return new Promise((resolve) => {
-      setBiometricModal({
-        isOpen: true,
-        mode,
-        status: "scanning",
-        message:
-          mode === "face"
-            ? "انظر إلى الشاشة وضَع وجهك في الإطار لمسح الملامح (Face ID)..."
-            : "ضع إصبعك على مستشعر البصمة للمتابعة...",
-        onSuccess: () => {
-          setBiometricModal((prev) => ({
-            ...prev,
-            status: "success",
-            message:
-              mode === "face"
-                ? "تم التعرف على الوجه بنجاح (Face ID Verified)!"
-                : "تم التحقق من البصمة بنجاح!",
-          }));
-          setTimeout(() => {
-            setBiometricModal((prev) => ({ ...prev, isOpen: false }));
-            resolve(true);
-          }, 650);
-        },
-      });
-    });
+    throw new Error(
+      "التحقق بالبصمة الحقيقي غير متاح في هذا المتصفح. استخدم تطبيق Android المدعوم أو سجّل الدخول بكلمة المرور."
+    );
   }
 
   async function handleBiometricLogin(mode: "face" | "fingerprint" = "face") {
