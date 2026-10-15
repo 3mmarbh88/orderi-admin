@@ -450,6 +450,7 @@ export async function adminLogout() {
       localStorage.removeItem("orderi_admin_token");
       localStorage.removeItem("orderi_admin_refresh_token");
       localStorage.removeItem("orderi_admin_user");
+      localStorage.removeItem("orderi_biometric_pass");
       localStorage.removeItem("natan_admin_token");
       localStorage.removeItem("natan_admin_refresh_token");
     }
