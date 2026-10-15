@@ -16,6 +16,7 @@ import {
   verifyAdminSession,
 } from "./api";
 import "./App.css";
+import orderiLogo from "./assets/orderi-logo.png";
 import { Language, translations } from "./i18n";
 
 type UserDevice = {
@@ -1564,7 +1565,7 @@ function App() {
     return (
       <div className="splash-screen" role="status" aria-label="Orderi Admin">
         <img
-          src="/orderi-admin-logo-512.png"
+          src={orderiLogo}
           alt="Orderi Admin"
           className="splash-logo"
         />
@@ -1611,7 +1612,7 @@ function App() {
           <div className="login-brand" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <div className="brand-mark" style={{ width: "62px", height: "62px", borderRadius: "18px", padding: 0, overflow: "hidden", background: "none", boxShadow: "0 10px 30px rgba(16, 185, 129, 0.4)" }}>
               <img
-                src="/orderi-admin-logo-512.png"
+                src={orderiLogo}
                 alt="Orderi Admin"
                 style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
               />
@@ -1881,7 +1882,7 @@ function App() {
         <div className="sidebar-brand">
           <div className="brand-mark small" style={{ width: "42px", height: "42px", borderRadius: "12px", padding: 0, overflow: "hidden", background: "none", boxShadow: "0 4px 18px rgba(16, 185, 129, 0.35)" }}>
             <img
-              src="/orderi-admin-logo-512.png"
+              src={orderiLogo}
               alt="Orderi"
               style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             />
@@ -2305,8 +2306,8 @@ function App() {
 
                 <div className="hero-logo-centerpiece">
                   <img
-                    src="/orderi-admin-logo-512.png"
-                    alt="Orderi Admin 3D Logo"
+                    src={orderiLogo}
+                    alt="Orderi Admin Logo"
                     className="hero-logo-img"
                   />
                 </div>

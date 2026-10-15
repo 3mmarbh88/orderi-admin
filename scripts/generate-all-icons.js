@@ -2,23 +2,42 @@ import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-async function generateAllIcons() {
-  const svgPath = path.resolve('public/orderi-admin-logo.svg');
-  if (!fs.existsSync(svgPath)) {
-    console.error('Master SVG not found at ' + svgPath);
-    return;
-  }
-  const svgBuffer = fs.readFileSync(svgPath);
-  const masterPng = await sharp(svgBuffer).resize(1024, 1024).png().toBuffer();
+const SOURCE_PNG = path.resolve('.aistudio/artifacts/brain/76073348-0725-483a-8116-1b38e4880efc/.tempmediaStorage/media_1792054309338_6e0fbfe2.png');
 
+async function run() {
+  if (!fs.existsSync(SOURCE_PNG)) {
+    console.error('Source PNG not found at', SOURCE_PNG);
+    process.exit(1);
+  }
+
+  const rawBuffer = fs.readFileSync(SOURCE_PNG);
+  const metadata = await sharp(rawBuffer).metadata();
+  console.log('Source image loaded:', metadata.width, 'x', metadata.height);
+
+  // 1. Generate master 1024x1024 buffer
+  const masterBuffer = await sharp(rawBuffer)
+    .resize(1024, 1024, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png()
+    .toBuffer();
+
+  // 2. Generate embedded SVG for fallback/vector consumers
+  const base64Png = masterBuffer.toString('base64');
+  const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <image href="data:image/png;base64,${base64Png}" x="0" y="0" width="512" height="512" preserveAspectRatio="xMidYMid meet" />
+</svg>`;
+
+  fs.writeFileSync('public/orderi-admin-logo.svg', svgContent, 'utf8');
+  fs.writeFileSync('src/assets/orderi-logo.svg', svgContent, 'utf8');
+  fs.writeFileSync('public/favicon.svg', svgContent, 'utf8');
+
+  // 3. Targets for web and app assets
   const targets = [
-    // Web / PWA
+    // Web / PWA / App assets
     { path: 'public/orderi-admin-logo.png', size: 512 },
     { path: 'public/orderi-admin-logo-512.png', size: 512 },
     { path: 'public/orderi-admin-logo-192.png', size: 192 },
     { path: 'public/pwa-512x512.png', size: 512 },
     { path: 'public/pwa-192x192.png', size: 192 },
-    { path: 'public/pwa-maskable-512x512.png', size: 512 },
     { path: 'public/apple-touch-icon.png', size: 180 },
     { path: 'public/favicon.png', size: 64 },
     { path: 'public/favicon-32.png', size: 32 },
@@ -61,13 +80,73 @@ async function generateAllIcons() {
 
   for (const t of targets) {
     const dir = path.dirname(t.path);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    await sharp(masterPng).resize(t.size, t.size).png().toFile(t.path);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    await sharp(masterBuffer)
+      .resize(t.size, t.size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toFile(t.path);
   }
 
-  console.log(`[Orderi Admin] ${targets.length} icons generated successfully.`);
+  // PWA Maskable Icon (inset by 15% to guarantee safe zone)
+  const maskableInner = await sharp(masterBuffer)
+    .resize(410, 410, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .toBuffer();
+  await sharp({
+    create: {
+      width: 512,
+      height: 512,
+      channels: 4,
+      background: { r: 9, g: 13, b: 22, alpha: 1 }
+    }
+  })
+    .composite([{ input: maskableInner, gravity: 'center' }])
+    .png()
+    .toFile('public/pwa-maskable-512x512.png');
+
+  // Favicon.ico (32x32 PNG-based ICO)
+  const fav32 = await sharp(masterBuffer).resize(32, 32).png().toBuffer();
+  fs.writeFileSync('public/favicon.ico', fav32);
+
+  // 4. Android Splash screens (Dark `#090d16` background with centered logo)
+  const splashTargets = [
+    { p: 'android/app/src/main/res/drawable/splash.png', w: 480, h: 800, logoSize: 220 },
+    { p: 'android/app/src/main/res/drawable-port-mdpi/splash.png', w: 320, h: 480, logoSize: 150 },
+    { p: 'android/app/src/main/res/drawable-port-hdpi/splash.png', w: 480, h: 800, logoSize: 220 },
+    { p: 'android/app/src/main/res/drawable-port-xhdpi/splash.png', w: 720, h: 1280, logoSize: 320 },
+    { p: 'android/app/src/main/res/drawable-port-xxhdpi/splash.png', w: 960, h: 1600, logoSize: 420 },
+    { p: 'android/app/src/main/res/drawable-port-xxxhdpi/splash.png', w: 1280, h: 1920, logoSize: 540 },
+    { p: 'android/app/src/main/res/drawable-land-mdpi/splash.png', w: 480, h: 320, logoSize: 150 },
+    { p: 'android/app/src/main/res/drawable-land-hdpi/splash.png', w: 800, h: 480, logoSize: 220 },
+    { p: 'android/app/src/main/res/drawable-land-xhdpi/splash.png', w: 1280, h: 720, logoSize: 320 },
+    { p: 'android/app/src/main/res/drawable-land-xxhdpi/splash.png', w: 1600, h: 960, logoSize: 420 },
+    { p: 'android/app/src/main/res/drawable-land-xxxhdpi/splash.png', w: 1920, h: 1280, logoSize: 540 },
+  ];
+
+  for (const s of splashTargets) {
+    const dir = path.dirname(s.p);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+    const logoBuf = await sharp(masterBuffer)
+      .resize(s.logoSize, s.logoSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
+
+    await sharp({
+      create: {
+        width: s.w,
+        height: s.h,
+        channels: 4,
+        background: { r: 9, g: 13, b: 22, alpha: 1 }
+      }
+    })
+      .composite([{ input: logoBuf, gravity: 'center' }])
+      .png()
+      .toFile(s.p);
+  }
+
+  console.log('Successfully generated all icons and splash screens!');
 }
 
-generateAllIcons().catch(console.error);
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
