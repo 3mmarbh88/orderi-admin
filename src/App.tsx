@@ -5,6 +5,7 @@ import {
   adminLogin,
   adminLogout,
   checkServer,
+  extendUserSubscription,
   createActivationCodes,
   deleteUser,
   deleteActivationCode,
@@ -728,44 +729,52 @@ function App() {
     setAuditLogs((prev) => [newLog, ...prev]);
   }
 
-  function handleBatchExtend(days: number) {
-    if (selectedUserIds.length === 0) return;
-    setUsers((current) =>
-      current.map((u) =>
-        selectedUserIds.includes(u.id)
-          ? {
-              ...u,
-              activation_expires_at: new Date(Date.now() + days * 86400000).toISOString(),
-              updated_at: new Date().toISOString(),
-            }
-          : u
-      )
-    );
-    addAudit(`تمديد اشتراك جماعي (+${days} يوم)`, `${selectedUserIds.length} مستخدمين`, "user");
-    showToast("success", `تم تمديد اشتراك ${selectedUserIds.length} مستخدمين لمدة ${days} يوم بنجاح`);
-    setSelectedUserIds([]);
+  async function handleBatchExtend(days: number) {
+    if (!selectedUserIds.length) return;
+    const ids = [...selectedUserIds];
+    setLoading(true);
+    try {
+      for (const id of ids) await extendUserSubscription(id, days);
+      await loadData();
+      addAudit(`تمديد اشتراك جماعي (+${days} يوم)`, `${ids.length} مستخدمين`, "user");
+      showToast("success", `تم تمديد اشتراك ${ids.length} مستخدمين لمدة ${days} يوم بنجاح`);
+      setSelectedUserIds([]);
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "تعذر تمديد الاشتراكات على الخادم");
+      await loadData();
+    } finally { setLoading(false); }
   }
 
-  function handleBatchToggleActive(active: boolean) {
-    if (selectedUserIds.length === 0) return;
-    setUsers((current) =>
-      current.map((u) =>
-        selectedUserIds.includes(u.id)
-          ? { ...u, is_active: active, updated_at: new Date().toISOString() }
-          : u
-      )
-    );
-    addAudit(active ? "تفعيل حسابات جماعي" : "تعطيل حسابات جماعي", `${selectedUserIds.length} مستخدمين`, "user");
-    showToast("success", `تم ${active ? "تفعيل" : "تعطيل"} ${selectedUserIds.length} حسابات`);
-    setSelectedUserIds([]);
+  async function handleBatchToggleActive(active: boolean) {
+    if (!selectedUserIds.length) return;
+    const ids = [...selectedUserIds];
+    setLoading(true);
+    try {
+      for (const id of ids) await updateUser(id, { isActive: active });
+      await loadData();
+      addAudit(active ? "تفعيل حسابات جماعي" : "تعطيل حسابات جماعي", `${ids.length} مستخدمين`, "user");
+      showToast("success", `تم ${active ? "تفعيل" : "تعطيل"} ${ids.length} حسابات`);
+      setSelectedUserIds([]);
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "تعذر تغيير حالة الحسابات على الخادم");
+      await loadData();
+    } finally { setLoading(false); }
   }
 
-  function handleBatchDelete() {
-    if (selectedUserIds.length === 0) return;
-    setUsers((current) => current.filter((u) => !selectedUserIds.includes(u.id)));
-    addAudit("حذف حسابات جماعي", `${selectedUserIds.length} مستخدمين`, "user");
-    showToast("success", `تم حذف ${selectedUserIds.length} مستخدمين بنجاح`);
-    setSelectedUserIds([]);
+  async function handleBatchDelete() {
+    if (!selectedUserIds.length) return;
+    const ids = [...selectedUserIds];
+    setLoading(true);
+    try {
+      for (const id of ids) await deleteUser(id);
+      await loadData();
+      addAudit("حذف حسابات جماعي", `${ids.length} مستخدمين`, "user");
+      showToast("success", `تم حذف ${ids.length} مستخدمين بنجاح`);
+      setSelectedUserIds([]);
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "تعذر حذف الحسابات على الخادم");
+      await loadData();
+    } finally { setLoading(false); }
   }
 
   function handleBatchExport() {
@@ -1057,7 +1066,6 @@ function App() {
           await adminLogin(username, password);
 
           localStorage.setItem("orderi_biometric_username", username.trim());
-          localStorage.setItem("orderi_biometric_pass", password);
           localStorage.setItem("orderi_biometric_enabled", "true");
           setBiometricEnabled(true);
           setLoggedIn(true);
@@ -1100,14 +1108,12 @@ function App() {
       }
 
       if (!sessionValid) {
-        const u = savedUsername || username || "admin";
+        const u = savedUsername || username;
         const p = savedPassword;
         if (p) {
           await adminLogin(u, p);
-        } else if (!token && !refreshToken) {
-          throw new Error(
-            "انتهت جلسة الدخول. سجّل الدخول بكلمة المرور لتجديد ربط البصمة."
-          );
+        } else {
+          throw new Error("انتهت جلسة المشرف. سجّل الدخول بكلمة المرور أولاً ثم استخدم البصمة.");
         }
       }
 
@@ -1150,10 +1156,6 @@ function App() {
 
       if (rememberBiometric) {
         localStorage.setItem(
-          "orderi_biometric_pass",
-          password
-        );
-        localStorage.setItem(
           "orderi_biometric_enabled",
           "true"
         );
@@ -1181,9 +1183,8 @@ function App() {
     }
   }
 
-  function handleLogout() {
-    adminLogout();
-
+  async function handleLogout() {
+    try { await adminLogout(); } catch { /* Clear local session even if server is offline. */ }
     setLoggedIn(false);
     setUsers([]);
     setCodes([]);
@@ -1311,202 +1312,58 @@ function App() {
 
   async function handleSaveUser() {
     if (!selectedUser) return;
-
-    const cleanUsername =
-      userForm.username.trim();
-
+    const cleanUsername = userForm.username.trim();
     if (!cleanUsername) {
-      showToast(
-        "error",
-        "اسم المستخدم مطلوب"
-      );
+      showToast("error", "رقم الهاتف / اسم المستخدم مطلوب");
       return;
     }
-
-    if (
-      userForm.maxDevices < 1 ||
-      userForm.maxDevices > 20
-    ) {
-      showToast(
-        "error",
-        "عدد الأجهزة يجب أن يكون بين 1 و20"
-      );
+    if (userForm.extendDays < 0 || userForm.extendDays > 3650) {
+      showToast("error", "مدة التمديد يجب أن تكون بين 0 و3650 يومًا");
       return;
     }
-
-    if (
-      userForm.extendDays < 0 ||
-      userForm.extendDays > 3650
-    ) {
-      showToast(
-        "error",
-        "مدة التمديد يجب أن تكون بين 0 و3650 يومًا"
-      );
+    if (userForm.password && userForm.password.length < 6) {
+      showToast("error", "كلمة المرور يجب أن تكون 6 أحرف على الأقل");
       return;
     }
-
-    if (
-      userForm.password &&
-      userForm.password.length < 6
-    ) {
-      showToast(
-        "error",
-        "كلمة المرور يجب أن تكون 6 أحرف على الأقل"
-      );
+    if (selectedUser.id.startsWith("usr_") && !userForm.password) {
+      showToast("error", "كلمة المرور مطلوبة لإنشاء مستخدم جديد");
       return;
     }
-
     setUserSaving(true);
-
     try {
-      const body = {
-        username: cleanUsername,
-        email:
-          userForm.email.trim() ||
-          null,
-        fullName:
-          userForm.fullName.trim() ||
-          null,
-        isActive:
-          userForm.isActive,
-        maxDevices:
-          userForm.maxDevices,
-
-        ...(userForm.extendDays > 0
-          ? {
-              extendDays:
-                userForm.extendDays,
-            }
-          : {}),
-
-        ...(userForm.password
-          ? {
-              password:
-                userForm.password,
-            }
-          : {}),
-      };
-
-      const result = await updateUser(
-        selectedUser.id,
-        body
-      ).catch(() => null);
-
-      const updatedUser =
-        result?.user ||
-        result?.data;
-
-      const newUserObj: User = {
-        id: selectedUser.id,
-        username: cleanUsername,
-        email: userForm.email.trim() || null,
-        full_name: userForm.fullName.trim() || null,
-        is_active: userForm.isActive,
-        max_devices: userForm.maxDevices,
-        activation_expires_at:
-          userForm.extendDays > 0
-            ? new Date(Date.now() + userForm.extendDays * 86400000).toISOString()
-            : selectedUser.activation_expires_at || new Date(Date.now() + 30 * 86400000).toISOString(),
-        created_at: selectedUser.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        ...(updatedUser || {}),
-      };
-
-      setUsers((current) => {
-        const exists = current.some((item) => item.id === selectedUser.id);
-        if (exists) {
-          return current.map((item) => (item.id === selectedUser.id ? newUserObj : item));
-        }
-        return [newUserObj, ...current];
-      });
-
+      if (selectedUser.id.startsWith("usr_")) {
+        const { createUser } = await import("./api");
+        await createUser({ username: cleanUsername, password: userForm.password, fullName: userForm.fullName.trim(), days: userForm.extendDays || 30 });
+      } else {
+        await updateUser(selectedUser.id, {
+          username: cleanUsername,
+          fullName: userForm.fullName.trim(),
+          isActive: userForm.isActive,
+          ...(userForm.password ? { password: userForm.password } : {}),
+        });
+        if (userForm.extendDays > 0) await extendUserSubscription(selectedUser.id, userForm.extendDays);
+      }
+      await loadData();
       setShowUserModal(false);
       setSelectedUser(null);
-
-      showToast(
-        "success",
-        "تم حفظ وتحديث بيانات المستخدم بنجاح"
-      );
-    } catch {
-      const newUserObj: User = {
-        id: selectedUser.id,
-        username: cleanUsername,
-        email: userForm.email.trim() || null,
-        full_name: userForm.fullName.trim() || null,
-        is_active: userForm.isActive,
-        max_devices: userForm.maxDevices,
-        activation_expires_at:
-          userForm.extendDays > 0
-            ? new Date(Date.now() + userForm.extendDays * 86400000).toISOString()
-            : selectedUser.activation_expires_at || new Date(Date.now() + 30 * 86400000).toISOString(),
-        created_at: selectedUser.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      setUsers((current) => {
-        const exists = current.some((item) => item.id === selectedUser.id);
-        if (exists) {
-          return current.map((item) => (item.id === selectedUser.id ? newUserObj : item));
-        }
-        return [newUserObj, ...current];
-      });
-
-      setShowUserModal(false);
-      setSelectedUser(null);
-
-      showToast(
-        "success",
-        "تم حفظ بيانات المستخدم (تعديل مباشر)"
-      );
-    } finally {
-      setUserSaving(false);
-    }
+      showToast("success", "تم حفظ بيانات المستخدم في قاعدة البيانات بنجاح");
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "تعذر حفظ بيانات المستخدم على الخادم");
+    } finally { setUserSaving(false); }
   }
 
   async function handleDeleteUser() {
     if (!selectedUser) return;
-
     setUserDeleting(true);
-
     try {
-      await deleteUser(
-        selectedUser.id
-      ).catch(() => null);
-
-      setUsers((current) =>
-        current.filter(
-          (user) =>
-            user.id !==
-            selectedUser.id
-        )
-      );
-
+      await deleteUser(selectedUser.id);
+      await loadData();
       setShowDeleteUserModal(false);
       setSelectedUser(null);
-
-      showToast(
-        "success",
-        "تم حذف المستخدم بنجاح"
-      );
-    } catch {
-      setUsers((current) =>
-        current.filter(
-          (user) =>
-            user.id !==
-            selectedUser.id
-        )
-      );
-
-      setShowDeleteUserModal(false);
-      setSelectedUser(null);
-
-      showToast(
-        "success",
-        "تم حذف المستخدم بنجاح"
-      );
-    } finally {
-      setUserDeleting(false);
-    }
+      showToast("success", "تم حذف المستخدم من قاعدة البيانات بنجاح");
+    } catch (err) {
+      showToast("error", err instanceof Error ? err.message : "تعذر حذف المستخدم من الخادم");
+    } finally { setUserDeleting(false); }
   }
 
   const availableCodes =
@@ -4677,7 +4534,7 @@ function App() {
 
               <div className="modal-body">
                 <label className="modal-field">
-                  اسم المستخدم
+                  رقم الهاتف
 
                   <input
                     value={
@@ -4716,27 +4573,6 @@ function App() {
                   />
                 </label>
 
-                <label className="modal-field">
-                  البريد الإلكتروني
-
-                  <input
-                    type="email"
-                    value={
-                      userForm.email
-                    }
-                    onChange={(e) =>
-                      setUserForm(
-                        (current) => ({
-                          ...current,
-                          email:
-                            e.target.value,
-                        })
-                      )
-                    }
-                    placeholder="example@email.com"
-                  />
-                </label>
-
                 <div
                   style={{
                     display:
@@ -4746,37 +4582,6 @@ function App() {
                     gap: "12px",
                   }}
                 >
-                  <label className="modal-field">
-                    الحد الأقصى للأجهزة
-
-                    <input
-                      type="number"
-                      min={1}
-                      max={20}
-                      value={
-                        userForm.maxDevices
-                      }
-                      onChange={(e) =>
-                        setUserForm(
-                          (current) => ({
-                            ...current,
-                            maxDevices:
-                              Math.min(
-                                20,
-                                Math.max(
-                                  1,
-                                  Number(
-                                    e.target
-                                      .value
-                                  ) || 1
-                                )
-                              ),
-                          })
-                        )
-                      }
-                    />
-                  </label>
-
                   <label className="modal-field">
                     تمديد التفعيل
 
