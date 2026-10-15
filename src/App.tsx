@@ -3574,8 +3574,8 @@ function App() {
                               try {
                                 await deleteActivationCode(code.id);
                                 setCodes((current) => current.filter((c) => c.id !== code.id));
-                                addAudit("حذف كود تفعيل", `كود ${code.code}`, "code");
-                                showToast("success", "تم حذف كود التفعيل من قاعدة البيانات");
+                                addAudit("إلغاء كود تفعيل", `كود ${code.code}`, "code");
+                                showToast("success", "تم إلغاء كود التفعيل في قاعدة البيانات");
                               } catch (err) {
                                 const message = err instanceof Error ? err.message : "تعذر حذف كود التفعيل من السيرفر.";
                                 setError(message);
@@ -3583,7 +3583,7 @@ function App() {
                               }
                             }}
                             style={{ width: "38px", height: "38px", color: "var(--danger)" }}
-                            title="حذف الكود"
+                            title="إلغاء كود التفعيل"
                           >
                             <Icon name="trash" size={15} />
                           </button>
