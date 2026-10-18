@@ -1496,24 +1496,27 @@ tbody tr:hover {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(8, 11, 22, 0.58);
-  backdrop-filter: blur(7px);
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  z-index: 100;
+  z-index: 9999;
 }
 
 .modal {
-  width: min(470px, 100%);
+  width: min(500px, 100%);
+  max-height: calc(100dvh - 40px);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.22);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  animation: modalIn 0.2s ease;
+  animation: modalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes modalIn {
@@ -1529,51 +1532,69 @@ tbody tr:hover {
 }
 
 .modal-header {
-  padding: 23px;
+  padding: 18px 22px;
   display: flex;
   align-items: center;
   gap: 12px;
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .modal-title-icon {
-  width: 45px;
-  height: 45px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   color: var(--primary);
   background: var(--primary-soft);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .modal-header > div:nth-child(2) {
   flex: 1;
+  min-width: 0;
 }
 
 .modal-header h3 {
-  margin: 0 0 5px;
+  margin: 0 0 4px;
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .modal-header p {
   margin: 0;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .modal-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--muted);
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  color: var(--text);
+  border-color: var(--border-hover);
 }
 
 .modal-body {
-  padding: 23px;
+  padding: 20px 22px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
 }
 
 .modal-field {
@@ -1581,35 +1602,37 @@ tbody tr:hover {
   flex-direction: column;
   gap: 8px;
   color: var(--text);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
-  margin-bottom: 17px;
+  margin-bottom: 16px;
 }
 
 .modal-field input,
 .modal-field select {
-  height: 44px;
+  height: 46px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   outline: none;
-  padding: 0 12px;
+  padding: 0 14px;
   color: var(--text);
   background: var(--surface-2);
-  font-size: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 .modal-field input:focus,
 .modal-field select:focus {
   border-color: var(--primary);
-  box-shadow:
-    0 0 0 3px rgba(99,91,255,0.08);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
 }
 
 .creation-preview {
-  margin-top: 7px;
+  margin-top: 10px;
   padding: 16px;
-  border-radius: 13px;
+  border-radius: 14px;
   background: var(--surface-2);
+  border: 1px solid var(--border);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
@@ -1623,32 +1646,255 @@ tbody tr:hover {
 
 .creation-preview span {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .creation-preview strong {
   color: var(--text);
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* Modern Duration & Quantity Chips */
+.duration-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .duration-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+.duration-chip-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 8px;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  min-height: 52px;
+  text-align: center;
+  user-select: none;
+}
+
+.duration-chip-btn:hover {
+  border-color: var(--primary);
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.duration-chip-btn.active {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.duration-chip-sub {
+  font-size: 10.5px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Count Stepper */
+.count-stepper-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+.count-step-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.count-step-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--surface-2);
+}
+
+.count-step-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.count-number-display {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  font-family: monospace;
+}
+
+.count-preset-chips {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.count-preset-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.count-preset-chip {
+  flex: 1;
+  min-width: 50px;
+  padding: 8px 6px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.count-preset-chip:hover {
+  border-color: var(--primary);
+}
+
+.count-preset-chip.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* Live Summary Card */
+.code-summary-card {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+
+.code-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.code-summary-item span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.code-summary-item strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* Result Codes List */
+.created-codes-result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 4px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.created-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.created-code-val {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.8px;
 }
 
 .modal-footer {
-  padding: 17px 23px;
+  padding: 16px 22px;
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: flex-start;
-  gap: 9px;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+.modal-footer .primary-button,
+.modal-footer .secondary-button {
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .confirmation-modal {
-  padding: 32px;
+  padding: 28px 24px;
   text-align: center;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .confirmation-icon {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 18px;
-  border-radius: 19px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 18px;
   color: var(--primary);
   background: var(--primary-soft);
   display: flex;
@@ -1657,37 +1903,55 @@ tbody tr:hover {
 }
 
 .confirmation-modal h3 {
-  margin: 0 0 9px;
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text);
-  font-size: 17px;
+}
+
+.confirmation-modal p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.confirmation-box {
+  margin: 14px 0 20px;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.confirmation-box span {
+  color: var(--muted);
+}
+
+.confirmation-box strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.confirmation-modal .modal-footer {
+  padding: 0;
+  border-top: none;
+  background: transparent;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }
 
 .confirmation-modal > p {
   margin: 0;
   color: var(--muted);
-  font-size: 10px;
-  line-height: 1.8;
-}
-
-.confirmation-box {
-  margin: 20px 0;
-  padding: 15px;
-  border-radius: 12px;
-  background: var(--surface-2);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
-  text-align: right;
-}
-
-.confirmation-box span {
-  color: var(--muted);
-  font-size: 9px;
-}
-
-.confirmation-box strong {
-  color: var(--text);
-  font-size: 10px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 /* =========================
@@ -2767,21 +3031,145 @@ tbody tr:hover {
     padding: 6px 10px;
   }
 
-  /* Mobile Modals (Bottom Sheet) */
+  /* Mobile Modals (Bottom Sheet / Centered Safe Sheet) */
   .modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
     align-items: flex-end !important;
+    justify-content: center !important;
     padding: 0 !important;
+    padding-top: max(16px, env(safe-area-inset-top, 16px)) !important;
+    z-index: 99999 !important;
+    background: rgba(3, 7, 18, 0.85) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
+  .modal,
   .modal-card {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 88vh !important;
+    max-height: min(92dvh, calc(100vh - 20px)) !important;
+    height: auto !important;
     border-radius: 24px 24px 0 0 !important;
-    padding: 22px 16px !important;
-    padding-bottom: calc(28px + env(safe-area-inset-bottom, 20px)) !important;
-    overflow-y: auto !important;
+    border: 1px solid var(--border) !important;
+    border-bottom: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: 0 -16px 45px rgba(0, 0, 0, 0.7) !important;
     animation: mobileModalSheet 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overscroll-behavior: contain !important;
+    background: var(--surface) !important;
+  }
+
+  /* Sheet Pull Handle */
+  .modal::before,
+  .modal-card::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 5px;
+    background: var(--muted);
+    border-radius: 99px;
+    margin: 8px auto 2px;
+    opacity: 0.45;
+    flex-shrink: 0;
+  }
+
+  .modal-header {
+    padding: 14px 18px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: var(--surface) !important;
+    z-index: 5 !important;
+  }
+
+  .modal-header h3 {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+  }
+
+  .modal-header p {
+    font-size: 11.5px !important;
+    color: var(--muted) !important;
+    margin: 2px 0 0 !important;
+  }
+
+  .modal-body {
+    padding: 16px 18px !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    max-height: none !important;
+  }
+
+  .modal-field {
+    font-size: 13px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .modal-field input,
+  .modal-field select {
+    font-size: 15px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+  }
+
+  .modal-footer {
+    padding: 12px 18px !important;
+    padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 16px) + 8px)) !important;
+    flex-shrink: 0 !important;
+    background: var(--surface) !important;
+    border-top: 1px solid var(--border) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    z-index: 10 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+  }
+
+  .modal-footer .primary-button,
+  .modal-footer .secondary-button,
+  .modal-footer button {
+    flex: 1 !important;
+    min-height: 48px !important;
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    border-radius: 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .confirmation-modal {
+    padding: 20px 18px !important;
+    padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 20px) + 8px)) !important;
+    max-height: min(92dvh, calc(100vh - 24px)) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .confirmation-modal .modal-footer {
+    margin-top: 16px !important;
+    padding: 0 !important;
+    border-top: none !important;
+    background: transparent !important;
   }
 
   @keyframes mobileModalSheet {

@@ -1,0 +1,32 @@
+{
+  "id": "/",
+  "name": "Orderi Server - إدارة البرنامج",
+  "short_name": "Orderi Admin",
+  "description": "لوحة الإدارة والتحكم المركزية لمنظومة Orderi لإدارة المستخدمين والمندوبين والأجهزة والتراخيص والاشتراكات",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "/orderi-admin-logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/orderi-admin-logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/orderi-admin-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

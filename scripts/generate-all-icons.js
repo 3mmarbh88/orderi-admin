@@ -2,79 +2,372 @@ import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const SOURCE_PNG = path.resolve('.aistudio/artifacts/brain/76073348-0725-483a-8116-1b38e4880efc/.tempmediaStorage/media_1792054309338_6e0fbfe2.png');
+const masterSvg = `
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Outer 3D Beveled Ring Gradients -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0066ff"/>
+      <stop offset="20%" stop-color="#00bfff"/>
+      <stop offset="50%" stop-color="#0052cc"/>
+      <stop offset="85%" stop-color="#002277"/>
+      <stop offset="100%" stop-color="#001144"/>
+    </linearGradient>
+
+    <linearGradient id="innerBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e0f7ff"/>
+      <stop offset="40%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#bce7fd"/>
+    </linearGradient>
+
+    <radialGradient id="innerBgGlow" cx="50%" cy="46%" r="56%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#f4f9fd"/>
+      <stop offset="100%" stop-color="#e1ecf6"/>
+    </radialGradient>
+
+    <!-- 3D Island Gradients -->
+    <linearGradient id="islandSurface" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="30%" stop-color="#22c55e"/>
+      <stop offset="80%" stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+
+    <linearGradient id="islandCliff" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="50%" stop-color="#0f4f27"/>
+      <stop offset="100%" stop-color="#042612"/>
+    </linearGradient>
+
+    <!-- Parcel Box Gradients -->
+    <linearGradient id="boxTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="40%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="boxLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="boxRightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+
+    <linearGradient id="tape" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#facc15" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Dispatcher Character Gradients -->
+    <linearGradient id="poloShirt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="35%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#172554"/>
+    </linearGradient>
+
+    <linearGradient id="hair" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="70%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <linearGradient id="skinTone" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffedd5"/>
+      <stop offset="60%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fba777"/>
+    </linearGradient>
+
+    <!-- Tablet Gradients -->
+    <linearGradient id="tabletFrame" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="50%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#034575"/>
+    </linearGradient>
+
+    <linearGradient id="tabletGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071d38"/>
+      <stop offset="100%" stop-color="#031022"/>
+    </linearGradient>
+
+    <!-- Badge Gradients -->
+    <linearGradient id="badgeBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="30%" stop-color="#00e5ff"/>
+      <stop offset="70%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#034b8c"/>
+    </linearGradient>
+
+    <linearGradient id="badgeSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#102c52"/>
+      <stop offset="40%" stop-color="#0a1f3b"/>
+      <stop offset="100%" stop-color="#040f1d"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="drop3D" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#010d1c" flood-opacity="0.55"/>
+    </filter>
+
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="glow"/>
+      <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+    </filter>
+
+    <filter id="text3D" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#020b18" flood-opacity="0.75"/>
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Shadow -->
+  <circle cx="512" cy="512" r="472" fill="none" filter="url(#drop3D)"/>
+
+  <!-- Outer 3D Glossy Ring -->
+  <circle cx="512" cy="512" r="472" fill="url(#rimGrad)"/>
+  <circle cx="512" cy="512" r="456" fill="#0284c7" opacity="0.6"/>
+  <circle cx="512" cy="512" r="448" fill="url(#innerBevel)"/>
+
+  <!-- Inner Clean White Field -->
+  <circle cx="512" cy="512" r="424" fill="url(#innerBgGlow)"/>
+
+  <!-- Main Scene Clipped to Inside Circle -->
+  <g clip-path="url(#circleMask)">
+    <clipPath id="circleMask">
+      <circle cx="512" cy="512" r="424"/>
+    </clipPath>
+
+    <!-- 3D Island Landmass (Bahrain Geography Extrusion) -->
+    <!-- Dark 3D Depth Base -->
+    <path d="M350 280 L400 230 L470 240 L540 195 L630 215 L675 265 L665 315 L735 365 L715 445 L650 475 L670 555 L630 625 L600 695 L570 755 L530 695 L500 615 L450 575 L430 495 L390 465 L350 405 L360 325 Z" 
+          transform="translate(0, 42)" fill="url(#islandCliff)"/>
+
+    <!-- Island Top Surface -->
+    <path d="M350 280 L400 230 L470 240 L540 195 L630 215 L675 265 L665 315 L735 365 L715 445 L650 475 L670 555 L630 625 L600 695 L570 755 L530 695 L500 615 L450 575 L430 495 L390 465 L350 405 L360 325 Z" 
+          fill="url(#islandSurface)"/>
+
+    <!-- Contour highlight bevel on island ridge -->
+    <path d="M360 285 L405 240 L470 250 L535 205 L620 225 L660 270 L650 310 L720 360 L700 430" 
+          fill="none" stroke="#86efac" stroke-width="4.5" stroke-linecap="round" opacity="0.75"/>
+
+    <!-- Secondary Islands (Right Archipelago) -->
+    <g transform="translate(745, 455)">
+      <path d="M22 15 L48 10 L68 30 L78 70 L63 125 L48 165 L32 185 L22 165 L27 100 L16 60 Z" transform="translate(0, 24)" fill="url(#islandCliff)"/>
+      <path d="M22 15 L48 10 L68 30 L78 70 L63 125 L48 165 L32 185 L22 165 L27 100 L16 60 Z" fill="url(#islandSurface)"/>
+      <ellipse cx="88" cy="95" rx="16" ry="24" fill="url(#islandSurface)"/>
+      <ellipse cx="78" cy="42" rx="12" ry="18" fill="url(#islandSurface)"/>
+    </g>
+
+    <!-- Top Left Island Satellite -->
+    <g transform="translate(245, 230)">
+      <path d="M20 20 L48 10 L64 30 L58 62 L42 78 L20 66 Z" transform="translate(0, 18)" fill="url(#islandCliff)"/>
+      <path d="M20 20 L48 10 L64 30 L58 62 L42 78 L20 66 Z" fill="url(#islandSurface)"/>
+      <circle cx="44" cy="18" r="8" fill="#15803d"/>
+      <circle cx="44" cy="12" r="6" fill="#4ade80"/>
+    </g>
+
+    <!-- Glowing Cyan Radar Waves Emanating from Parcel Box -->
+    <g filter="url(#cyanGlow)" opacity="0.9">
+      <ellipse cx="555" cy="425" rx="60" ry="36" fill="none" stroke="#00e5ff" stroke-width="4" stroke-dasharray="14 6"/>
+      <ellipse cx="555" cy="425" rx="115" ry="68" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
+      <ellipse cx="555" cy="425" rx="175" ry="102" fill="none" stroke="#00e5ff" stroke-width="3"/>
+      <ellipse cx="555" cy="425" rx="240" ry="140" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity="0.65"/>
+      <ellipse cx="555" cy="425" rx="305" ry="178" fill="none" stroke="#0284c7" stroke-width="2" opacity="0.4"/>
+      <!-- Radar Scanner Beam Line -->
+      <line x1="555" y1="425" x2="675" y2="295" stroke="#00ffff" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <!-- 3D Cardboard Parcel Box in Center -->
+    <g transform="translate(470, 330)">
+      <!-- Shadow under box -->
+      <polygon points="85,160 175,115 95,78 5,123" transform="translate(0, 20)" fill="#042612" opacity="0.6"/>
+
+      <!-- Left face -->
+      <polygon points="10,65 85,110 85,185 10,140" fill="url(#boxLeftGrad)"/>
+      <!-- Right face -->
+      <polygon points="85,110 162,65 162,140 85,185" fill="url(#boxRightGrad)"/>
+      <!-- Top face -->
+      <polygon points="85,22 162,65 85,110 10,65" fill="url(#boxTopGrad)"/>
+
+      <!-- Packaging tape top -->
+      <polygon points="73,16 97,29 97,105 73,92" fill="url(#tape)"/>
+      <!-- Packaging tape left -->
+      <polygon points="73,92 97,105 97,180 73,167" fill="url(#tape)"/>
+
+      <!-- Box Shipping Label / Barcode on Right Face -->
+      <polygon points="96,118 128,100 128,135 96,153" fill="#ffffff"/>
+      <g stroke="#0f172a" stroke-width="2" transform="translate(1, 0)">
+        <line x1="102" y1="116" x2="102" y2="147"/>
+        <line x1="107" y1="113" x2="107" y2="144" stroke-width="3.5"/>
+        <line x1="112" y1="110" x2="112" y2="141"/>
+        <line x1="117" y1="107" x2="117" y2="138" stroke-width="3"/>
+        <line x1="122" y1="104" x2="122" y2="135"/>
+      </g>
+      <!-- Fragile icon on left face -->
+      <g fill="#78350f" transform="translate(26, 114) scale(0.7)">
+        <path d="M10 4 L17 4 L19 15 L7 15 Z"/>
+        <line x1="13" y1="15" x2="13" y2="23" stroke="#78350f" stroke-width="3"/>
+        <line x1="6" y1="23" x2="20" y2="23" stroke="#78350f" stroke-width="3"/>
+      </g>
+    </g>
+
+    <!-- Delivery Operations Dispatcher / Manager (Bottom Left) -->
+    <g transform="translate(85, 410)">
+      <!-- Back body / Polo shirt -->
+      <path d="M110 330 C90 280 80 230 110 175 C130 145 170 135 200 145 C235 155 265 195 285 260 C295 290 300 330 295 390 L100 390 Z" 
+            fill="url(#poloShirt)"/>
+
+      <!-- White/cyan polo collar line -->
+      <path d="M160 150 L200 140 L225 170 L175 180 Z" fill="#1e40af"/>
+      <path d="M165 150 L192 165 L215 150" stroke="#93c5fd" stroke-width="3.5" fill="none"/>
+
+      <!-- Head & Neck -->
+      <ellipse cx="220" cy="110" rx="45" ry="50" fill="url(#skinTone)"/>
+      <!-- Ear -->
+      <ellipse cx="258" cy="115" rx="14" ry="18" fill="url(#skinTone)"/>
+      <ellipse cx="258" cy="115" rx="7" ry="10" fill="#ea580c" opacity="0.25"/>
+
+      <!-- 3D Haircut covering top and back of head -->
+      <path d="M175 105 C170 65 200 45 235 48 C270 50 285 75 280 110 C272 100 258 92 238 92 C210 92 188 105 180 120 Z" 
+            fill="url(#hair)"/>
+      <path d="M175 100 C165 115 168 138 180 150 C185 130 185 110 175 100 Z" fill="url(#hair)"/>
+
+      <!-- Arm holding tablet -->
+      <path d="M235 245 C275 250 325 260 355 285 C365 295 360 315 340 325 C300 335 255 315 225 290 Z" fill="#1d4ed8"/>
+      <circle cx="360" cy="300" r="22" fill="url(#skinTone)"/>
+
+      <!-- Futuristic Operations Tablet in Dispatcher Hands -->
+      <g transform="translate(290, 205) rotate(-10)">
+        <!-- Tablet Frame (3D beveled edge) -->
+        <rect x="0" y="0" width="235" height="160" rx="20" fill="#0c192c" stroke="url(#tabletFrame)" stroke-width="5" filter="url(#drop3D)"/>
+        <!-- Inner Screen -->
+        <rect x="10" y="10" width="215" height="140" rx="12" fill="url(#tabletGlass)"/>
+
+        <!-- Tablet Screen Content -->
+        <!-- White Map Pin Marker -->
+        <g transform="translate(38, 30)">
+          <path d="M18 0 C8 0 0 8 0 18 C0 30 18 48 18 48 C18 48 36 30 36 18 C36 8 28 0 18 0 Z" fill="#ffffff"/>
+          <circle cx="18" cy="18" r="7" fill="#0284c7"/>
+        </g>
+
+        <!-- White Delivery Truck Icon -->
+        <g transform="translate(132, 85) scale(1.15)">
+          <path d="M0 10 L0 32 L35 32 L35 10 Z" fill="#ffffff"/>
+          <path d="M35 18 L48 18 L55 25 L55 32 L35 32 Z" fill="#ffffff"/>
+          <circle cx="10" cy="34" r="6" fill="#00e5ff"/>
+          <circle cx="44" cy="34" r="6" fill="#00e5ff"/>
+          <!-- Speed Motion Lines -->
+          <line x1="-12" y1="18" x2="-4" y2="18" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+          <line x1="-8" y1="25" x2="-3" y2="25" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+        </g>
+
+        <!-- Route & dashboard status lines -->
+        <g fill="#ffffff" opacity="0.95">
+          <rect x="84" y="32" width="90" height="7" rx="3.5"/>
+          <rect x="84" y="47" width="70" height="6" rx="3" opacity="0.75"/>
+          <rect x="84" y="60" width="105" height="6" rx="3" opacity="0.75"/>
+          <!-- Waypoint dots and connecting route -->
+          <circle cx="42" cy="98" r="4.5" fill="#00e5ff"/>
+          <circle cx="70" cy="92" r="4.5" fill="#38bdf8"/>
+          <circle cx="96" cy="106" r="4.5" fill="#00e5ff"/>
+          <polyline points="42,98 70,92 96,106 128,96" fill="none" stroke="#00e5ff" stroke-width="3" stroke-dasharray="4 3"/>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- BOTTOM 3D BADGE (Orderi - ADMIN -) -->
+  <g transform="translate(512, 810)" filter="url(#drop3D)">
+    <!-- Outer Cyan Glow Rim -->
+    <rect x="-315" y="-92" width="630" height="184" rx="92" fill="url(#badgeBorder)"/>
+
+    <!-- Inner Dark Navy Plate -->
+    <rect x="-307" y="-84" width="614" height="168" rx="84" fill="url(#badgeSurface)"/>
+
+    <!-- 3D Bevel Highlight on Top Edge of Plate -->
+    <path d="M-285 -76 Q0 -81 285 -76 Q302 -76 306 -61 Q0 -46 -306 -61 Q-302 -76 -285 -76 Z" fill="#ffffff" opacity="0.16"/>
+
+    <!-- 'Orderi' Bold 3D Custom Vector Glyphs (Guaranteed 100% Crisp on all systems) -->
+    <g transform="translate(-240, -56)" filter="url(#text3D)">
+      <!-- 'O' -->
+      <path d="M48 0 C74 0 94 20 94 46 C94 72 74 92 48 92 C22 92 2 72 2 46 C2 20 22 0 48 0 Z M48 22 C34 22 24 33 24 46 C24 59 34 70 48 70 C62 70 72 59 72 46 C72 33 62 22 48 22 Z" fill="#ffffff"/>
+
+      <!-- 'r' -->
+      <g transform="translate(112, 0)">
+        <rect x="0" y="25" width="21" height="67" rx="10" fill="#ffffff"/>
+        <path d="M20 45 C25 32 38 25 55 25 C62 25 68 27 72 30 L66 50 C62 48 57 47 52 47 C40 47 28 54 21 65 L21 92 L0 92" fill="#ffffff"/>
+      </g>
+
+      <!-- 'd' -->
+      <g transform="translate(200, 0)">
+        <rect x="60" y="0" width="21" height="92" rx="10" fill="#ffffff"/>
+        <path d="M42 24 C64 24 74 38 74 58 C74 78 62 92 42 92 C20 92 8 78 8 58 C8 38 20 24 42 24 Z M42 44 C30 44 26 51 26 58 C26 65 30 72 42 72 C54 72 58 65 58 58 C58 51 54 44 42 44 Z" fill="#ffffff"/>
+      </g>
+
+      <!-- 'e' -->
+      <g transform="translate(300, 0)">
+        <path d="M40 24 C64 24 74 38 74 58 C74 62 73 66 72 70 L26 70 C28 78 34 82 44 82 C52 82 58 79 64 75 L72 88 C64 94 54 97 42 97 C18 97 6 82 6 58 C6 38 18 24 40 24 Z M40 39 C30 39 26 46 25 56 L56 56 C55 46 50 39 40 39 Z" fill="#ffffff"/>
+      </g>
+
+      <!-- 'r' -->
+      <g transform="translate(390, 0)">
+        <rect x="0" y="25" width="21" height="67" rx="10" fill="#ffffff"/>
+        <path d="M20 45 C25 32 38 25 55 25 C62 25 68 27 72 30 L66 50 C62 48 57 47 52 47 C40 47 28 54 21 65 L21 92 L0 92" fill="#ffffff"/>
+      </g>
+
+      <!-- 'i' with Location Pin Dot -->
+      <g transform="translate(470, 0)">
+        <rect x="2" y="25" width="21" height="67" rx="10" fill="#ffffff"/>
+        <!-- Location pin forming dot of 'i' -->
+        <g transform="translate(-4, -18)">
+          <path d="M15 0 C6.7 0 0 6.7 0 15 C0 26 15 42 15 42 C15 42 30 26 30 15 C30 6.7 23.3 0 15 0 Z" fill="#00e5ff" filter="url(#cyanGlow)"/>
+          <circle cx="15" cy="14" r="5.5" fill="#071a2f"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Subtitle: — ADMIN — -->
+    <g transform="translate(0, 52)">
+      <!-- Left cyan line -->
+      <line x1="-230" y1="-2" x2="-105" y2="-2" stroke="#00e5ff" stroke-width="6" stroke-linecap="round" filter="url(#cyanGlow)"/>
+
+      <!-- ADMIN Text in bold stylized vector paths -->
+      <g transform="translate(-75, -17)" fill="#00e5ff" filter="url(#cyanGlow)">
+        <!-- A -->
+        <path d="M14 0 L24 28 L17 28 L14 20 L6 20 L3 28 L-4 28 L6 0 Z M10 8 L7 16 L13 16 Z"/>
+        <!-- D -->
+        <path d="M34 0 L46 0 C54 0 60 5 60 14 C60 23 54 28 46 28 L34 28 Z M40 6 L40 22 L46 22 C50 22 53 19 53 14 C53 9 50 6 46 6 Z"/>
+        <!-- M -->
+        <path d="M70 0 L77 0 L84 18 L91 0 L98 0 L98 28 L92 28 L92 8 L86 24 L82 24 L76 8 L76 28 L70 28 Z"/>
+        <!-- I -->
+        <rect x="110" y="0" width="6" height="28" rx="2"/>
+        <!-- N -->
+        <path d="M126 0 L132 0 L144 20 L144 0 L150 0 L150 28 L144 28 L132 8 L132 28 L126 28 Z"/>
+      </g>
+
+      <!-- Right cyan line -->
+      <line x1="105" y1="-2" x2="230" y2="-2" stroke="#00e5ff" stroke-width="6" stroke-linecap="round" filter="url(#cyanGlow)"/>
+    </g>
+  </g>
+</svg>
+`;
 
 async function run() {
-  if (!fs.existsSync(SOURCE_PNG)) {
-    console.error('Source PNG not found at', SOURCE_PNG);
-    process.exit(1);
-  }
+  console.log('Generating Orderi Admin master vector and raster assets...');
 
-  const rawBuffer = fs.readFileSync(SOURCE_PNG);
-  const metadata = await sharp(rawBuffer).metadata();
-  console.log('Source image loaded:', metadata.width, 'x', metadata.height);
-
-  // 1. Overlay seamless "ادمن" typography in Arabic onto the 512x512 logo
-  const overlaySvg = `
-  <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <!-- Gradient matching card surface -->
-      <linearGradient id="topCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="60%" stop-color="#fcfdfe"/>
-        <stop offset="100%" stop-color="#f5f7fa"/>
-      </linearGradient>
-
-      <!-- Gradient matching 3D pill surface -->
-      <linearGradient id="pillSurface" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#ffffff"/>
-        <stop offset="35%" stop-color="#f5f7fa"/>
-        <stop offset="100%" stop-color="#e1e6ed"/>
-      </linearGradient>
-
-      <!-- Soft blend mask for top rect to eliminate any hard edges -->
-      <filter id="blurPatch" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="3" />
-      </filter>
-    </defs>
-    
-    <!-- Feathered patch covering old text completely -->
-    <rect x="86" y="72" width="100" height="38" rx="8" fill="url(#topCardGrad)" filter="url(#blurPatch)"/>
-    <rect x="90" y="76" width="92" height="30" rx="6" fill="url(#topCardGrad)"/>
-    
-    <!-- Crisp bold Arabic text 'ادمن' -->
-    <text x="136" y="99" font-family="Lemonada, sans-serif" font-size="23" font-weight="800" fill="#243447" text-anchor="middle">ادمن</text>
-
-    <!-- Bottom-right pill badge: clean seamless cover and crisp text -->
-    <rect x="313" y="393" width="128" height="33" rx="14" fill="url(#pillSurface)"/>
-    <text x="377" y="417" font-family="Lemonada, sans-serif" font-size="19" font-weight="800" fill="#243447" text-anchor="middle">ادمن</text>
-  </svg>
-  `;
-
-  // Apply overlay onto base 512x512
-  const edited512Buffer = await sharp(rawBuffer)
-    .composite([{ input: Buffer.from(overlaySvg), top: 0, left: 0 }])
+  // 1. Generate master PNG buffer at 1024x1024
+  const masterBuffer = await sharp(Buffer.from(masterSvg))
+    .resize(1024, 1024)
     .png()
     .toBuffer();
 
-  // 2. Generate master 1024x1024 buffer
-  const masterBuffer = await sharp(edited512Buffer)
-    .resize(1024, 1024, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toBuffer();
+  // 2. Write SVG files for web vector use
+  fs.writeFileSync('public/orderi-admin-logo.svg', masterSvg, 'utf8');
+  fs.writeFileSync('src/assets/orderi-logo.svg', masterSvg, 'utf8');
+  fs.writeFileSync('public/favicon.svg', masterSvg, 'utf8');
 
-  // 3. Generate embedded SVG for vector consumers
-  const base64Png = masterBuffer.toString('base64');
-  const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <image href="data:image/png;base64,${base64Png}" x="0" y="0" width="512" height="512" preserveAspectRatio="xMidYMid meet" />
-</svg>`;
-
-  fs.writeFileSync('public/orderi-admin-logo.svg', svgContent, 'utf8');
-  fs.writeFileSync('src/assets/orderi-logo.svg', svgContent, 'utf8');
-  fs.writeFileSync('public/favicon.svg', svgContent, 'utf8');
-
-  // 4. Targets for web and app assets
-  const targets = [
+  // 3. Targets for web, app, PWA and Android mipmaps
+  const standardTargets = [
     // Web / PWA / App assets
     { path: 'public/orderi-admin-logo.png', size: 512 },
     { path: 'public/orderi-admin-logo-512.png', size: 512 },
@@ -89,39 +382,34 @@ async function run() {
     { path: 'src/assets/natan-logo.png', size: 512 },
     { path: 'src/assets/hero.png', size: 512 },
 
-    // Android Mipmaps
+    // Android APK Mipmap icons (Standard launcher & rounded launcher)
     { path: 'android/app/src/main/res/mipmap-mdpi/ic_launcher.png', size: 48 },
     { path: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png', size: 48 },
-    { path: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png', size: 108 },
     { path: 'android/app/src/main/res/mipmap-mdpi/natan_admin.png', size: 48 },
     { path: 'android/app/src/main/res/mipmap-mdpi/natan_admin_round.png', size: 48 },
 
     { path: 'android/app/src/main/res/mipmap-hdpi/ic_launcher.png', size: 72 },
     { path: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png', size: 72 },
-    { path: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png', size: 162 },
     { path: 'android/app/src/main/res/mipmap-hdpi/natan_admin.png', size: 72 },
     { path: 'android/app/src/main/res/mipmap-hdpi/natan_admin_round.png', size: 72 },
 
     { path: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher.png', size: 96 },
     { path: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png', size: 96 },
-    { path: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png', size: 216 },
     { path: 'android/app/src/main/res/mipmap-xhdpi/natan_admin.png', size: 96 },
     { path: 'android/app/src/main/res/mipmap-xhdpi/natan_admin_round.png', size: 96 },
 
     { path: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png', size: 144 },
     { path: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png', size: 144 },
-    { path: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png', size: 324 },
     { path: 'android/app/src/main/res/mipmap-xxhdpi/natan_admin.png', size: 144 },
     { path: 'android/app/src/main/res/mipmap-xxhdpi/natan_admin_round.png', size: 144 },
 
     { path: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png', size: 192 },
     { path: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png', size: 192 },
-    { path: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png', size: 432 },
     { path: 'android/app/src/main/res/mipmap-xxxhdpi/natan_admin.png', size: 192 },
     { path: 'android/app/src/main/res/mipmap-xxxhdpi/natan_admin_round.png', size: 192 },
   ];
 
-  for (const t of targets) {
+  for (const t of standardTargets) {
     const dir = path.dirname(t.path);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     await sharp(masterBuffer)
@@ -130,7 +418,38 @@ async function run() {
       .toFile(t.path);
   }
 
-  // PWA Maskable Icon (inset by 15% to guarantee safe zone)
+  // 4. Android Adaptive Icon Foregrounds (with 18% padding so circular badge sits safely inside 72dp safe-zone)
+  const foregroundTargets = [
+    { path: 'android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png', size: 108 },
+    { path: 'android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png', size: 162 },
+    { path: 'android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png', size: 216 },
+    { path: 'android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png', size: 324 },
+    { path: 'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png', size: 432 },
+  ];
+
+  for (const f of foregroundTargets) {
+    const innerSize = Math.round(f.size * 0.76); // Safe zone fitting
+    const badge = await sharp(masterBuffer)
+      .resize(innerSize, innerSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
+
+    const dir = path.dirname(f.path);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+    await sharp({
+      create: {
+        width: f.size,
+        height: f.size,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      },
+    })
+      .composite([{ input: badge, gravity: 'center' }])
+      .png()
+      .toFile(f.path);
+  }
+
+  // 5. PWA Maskable Icon (inset by 15% onto dark blue #071a2f background)
   const maskableInner = await sharp(masterBuffer)
     .resize(410, 410, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .toBuffer();
@@ -139,30 +458,30 @@ async function run() {
       width: 512,
       height: 512,
       channels: 4,
-      background: { r: 9, g: 13, b: 22, alpha: 1 }
-    }
+      background: { r: 7, g: 26, b: 47, alpha: 1 },
+    },
   })
     .composite([{ input: maskableInner, gravity: 'center' }])
     .png()
     .toFile('public/pwa-maskable-512x512.png');
 
-  // Favicon.ico (32x32 PNG-based ICO)
+  // Favicon.ico
   const fav32 = await sharp(masterBuffer).resize(32, 32).png().toBuffer();
   fs.writeFileSync('public/favicon.ico', fav32);
 
-  // 5. Android Splash screens (Dark `#090d16` background with centered logo)
+  // 6. Android APK Splash screens (Dark #071A2F background with centered 3D badge)
   const splashTargets = [
-    { p: 'android/app/src/main/res/drawable/splash.png', w: 480, h: 800, logoSize: 220 },
-    { p: 'android/app/src/main/res/drawable-port-mdpi/splash.png', w: 320, h: 480, logoSize: 150 },
-    { p: 'android/app/src/main/res/drawable-port-hdpi/splash.png', w: 480, h: 800, logoSize: 220 },
-    { p: 'android/app/src/main/res/drawable-port-xhdpi/splash.png', w: 720, h: 1280, logoSize: 320 },
-    { p: 'android/app/src/main/res/drawable-port-xxhdpi/splash.png', w: 960, h: 1600, logoSize: 420 },
-    { p: 'android/app/src/main/res/drawable-port-xxxhdpi/splash.png', w: 1280, h: 1920, logoSize: 540 },
-    { p: 'android/app/src/main/res/drawable-land-mdpi/splash.png', w: 480, h: 320, logoSize: 150 },
-    { p: 'android/app/src/main/res/drawable-land-hdpi/splash.png', w: 800, h: 480, logoSize: 220 },
-    { p: 'android/app/src/main/res/drawable-land-xhdpi/splash.png', w: 1280, h: 720, logoSize: 320 },
-    { p: 'android/app/src/main/res/drawable-land-xxhdpi/splash.png', w: 1600, h: 960, logoSize: 420 },
-    { p: 'android/app/src/main/res/drawable-land-xxxhdpi/splash.png', w: 1920, h: 1280, logoSize: 540 },
+    { p: 'android/app/src/main/res/drawable/splash.png', w: 480, h: 800, logoSize: 260 },
+    { p: 'android/app/src/main/res/drawable-port-mdpi/splash.png', w: 320, h: 480, logoSize: 180 },
+    { p: 'android/app/src/main/res/drawable-port-hdpi/splash.png', w: 480, h: 800, logoSize: 260 },
+    { p: 'android/app/src/main/res/drawable-port-xhdpi/splash.png', w: 720, h: 1280, logoSize: 380 },
+    { p: 'android/app/src/main/res/drawable-port-xxhdpi/splash.png', w: 960, h: 1600, logoSize: 500 },
+    { p: 'android/app/src/main/res/drawable-port-xxxhdpi/splash.png', w: 1280, h: 1920, logoSize: 640 },
+    { p: 'android/app/src/main/res/drawable-land-mdpi/splash.png', w: 480, h: 320, logoSize: 180 },
+    { p: 'android/app/src/main/res/drawable-land-hdpi/splash.png', w: 800, h: 480, logoSize: 260 },
+    { p: 'android/app/src/main/res/drawable-land-xhdpi/splash.png', w: 1280, h: 720, logoSize: 380 },
+    { p: 'android/app/src/main/res/drawable-land-xxhdpi/splash.png', w: 1600, h: 960, logoSize: 500 },
+    { p: 'android/app/src/main/res/drawable-land-xxxhdpi/splash.png', w: 1920, h: 1280, logoSize: 640 },
   ];
 
   for (const s of splashTargets) {
@@ -178,15 +497,15 @@ async function run() {
         width: s.w,
         height: s.h,
         channels: 4,
-        background: { r: 9, g: 13, b: 22, alpha: 1 }
-      }
+        background: { r: 7, g: 26, b: 47, alpha: 1 },
+      },
     })
       .composite([{ input: logoBuf, gravity: 'center' }])
       .png()
       .toFile(s.p);
   }
 
-  console.log('Successfully generated all icons and splash screens with Arabic ادمن typography!');
+  console.log('✅ Successfully generated all Orderi Admin icons, Android APK mipmaps, and splash screens!');
 }
 
 run().catch((err) => {
