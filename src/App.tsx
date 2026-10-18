@@ -873,7 +873,7 @@ function App() {
         getActivationCodes(),
       ]);
 
-      setServerOnline(server?.success === true);
+      setServerOnline((server?.success === true || server?.status === "ok" || server?.status === "online"));
       setServerTime(server?.timestamp || server?.time || "");
 
       const loadedUsers = userResult?.users ?? userResult?.data;
