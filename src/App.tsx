@@ -850,7 +850,7 @@ function App() {
     try {
       const result = await checkServer();
 
-      setServerOnline(result?.success === true);
+      setServerOnline((result?.success === true || result?.status === "ok" || result?.status === "online"));
 
       setServerTime(
         result?.timestamp ||
