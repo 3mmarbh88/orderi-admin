@@ -3262,6 +3262,39 @@ tbody tr:hover {
   .chart-legend {
     width: 100%;
   }
+
+  .modal-footer {
+    padding: 10px 14px !important;
+    padding-bottom: max(14px, calc(env(safe-area-inset-bottom, 14px) + 6px)) !important;
+    gap: 8px !important;
+  }
+
+  .modal-footer button {
+    font-size: 13px !important;
+    min-height: 46px !important;
+  }
+
+  .duration-chips-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .count-preset-chips {
+    gap: 4px !important;
+  }
+
+  .biometric-scanner-modal {
+    padding: 22px 16px !important;
+    width: 94% !important;
+    max-height: 90dvh !important;
+    border-radius: 20px !important;
+  }
+
+  .face-id-scanner-viewport {
+    width: 145px !important;
+    height: 145px !important;
+    margin-bottom: 14px !important;
+  }
 }
 
 /* =========================
@@ -3462,6 +3495,62 @@ tbody tr:hover {
   color: #22c55e;
   z-index: 20;
   animation: toastIn 0.25s ease;
+}
+
+/* Face Matching Live HUD */
+.face-match-hud {
+  margin: 10px 0 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: right;
+}
+
+.face-match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  margin-bottom: 6px;
+}
+
+.face-match-bar-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin: 6px 0;
+  position: relative;
+}
+
+.face-match-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #38bdf8 0%, #10b981 100%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.face-match-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.face-node-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
 .biometric-badge {
@@ -4031,7 +4120,7 @@ tbody tr:hover {
 
 
 /* =========================================================
-   ORDERI ADMIN - SPLASH SCREEN
+   ORDERI ADMIN - SPLASH SCREEN (MOBILE & DESKTOP)
 ========================================================= */
 .splash-screen {
   position: fixed;
@@ -4041,25 +4130,155 @@ tbody tr:hover {
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(circle at 50% 42%, rgba(99, 91, 255, 0.16), transparent 32%),
+    radial-gradient(circle at 50% 36%, rgba(16, 185, 129, 0.16), transparent 38%),
+    radial-gradient(circle at 50% 68%, rgba(99, 91, 255, 0.18), transparent 45%),
     #070b18;
+  padding: 24px 20px;
   animation: splashFadeIn 0.35s ease-out;
 }
+
+.splash-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+}
+
+.splash-logo-container {
+  position: relative;
+  width: min(110px, 28vw);
+  height: min(110px, 28vw);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-halo {
+  position: absolute;
+  inset: -14px;
+  border-radius: 38px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(56, 189, 248, 0.2) 48%, transparent 72%);
+  filter: blur(14px);
+  animation: splashHaloPulse 2.2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
 .splash-logo {
-  width: 165px;
-  height: 165px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  display: block;
-  animation: splashLogoPulse 1.25s ease-in-out infinite alternate;
-  filter: drop-shadow(0 16px 35px rgba(16, 185, 129, 0.45));
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(16, 185, 129, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  animation: splashLogoFloat 2.4s ease-in-out infinite alternate;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 6px;
 }
-@keyframes splashLogoPulse {
-  from { transform: scale(0.94); opacity: 0.88; }
-  to { transform: scale(1); opacity: 1; }
+
+@keyframes splashLogoFloat {
+  from { transform: translateY(0px) scale(0.98); }
+  to { transform: translateY(-6px) scale(1.02); }
 }
+
+@keyframes splashHaloPulse {
+  from { opacity: 0.6; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1.08); }
+}
+
 @keyframes splashFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.splash-brand-info {
+  margin-bottom: 24px;
+}
+
+.splash-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #f8fafc;
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.splash-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #38bdf8;
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.splash-tagline {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.splash-loader-area {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.splash-progress-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.splash-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #10b981 0%, #38bdf8 50%, #6366f1 100%);
+  transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+}
+
+.splash-loader-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 11.5px;
+}
+
+.splash-status-text {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.splash-percent-text {
+  color: #38bdf8;
+  font-weight: 800;
+  font-family: monospace;
+}
+
+.splash-footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 /* =========================================================
