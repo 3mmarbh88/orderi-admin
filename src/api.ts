@@ -153,6 +153,17 @@ export async function checkServer() {
       : {}),
   };
 
+  // The Orderi server reports health as { status: "ok", database: true }
+  // and may not include success: true. Normalize valid health responses so
+  // the Admin UI does not incorrectly show "Server Offline".
+  const normalizeHealth = (data: any) => ({
+    ...(data && typeof data === "object" ? data : {}),
+    success:
+      data?.success === true ||
+      data?.status === "ok" ||
+      data?.status === "healthy",
+  });
+
   const endpoints = ["/api/health", "/health", ""];
   for (const ep of endpoints) {
     try {
@@ -162,17 +173,17 @@ export async function checkServer() {
         headers,
       });
       if (res.ok) {
-        return await res.json().catch(() => ({
-          success: true,
+        const data = await res.json().catch(() => ({
           status: "ok",
         }));
+        return normalizeHealth(data);
       }
     } catch {
       // المحاولة التالية
     }
   }
 
-  return request("/api/health");
+  return normalizeHealth(await request("/api/health"));
 }
 
 /**
