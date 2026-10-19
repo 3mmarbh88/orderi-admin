@@ -641,7 +641,7 @@ function App() {
 
   const [biometricEnabled, setBiometricEnabled] =
     useState(
-      localStorage.getItem("orderi_biometric_enabled") !== "false"
+      localStorage.getItem("orderi_biometric_enabled") === "true"
     );
 
   const [rememberBiometric, setRememberBiometric] = useState(true);
