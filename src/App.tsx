@@ -1175,23 +1175,48 @@ function App() {
     };
   }, [biometricModal.isOpen, biometricModal.mode, biometricModal.status, lang]);
 
+  async function requestCameraAccess() {
+    if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
+      showToast("error", lang === "ar" ? "الكاميرا غير مدعومة على هذا المتصفح" : "Camera not supported on this browser");
+      return;
+    }
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "user",
+          width: { ideal: 480 },
+          height: { ideal: 480 },
+        },
+      });
+      setFaceCameraActive(true);
+      if (faceVideoRef.current) {
+        faceVideoRef.current.srcObject = mediaStream;
+        await faceVideoRef.current.play().catch(() => {});
+      }
+      showToast("success", lang === "ar" ? "تم تمكين الكاميرا بنجاح!" : "Camera enabled successfully!");
+    } catch (err) {
+      console.error("Camera access error:", err);
+      showToast("error", lang === "ar" ? "يرجى السماح بصلاحية الكاميرا للمقارنة الحيوية" : "Please allow camera access for face matching");
+    }
+  }
+
   async function triggerBiometricAuth(
     mode: "face" | "fingerprint" = "face",
     reason = mode === "face"
       ? "التحقق من بصمة الوجه (Face ID)"
       : "التحقق من بصمة الإصبع"
   ): Promise<boolean> {
-    // 1. Native Capacitor
-    if (typeof window !== "undefined" && (window as any).Capacitor?.isNativePlatform?.()) {
+    // 1. Native Capacitor (for fingerprint only, allowing Face ID to use in-app camera)
+    if (mode === "fingerprint" && typeof window !== "undefined" && (window as any).Capacitor?.isNativePlatform?.()) {
       try {
         await BiometricAuth.authenticate({
           reason,
           cancelTitle: "إلغاء",
-          androidTitle: mode === "face" ? "Orderi Admin - بصمة الوجه" : "Orderi Admin - بصمة الإصبع",
-          androidSubtitle: mode === "face" ? "انظر إلى شاشة الهاتف للتحقق" : "استخدم بصمة الإصبع أو قفل الجهاز",
+          androidTitle: "Orderi Admin - بصمة الإصبع",
+          androidSubtitle: "استخدم مستشعر البصمة أو قفل الجهاز للتحقق",
           androidConfirmationRequired: false,
           allowDeviceCredential: false,
-          androidBiometryStrength: (mode === "face" ? "weak" : "strong") as any,
+          androidBiometryStrength: "strong" as any,
         });
         return true;
       } catch (err: any) {
@@ -1210,7 +1235,7 @@ function App() {
         status: "scanning",
         message:
           mode === "face"
-            ? (lang === "ar" ? "انظر إلى الكاميرا للتحقق التلقائي من بصمة الوجه" : "Look at the camera for automatic Face ID verification")
+            ? (lang === "ar" ? "انظر إلى الكاميرا للتحقق والمقارنة الحيوية الفورية" : "Look at the camera for live biometric face comparison")
             : (lang === "ar" ? "ضع إصبعك على المستشعر للتحقق السريع" : "Touch the sensor to verify fingerprint"),
         onSuccess: () => {
           setFaceMatchProgress(100);
@@ -1929,34 +1954,72 @@ function App() {
               disabled={biometricLoading || loginLoading}
               style={{
                 width: "100%",
-                minHeight: "48px",
+                minHeight: "52px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 gap: "10px",
                 borderRadius: "14px",
-                background: "linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(99, 91, 255, 0.24) 100%)",
-                border: "1px solid rgba(56, 189, 248, 0.45)",
-                color: "#e0f2fe",
-                fontSize: "13px",
-                fontWeight: 700,
+                background: "linear-gradient(135deg, rgba(2, 132, 199, 0.24) 0%, rgba(99, 91, 255, 0.3) 100%)",
+                border: "1.5px solid rgba(56, 189, 248, 0.65)",
+                color: "#f0f9ff",
+                fontSize: "13.5px",
+                fontWeight: 800,
                 cursor: "pointer",
-                boxShadow: "0 4px 18px rgba(56, 189, 248, 0.15)",
-                transition: "all 0.2s ease",
+                boxShadow: "0 6px 24px rgba(56, 189, 248, 0.22)",
+                transition: "all 0.25s ease",
+                padding: "8px 14px",
               }}
             >
               {biometricLoading && biometricModal.mode === "face" ? (
-                <>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", width: "100%" }}>
                   <span className="spinner" />
-                  {t.faceIdScanning}
-                </>
+                  <span>{t.faceIdScanning}</span>
+                </div>
               ) : (
                 <>
-                  <Icon
-                    name="face-id"
-                    size={22}
-                  />
-                  {t.faceIdBtn}
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+                    <div
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        borderRadius: "10px",
+                        background: "rgba(56, 189, 248, 0.22)",
+                        border: "1px solid rgba(56, 189, 248, 0.4)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#38bdf8",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Icon name="face-id" size={22} />
+                    </div>
+                    <div style={{ textAlign: "right", minWidth: 0 }}>
+                      <div style={{ fontSize: "13.5px", fontWeight: 800, color: "#f8fafc" }}>
+                        {t.faceIdBtn}
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#93c5fd", fontWeight: 600 }}>
+                        {lang === "ar" ? "تمكين الكاميرا والمقارنة الحيوية" : "Enable camera & live face matching"}
+                      </div>
+                    </div>
+                  </div>
+
+                  <span
+                    style={{
+                      fontSize: "10.5px",
+                      padding: "4px 9px",
+                      borderRadius: "99px",
+                      background: "rgba(34, 197, 94, 0.18)",
+                      color: "#4ade80",
+                      border: "1px solid rgba(34, 197, 94, 0.35)",
+                      fontWeight: 700,
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {lang === "ar" ? "كاميرا نشطة 🟢" : "Camera 🟢"}
+                  </span>
                 </>
               )}
             </button>
@@ -5344,14 +5407,16 @@ function App() {
                 <div
                   className={`face-id-scanner-viewport ${biometricModal.status}`}
                   onClick={() => {
-                    if (
+                    if (!faceCameraActive) {
+                      void requestCameraAccess();
+                    } else if (
                       biometricModal.status === "scanning" &&
                       biometricModal.onSuccess
                     ) {
                       biometricModal.onSuccess();
                     }
                   }}
-                  title="انقر للتأكيد الفوري والمطابقة"
+                  title={faceCameraActive ? (lang === "ar" ? "انقر للتأكيد الفوري والمطابقة" : "Click to confirm match") : (lang === "ar" ? "انقر هنا لتمكين الكاميرا" : "Click to enable camera")}
                 >
                   <div className="reticle-corner tl" />
                   <div className="reticle-corner tr" />
@@ -5368,10 +5433,36 @@ function App() {
                     style={{ display: faceCameraActive ? "block" : "none" }}
                   />
 
-                  {/* Face Mesh Reticle when camera feed is inactive */}
+                  {/* Dynamic Landmark Tracking Grid when camera is active */}
+                  {faceCameraActive && biometricModal.status === "scanning" && (
+                    <div className="face-tracking-grid">
+                      <div className="face-track-dot d1" />
+                      <div className="face-track-dot d2" />
+                      <div className="face-track-dot d3" />
+                      <div className="face-track-dot d4" />
+                      <div className="face-track-dot d5" />
+                      <div className="face-track-dot d6" />
+                    </div>
+                  )}
+
+                  {/* Camera Permission Prompt when camera feed is inactive */}
                   {!faceCameraActive && (
-                    <div className="face-mesh-overlay">
-                      <Icon name="face-id" size={76} />
+                    <div
+                      className="face-camera-permission-prompt"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void requestCameraAccess();
+                      }}
+                    >
+                      <div className="camera-icon-circle">
+                        <Icon name="device" size={28} />
+                      </div>
+                      <span style={{ fontSize: "12px", fontWeight: 800, color: "#38bdf8", marginTop: "8px" }}>
+                        {lang === "ar" ? "تمكين الكاميرا للمقارنة" : "Enable Camera"}
+                      </span>
+                      <span style={{ fontSize: "10px", color: "var(--muted)", marginTop: "2px" }}>
+                        {lang === "ar" ? "انقر لتشغيل الكاميرا الأمامية" : "Click to activate camera"}
+                      </span>
                     </div>
                   )}
 
