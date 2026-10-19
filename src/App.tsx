@@ -1108,183 +1108,116 @@ function App() {
 
   async function triggerBiometricAuth(
     mode: "face" | "fingerprint" = "face",
-    reason = mode === "face"
-      ? "التحقق من بصمة الوجه (Face ID)"
-      : "التحقق من بصمة الإصبع"
+    reason = "تحقق الهوية لتسجيل الدخول إلى Orderi Admin"
   ): Promise<boolean> {
-    // 1. Native Capacitor
-    if (typeof window !== "undefined" && (window as any).Capacitor?.isNativePlatform?.()) {
-      try {
-        await BiometricAuth.authenticate({
-          reason,
-          cancelTitle: "إلغاء",
-          androidTitle: mode === "face" ? "Orderi Admin - بصمة الوجه" : "Orderi Admin - بصمة الإصبع",
-          androidSubtitle: mode === "face" ? "انظر إلى شاشة الهاتف للتحقق" : "استخدم بصمة الإصبع أو قفل الجهاز",
-          androidConfirmationRequired: false,
-          // Face unlock on Android is commonly classified as weak.
-          // Android still chooses the biometric modality; the app cannot force Face.
-          allowDeviceCredential: false,
-          androidBiometryStrength: (mode === "face" ? "weak" : "strong") as any,
-        });
-        return true;
-      } catch (err: any) {
-        if (err?.code === "userCancel" || err?.code === "systemCancel") {
-          throw new Error("تم إلغاء التحقق");
-        }
-        throw err;
-      }
+    // Biometric authentication is trusted only inside the native Android app.
+    // Never use the web camera or a clickable mock as proof of identity.
+    if (!(typeof window !== "undefined" && (window as any).Capacitor?.isNativePlatform?.())) {
+      throw new Error("ميزة التحقق الحيوي متاحة من تطبيق Orderi Admin المثبت على أندرويد فقط.");
     }
 
-    // 2. Web browser fallback using interactive biometric modal
-    return new Promise<boolean>((resolve, reject) => {
-      setBiometricModal({
-        isOpen: true,
-        mode,
-        status: "scanning",
-        message:
-          mode === "face"
-            ? "انظر إلى الكاميرا أو انقر لتأكيد مطابقة بصمة الوجه (Face ID)"
-            : "ضع إصبعك على المستشعر أو انقر للتأكيد السريع للبصمة",
-        onSuccess: () => {
-          setBiometricModal((prev) => ({
-            ...prev,
-            status: "success",
-            message: mode === "face" ? "تم التعرف على الوجه بنجاح!" : "تم التحقق من البصمة بنجاح!",
-          }));
-          setTimeout(() => {
-            setBiometricModal((prev) => ({ ...prev, isOpen: false }));
-            resolve(true);
-          }, 800);
-        },
-        onCancel: () => {
-          reject(new Error("تم إلغاء التحقق"));
-        },
+    try {
+      await BiometricAuth.authenticate({
+        reason,
+        cancelTitle: "إلغاء",
+        androidTitle: "Orderi Admin - التحقق الحيوي",
+        androidSubtitle: "تحقق من هويتك باستخدام وسيلة الأمان المسجلة على الهاتف",
+        androidConfirmationRequired: false,
+        allowDeviceCredential: false,
+        // Android selects an enrolled biometric modality supported by the device.
+        // The app cannot force the device to use face rather than fingerprint.
+        androidBiometryStrength: "weak" as any,
       });
-    });
+      return true;
+    } catch (err: any) {
+      if (err?.code === "userCancel" || err?.code === "systemCancel") {
+        throw new Error("تم إلغاء التحقق الحيوي.");
+      }
+      throw new Error(err?.message || "فشل التحقق الحيوي. تأكد من إعداد بصمة الوجه أو الإصبع في الهاتف.");
+    }
   }
 
   async function handleBiometricLogin(mode: "face" | "fingerprint" = "face") {
     setError("");
 
+    const enabled = localStorage.getItem("orderi_biometric_enabled") === "true";
+    if (!enabled) {
+      setError("سجّل الدخول بكلمة المرور أولاً، ثم فعّل التحقق الحيوي لهذا الجهاز.");
+      return;
+    }
+
     const token = localStorage.getItem("orderi_admin_token");
     const refreshToken = localStorage.getItem("orderi_admin_refresh_token");
-    const savedUsername = localStorage.getItem("orderi_biometric_username");
-    const savedPassword = localStorage.getItem("orderi_biometric_pass");
-
-    // If no credentials or token stored at all:
-    if (!token && !refreshToken && !savedPassword) {
-      if (username && password) {
-        setBiometricLoading(true);
-        try {
-          await triggerBiometricAuth(mode);
-          await adminLogin(username, password);
-
-          localStorage.setItem("orderi_biometric_username", username.trim());
-          localStorage.setItem("orderi_biometric_enabled", "true");
-          setBiometricEnabled(true);
-          setLoggedIn(true);
-          setPassword("");
-
-          showToast(
-            "success",
-            mode === "face"
-              ? "تم التحقق ببصمة الوجه (Face ID) وتسجيل الدخول بنجاح"
-              : "تم تفعيل البصمة وتسجيل الدخول بنجاح"
-          );
-        } catch (err: any) {
-          setError(err?.message || "فشل التحقق");
-        } finally {
-          setBiometricLoading(false);
-        }
-        return;
-      }
-
-      setError(
-        "يرجى تسجيل الدخول باسم المستخدم وكلمة المرور لمرة واحدة لربط بصمة الوجه / الإصبع بهذا الجهاز."
-      );
+    if (!token && !refreshToken) {
+      setError("انتهت جلسة المشرف. سجّل الدخول بكلمة المرور أولاً ثم استخدم التحقق الحيوي.");
       return;
     }
 
     setBiometricLoading(true);
-
     try {
       await triggerBiometricAuth(mode);
-
-      // Check session validity or re-login with stored credentials
-      let sessionValid = false;
-      if (token) {
-        try {
-          await verifyAdminSession();
-          sessionValid = true;
-        } catch {
-          sessionValid = false;
-        }
-      }
-
-      if (!sessionValid) {
-        const u = savedUsername || username;
-        const p = savedPassword;
-        if (p) {
-          await adminLogin(u, p);
-        } else {
-          throw new Error("انتهت جلسة المشرف. سجّل الدخول بكلمة المرور أولاً ثم استخدم البصمة.");
-        }
-      }
-
-      if (savedUsername) {
-        setUsername(savedUsername);
-      }
+      // The biometric prompt only unlocks access to the existing server session.
+      // Server session validation and existing permissions remain authoritative.
+      await verifyAdminSession();
+      const savedUsername = localStorage.getItem("orderi_biometric_username");
+      if (savedUsername) setUsername(savedUsername);
       setLoggedIn(true);
-      showToast(
-        "success",
-        mode === "face"
-          ? "تم تسجيل الدخول ببصمة الوجه (Face ID) بنجاح"
-          : "تم تسجيل الدخول بالبصمة بنجاح"
-      );
+      showToast("success", "تم التحقق من هويتك وتسجيل الدخول بنجاح.");
     } catch (err: any) {
       console.error("Biometric login error:", err);
-      setError(err?.message || "فشل التحقق");
+      setError(err?.message || "فشل التحقق الحيوي أو انتهت جلسة المشرف. استخدم كلمة المرور.");
     } finally {
       setBiometricLoading(false);
     }
   }
 
+
   async function handleLogin(
     e: React.FormEvent
   ) {
     e.preventDefault();
-
     setLoginLoading(true);
     setError("");
 
     try {
-      await adminLogin(
-        username,
-        password
-      );
-
-      localStorage.setItem(
-        "orderi_biometric_username",
-        username.trim()
-      );
-
-      if (rememberBiometric) {
-        localStorage.setItem(
-          "orderi_biometric_enabled",
-          "true"
-        );
-        setBiometricEnabled(true);
-      }
-
+      // Always authenticate against the existing server first.
+      await adminLogin(username, password);
+      localStorage.setItem("orderi_biometric_username", username.trim());
       setLoggedIn(true);
       setPassword("");
 
-      showToast(
-        "success",
-        rememberBiometric
-          ? (lang === "ar" ? "تم تسجيل الدخول وحفظ البصمة لهذا الجهاز" : "Signed in and biometric remembered for this device")
-          : (lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully")
-      );
+      if (rememberBiometric) {
+        try {
+          await triggerBiometricAuth(
+            "face",
+            "تفعيل التحقق الحيوي لتطبيق Orderi Admin"
+          );
+          localStorage.setItem("orderi_biometric_enabled", "true");
+          setBiometricEnabled(true);
+          showToast(
+            "success",
+            lang === "ar"
+              ? "تم تسجيل الدخول وتفعيل التحقق الحيوي لهذا الجهاز."
+              : "Signed in and enabled device biometrics."
+          );
+        } catch (biometricError: any) {
+          localStorage.setItem("orderi_biometric_enabled", "false");
+          setBiometricEnabled(false);
+          showToast(
+            "success",
+            lang === "ar"
+              ? "تم تسجيل الدخول. لم يتم تفعيل التحقق الحيوي؛ يمكنك تفعيله من الهاتف أو المحاولة لاحقاً."
+              : "Signed in. Device biometrics were not enabled; configure them on your phone and try again."
+          );
+        }
+      } else {
+        localStorage.setItem("orderi_biometric_enabled", "false");
+        setBiometricEnabled(false);
+        showToast(
+          "success",
+          lang === "ar" ? "تم تسجيل الدخول بنجاح" : "Signed in successfully"
+        );
+      }
     } catch (err) {
       setLoggedIn(false);
       setError(
@@ -1296,6 +1229,7 @@ function App() {
       setLoginLoading(false);
     }
   }
+
 
   async function handleLogout() {
     try { await adminLogout(); } catch { /* Clear local session even if server is offline. */ }
