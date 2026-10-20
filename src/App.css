@@ -3611,6 +3611,40 @@ tbody tr:hover {
   font-weight: 600;
 }
 
+/* Real Face Detection Dynamic Bounding Box & Enrolled Card */
+.face-live-bounding-box {
+  position: absolute;
+  border: 2px solid #38bdf8;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.5), inset 0 0 15px rgba(56, 189, 248, 0.25);
+  pointer-events: none;
+  z-index: 12;
+  transition: all 0.1s ease-out;
+}
+.face-live-bounding-box.matched {
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), inset 0 0 20px rgba(34, 197, 94, 0.3);
+}
+.face-enrolled-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(2, 132, 199, 0.09);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  text-align: right;
+}
+.face-enrolled-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1.5px solid #38bdf8;
+  flex-shrink: 0;
+}
+
 .biometric-badge {
   display: inline-flex;
   align-items: center;
