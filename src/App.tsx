@@ -1206,55 +1206,46 @@ function App() {
       ? "التحقق من بصمة الوجه (Face ID)"
       : "التحقق من بصمة الإصبع"
   ): Promise<boolean> {
-    // 1. Native Capacitor (for fingerprint only, allowing Face ID to use in-app camera)
-    if (mode === "fingerprint" && typeof window !== "undefined" && (window as any).Capacitor?.isNativePlatform?.()) {
-      try {
-        await BiometricAuth.authenticate({
-          reason,
-          cancelTitle: "إلغاء",
-          androidTitle: "Orderi Admin - بصمة الإصبع",
-          androidSubtitle: "استخدم مستشعر البصمة أو قفل الجهاز للتحقق",
-          androidConfirmationRequired: false,
-          allowDeviceCredential: false,
-          androidBiometryStrength: "strong" as any,
-        });
-        return true;
-      } catch (err: any) {
-        if (err?.code === "userCancel" || err?.code === "systemCancel") {
-          throw new Error("تم إلغاء التحقق");
-        }
-        throw err;
-      }
+    const isNative = typeof window !== "undefined" &&
+      !!(window as any).Capacitor?.isNativePlatform?.();
+
+    if (!isNative) {
+      throw new Error(lang === "ar"
+        ? "التحقق الحيوي متاح داخل تطبيق أندرويد فقط. افتح التطبيق المثبت على الهاتف."
+        : "Biometric authentication is available only in the installed Android app.");
     }
 
-    // 2. Interactive biometric scanner modal with camera comparison
-    return new Promise<boolean>((resolve, reject) => {
-      setBiometricModal({
-        isOpen: true,
-        mode,
-        status: "scanning",
-        message:
-          mode === "face"
-            ? (lang === "ar" ? "انظر إلى الكاميرا للتحقق والمقارنة الحيوية الفورية" : "Look at the camera for live biometric face comparison")
-            : (lang === "ar" ? "ضع إصبعك على المستشعر للتحقق السريع" : "Touch the sensor to verify fingerprint"),
-        onSuccess: () => {
-          setFaceMatchProgress(100);
-          setFaceMatchStep(mode === "face" ? (lang === "ar" ? "تم التعرف على الوجه بنجاح!" : "Face recognized successfully!") : (lang === "ar" ? "تم التحقق من البصمة بنجاح!" : "Fingerprint verified!"));
-          setBiometricModal((prev) => ({
-            ...prev,
-            status: "success",
-            message: mode === "face" ? (lang === "ar" ? "تم التعرف على الوجه بنجاح!" : "Face recognized successfully!") : (lang === "ar" ? "تم التحقق من البصمة بنجاح!" : "Fingerprint verified!"),
-          }));
-          setTimeout(() => {
-            setBiometricModal((prev) => ({ ...prev, isOpen: false }));
-            resolve(true);
-          }, 700);
-        },
-        onCancel: () => {
-          reject(new Error("تم إلغاء التحقق"));
-        },
+    try {
+      const availability = await BiometricAuth.checkBiometry();
+      if (!availability.isAvailable) {
+        throw new Error(lang === "ar"
+          ? "لا توجد بصمة وجه أو بصمة حيوية مسجلة ومتاحة للتطبيق. فعّلها من إعدادات الهاتف أولاً."
+          : "No enrolled biometric is available to apps. Set it up in your phone settings first.");
+      }
+      if (mode === "fingerprint" && !availability.strongBiometryIsAvailable) {
+        throw new Error(lang === "ar"
+          ? "بصمة الإصبع القوية غير متاحة لهذا التطبيق على هذا الجهاز."
+          : "Strong fingerprint authentication is not available to this app on this device.");
+      }
+
+      await BiometricAuth.authenticate({
+        reason,
+        cancelTitle: "إلغاء",
+        androidTitle: "Orderi Admin - " + (mode === "face" ? "بصمة الوجه" : "بصمة الإصبع"),
+        androidSubtitle: mode === "face"
+          ? "تحقق من هويتك باستخدام التحقق الحيوي في أندرويد"
+          : "استخدم مستشعر البصمة للتحقق",
+        androidConfirmationRequired: false,
+        allowDeviceCredential: false,
+        androidBiometryStrength: (mode === "face" ? "weak" : "strong") as any,
       });
-    });
+      return true;
+    } catch (err: any) {
+      if (err?.code === "userCancel" || err?.code === "systemCancel") {
+        throw new Error("تم إلغاء التحقق");
+      }
+      throw err;
+    }
   }
 
   async function handleBiometricLogin(mode: "face" | "fingerprint" = "face") {
@@ -1262,68 +1253,41 @@ function App() {
     setBiometricLoading(true);
 
     try {
-      // 1. Perform camera/sensor verification and matching
       await triggerBiometricAuth(mode);
 
-      // 2. Authorize admin session smoothly
-      const token = localStorage.getItem("orderi_admin_token");
-      const savedUsername = localStorage.getItem("orderi_biometric_username") || username.trim() || "admin";
-      const savedPassword = localStorage.getItem("orderi_biometric_pass");
-
+      // Biometrics unlock only an existing, valid server session.
+      // Never create a local/demo token or bypass server authentication.
+      const savedUsername = localStorage.getItem("orderi_biometric_username") || username.trim();
       let sessionActive = false;
-      if (token) {
-        try {
-          await verifyAdminSession();
-          sessionActive = true;
-        } catch {
-          sessionActive = false;
-        }
+      try {
+        await verifyAdminSession();
+        sessionActive = true;
+      } catch {
+        sessionActive = false;
       }
 
       if (!sessionActive) {
-        if (savedPassword) {
-          try {
-            await adminLogin(savedUsername, savedPassword);
-            sessionActive = true;
-          } catch {
-            sessionActive = false;
-          }
-        } else if (password) {
-          try {
-            await adminLogin(savedUsername, password);
-            sessionActive = true;
-          } catch {
-            sessionActive = false;
-          }
-        }
+        throw new Error(lang === "ar"
+          ? "انتهت جلسة المسؤول. سجّل الدخول بكلمة المرور أولاً ثم استخدم الدخول الحيوي."
+          : "The admin session has expired. Sign in with your password first, then use biometric login.");
       }
 
-      // If server is offline or first-time biometric sign-in:
-      if (!sessionActive) {
-        const bioToken = "orderi_auth_bio_" + Math.random().toString(36).substring(2) + "_" + Date.now();
-        localStorage.setItem("orderi_admin_token", bioToken);
-        localStorage.setItem("natan_admin_token", bioToken);
-        localStorage.setItem("orderi_admin_user", savedUsername);
-      }
-
-      localStorage.setItem("orderi_biometric_enabled", "true");
       localStorage.setItem("orderi_biometric_username", savedUsername);
+      localStorage.setItem("orderi_biometric_enabled", "true");
+      localStorage.removeItem("orderi_biometric_pass");
       setBiometricEnabled(true);
       setUsername(savedUsername);
       setPassword("");
       setLoggedIn(true);
 
-      showToast(
-        "success",
-        mode === "face"
-          ? (lang === "ar" ? "تم التحقق من بصمة الوجه (Face ID) وتسجيل الدخول بنجاح" : "Face ID verified and signed in successfully")
-          : (lang === "ar" ? "تم التحقق من بصمة الإصبع وتسجيل الدخول بنجاح" : "Fingerprint verified and signed in successfully")
-      );
+      showToast("success", mode === "face"
+        ? (lang === "ar" ? "تم التحقق الحيوي من الوجه وتأكيد جلسة المسؤول بنجاح" : "Face biometric verified and admin session confirmed")
+        : (lang === "ar" ? "تم التحقق الحيوي وتأكيد جلسة المسؤول بنجاح" : "Biometric verified and admin session confirmed"));
 
       void loadData();
     } catch (err: any) {
       console.error("Biometric login error:", err);
-      setError(err?.message || (lang === "ar" ? "فشل التحقق البيومتري" : "Biometric verification failed"));
+      setError(err?.message || (lang === "ar" ? "فشل التحقق الحيوي" : "Biometric verification failed"));
     } finally {
       setBiometricLoading(false);
     }
